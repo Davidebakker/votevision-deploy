@@ -2,11 +2,11 @@
 
 ## Doel
 
-Het doel van dit samenwerkingscontract is om duidelijke afspraken vast te stellen die ervoor zorgen dat de samenwerking binnen het team bevorderd. Door deze afspraken te maken, streven we ernaar om onze samenwerking te verbeteren en ons gezamenlijke project succesvol te voltooien.
+Het doel van dit samenwerkingscontract is om duidelijke afspraken te maken die ervoor zorgen dat de samenwerking binnen het team goed verloopt. Door deze afspraken te maken, willen we onze samenwerking verbeteren en ons gezamenlijke project succesvol af te ronden.
 
 ## Specifiek
 1. Contactmomenten en locaties:
-   - We hebben vastgesteld dat onze wekelijkse contactmomenten zullen plaatsvinden op dinsdag tot en met donderdag op locatie en op vrijdag online. Daarnaast hebben we de mogelijkheid om voor of na schooltijd verder te werken in de bibliotheek of thuis.
+   - We hebben vastgesteld dat onze wekelijkse contactmomenten zullen plaatsvinden op dinsdag (12:00 - 15:20), woensdag (9:00-11:50) en donderdag (15:20-18:40) op locatie en op vrijdag online. Daarnaast hebben we de mogelijkheid om voor of na schooltijd verder te werken in de bibliotheek of thuis.
 
 2. Besluitvormingsrichtlijnen:
    - We hebben afgesproken dat bij het nemen van beslissingen iedereen de voor- en nadelen van zijn of haar keuzes zal beschrijven. Vervolgens zullen teamgenoten feedback geven aan elkaar. Als we er niet uitkomen, zullen we een docent om begeleiding vragen om tot de beste oplossing te komen.
@@ -17,8 +17,8 @@ Het doel van dit samenwerkingscontract is om duidelijke afspraken vast te stelle
 4. Consequenties bij niet nakomen van afspraken of conflicten:
    - We hebben afgesproken dat goede communicatie essentieel is bij verhindering. Bij ziekte of afwezigheid is het belangrijk om op tijd af te melden bij je teamgenoten, zodat zij op de hoogte zijn.
    - Als een teamgenoot weinig of geen inzet toont, zullen we met elkaar in gesprek gaan om een oplossing te vinden. Als dit niet lukt, zullen we een docent inschakelen.
-   - In geval van langdurige ziekte, verhindering of stoppen met de opleiding zullen we een docent inschakelen om een passende oplossing te vinden.
-   - Als afspraken niet worden nagekomen, zal de schuldige extra hard moeten werken en is iedereen een kop koffie (of andere versnapering naar keuze) schuldig als maatregel.
+   - In geval van langdurige ziekte, andere problemen of stoppen met de opleiding zullen we een docent inschakelen om een passende oplossing te vinden.
+   - Als afspraken niet worden nagekomen, zal de degene die de afspraken niet nakomt is iedereen een kop koffie (of andere versnapering naar keuze) 'schuldig' als maatregel.
 
 5. Samenwerking binnen het team m.b.t. sterke punten en valkuilen:
 
@@ -28,6 +28,8 @@ Wij willen een efficiënte werkomgeving creëren door de talenten van het team t
 De sterke punten en valkuilen van ons team:
 
    - Tess
+     Sterkte punt: Ik kan goed alles inplannen en organiseren.
+     Valkuil: Ik kan voor mezelf soms wat minder goed prioriteiten stellen waardoor ik soms belangrijke dingen uitstel.
 
    - Ibti
 
@@ -48,7 +50,7 @@ Op basis van de van de opgestelde sterke punten en valkuilen, ...
 - We kunnen meten of het besluitvormingsproces en de feedbackprocedures werken door te kijken naar hoe we ze daadwerkelijk gebruiken en wat voor effect ze hebben op onze samenwerking.
 - De vastgestelde contactmomenten en locaties zijn concreet en kunnen worden nagekomen.
 - Deadlines kunnen worden behaald als taken op tijd worden afgerond binnen de afgesproken periodes.
-- Consequenties bij niet nakomen van afspraken zijn meetbaar door de toewijzing van extra werk en de afspraak over traktatie van een kop koffie*.
+- Consequenties bij niet nakomen van afspraken zijn meetbaar door de afspraak over traktatie van een kop koffie*.
 
 ## Acceptabel
 
