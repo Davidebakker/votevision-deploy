@@ -34,6 +34,8 @@ De sterke punten en valkuilen van ons team:
    - Ibti
 
    - Matin
+   Sterkte: Ik ben goed in mergen en code structure netjes houden en zorgen dat alles qua technisch goed gaat.
+   Valkuil:Ik kan soms heel snel afgeleid raken.
 
    - David
 
