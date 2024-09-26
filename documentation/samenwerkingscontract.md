@@ -22,7 +22,7 @@ Het doel van dit samenwerkingscontract is om duidelijke afspraken te maken die e
 
 5. Samenwerking binnen het team m.b.t. sterke punten en valkuilen:
 
-Ieder persoon heeft zijn eigen unieke vaardigheden. In een team is het van belangrijk dat deze vaardigheden goed worden gebundeld zodat iedereen hier voordeel van heeft. Ons doel hierbij is om ervoor te zorgen dat er goede verhouding is tussen de sterke en zwakke punten. 
+Ieder persoon heeft zijn eigen vaardigheden. In een team is het van belangrijk dat deze vaardigheden goed worden samen gevoegd zodat iedereen hier voordeel van heeft. Ons doel hierbij is om ervoor te zorgen dat er goede verhouding is tussen de sterke en zwakke punten. 
 Wij willen een efficiënte werkomgeving creëren door de talenten van het team te onderzoeken. 
 
 De sterke punten en valkuilen van ons team:
@@ -41,7 +41,6 @@ Matin
 
 David
 
-Op basis van de van de opgestelde sterke punten en valkuilen, ...  
 
 6. Andere belangrijke afspraken
 
