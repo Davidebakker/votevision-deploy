@@ -28,10 +28,12 @@ Wij willen een efficiënte werkomgeving creëren door de talenten van het team t
 De sterke punten en valkuilen van ons team:
 
    - Tess
-     Sterkte punt: Ik kan goed alles inplannen en organiseren.
+     Sterkste punt: Ik kan goed alles inplannen en organiseren.
      Valkuil: Ik kan voor mezelf soms wat minder goed prioriteiten stellen waardoor ik soms belangrijke dingen uitstel.
 
    - Ibti
+     Stekste punt: Ik ben goed in mijn teamgenoten motiveren, en ik zorg ervoor dat we samen effectief naar onze doelen    toewerken door heldere communicatie en samenwerking.
+     Valkuil : ik kan mezelf overladen door te veel verantwoordelijkheid op me te nemen hierdoor heb ik moeite met delegeren, wat kan leiden tot overbelasting en frustratie.
 
    - Matin
    Sterkte: Ik ben goed in mergen en code structure netjes houden en zorgen dat alles qua technisch goed gaat.
