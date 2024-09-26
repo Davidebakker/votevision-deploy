@@ -35,9 +35,11 @@ De sterke punten en valkuilen van ons team:
 
    - Matin
    Sterkte: Ik ben goed in mergen en code structure netjes houden en zorgen dat alles qua technisch goed gaat.
-   Valkuil:Ik kan soms heel snel afgeleid raken.
+   Valkuil: Ik kan soms heel snel afgeleid raken.
 
    - David
+      sterkte: Ik kan heel gefocust aan het project werken en dus veel progressie maken.
+      valkuil: Ik stel vaak dingen zoals documentatie of verslagen schrijven uit.
 
 Op basis van de van de opgestelde sterke punten en valkuilen, ...  
 
