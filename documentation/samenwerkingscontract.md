@@ -39,7 +39,7 @@ Matin
 - Sterkte: Ik ben goed in mergen en code structure netjes houden en zorgen dat alles qua technisch goed gaat.
 - Valkuil:Ik kan soms heel snel afgeleid raken.
 
-   - David
+David
 
 Op basis van de van de opgestelde sterke punten en valkuilen, ...  
 
