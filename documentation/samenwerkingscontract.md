@@ -22,16 +22,18 @@ Het doel van dit samenwerkingscontract is om duidelijke afspraken te maken die e
 
 5. Samenwerking binnen het team m.b.t. sterke punten en valkuilen:
 
-Ieder persoon heeft zijn eigen unieke vaardigheden. In een team is het van belangrijk dat deze vaardigheden goed worden gebundeld zodat iedereen hier voordeel van heeft. Ons doel hierbij is om ervoor te zorgen dat er goede verhouding is tussen de sterke en zwakke punten. 
+Ieder persoon heeft zijn eigen vaardigheden. In een team is het van belangrijk dat deze vaardigheden goed worden samen gevoegd zodat iedereen hier voordeel van heeft. Ons doel hierbij is om ervoor te zorgen dat er goede verhouding is tussen de sterke en zwakke punten. 
 Wij willen een efficiënte werkomgeving creëren door de talenten van het team te onderzoeken. 
 
 De sterke punten en valkuilen van ons team:
 
-   - Tess
-     Sterkte punt: Ik kan goed alles inplannen en organiseren.
-     Valkuil: Ik kan voor mezelf soms wat minder goed prioriteiten stellen waardoor ik soms belangrijke dingen uitstel.
+Tess
+- Sterkste punt: Ik kan goed alles inplannen en organiseren.
+-  Valkuil: Ik kan voor mezelf soms wat minder goed prioriteiten stellen waardoor ik soms belangrijke dingen uitstel.
 
-   - Ibti
+Ibti
+- Stekste punt: Ik ben goed in mijn teamgenoten motiveren, en ik zorg ervoor dat we samen effectief naar onze doelen    toewerken door heldere communicatie en samenwerking.
+- Valkuil : ik kan mezelf overladen door te veel verantwoordelijkheid op me te nemen hierdoor heb ik moeite met delegeren, wat kan leiden tot overbelasting en frustratie.
 
    - Matin
    Sterkte: Ik ben goed in mergen en code structure netjes houden en zorgen dat alles qua technisch goed gaat.
@@ -41,7 +43,6 @@ De sterke punten en valkuilen van ons team:
       sterkte: Ik kan heel gefocust aan het project werken en dus veel progressie maken.
       valkuil: Ik stel vaak dingen zoals documentatie of verslagen schrijven uit.
 
-Op basis van de van de opgestelde sterke punten en valkuilen, ...  
 
 6. Andere belangrijke afspraken
 
