@@ -1,4 +1,4 @@
-# Elections
+# Elections 
 
 Welcome to your Elections project. You and your teammates will need to create the project structure from the ground up. The second presentation contains a widely used and proven structure. Besides the information within the [studiemanual](https://dlo.mijnhva.nl/d2l/le/lessons/609780/topics/2234932) you can also find more information on the [DLO](https://dlo.mijnhva.nl/d2l/le/lessons/609780/units/2204825).
 

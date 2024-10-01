@@ -35,11 +35,13 @@ Ibti
 - Stekste punt: Ik ben goed in mijn teamgenoten motiveren, en ik zorg ervoor dat we samen effectief naar onze doelen    toewerken door heldere communicatie en samenwerking.
 - Valkuil : ik kan mezelf overladen door te veel verantwoordelijkheid op me te nemen hierdoor heb ik moeite met delegeren, wat kan leiden tot overbelasting en frustratie.
 
-Matin
-- Sterkte: Ik ben goed in mergen en code structure netjes houden en zorgen dat alles qua technisch goed gaat.
-- Valkuil:Ik kan soms heel snel afgeleid raken.
+   - Matin
+   Sterkte: Ik ben goed in mergen en code structure netjes houden en zorgen dat alles qua technisch goed gaat.
+   Valkuil: Ik kan soms heel snel afgeleid raken.
 
-David
+   - David
+      sterkte: Ik kan heel gefocust aan het project werken en dus veel progressie maken.
+      valkuil: Ik stel vaak dingen zoals documentatie of verslagen schrijven uit.
 
 
 6. Andere belangrijke afspraken
