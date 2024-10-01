@@ -17,6 +17,7 @@
   </nav>
 </template>
 
+
 <script>
 import Results from '@/components/NavBarComponents/NavBarResults.vue';
 import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
