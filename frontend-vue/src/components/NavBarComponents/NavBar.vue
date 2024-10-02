@@ -3,10 +3,13 @@
     <div class="nav-logo"></div>
     <div class="nav-content">
       <div class="menu-item">
-        <router-link to="/frontend-vue/public">Home</router-link>
+        <router-link to="/home">Home</router-link>
       </div>
       <div class="menu-item">
         <router-link to="/about">About</router-link>
+      </div>
+      <div class="menu-item">
+        <router-link to="/about">Sign up</router-link>
       </div>
       <Results title="Results" />
     </div>
@@ -48,7 +51,7 @@ export default {
 
 <style>
 nav {
-  width: 100vw;
+  width: 100%; /* Use 100% instead of 100vw to avoid overflow */
   background-color: #ac0000;
   display: flex;
   align-items: center;
