@@ -9,7 +9,7 @@
         <router-link to="/about">About</router-link>
       </div>
       <div class="menu-item">
-        <router-link to="/about">Sign up</router-link>
+        <router-link to="/registration">Sign up</router-link>
       </div>
       <Results title="Results" />
     </div>
