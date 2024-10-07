@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ElectionResultView from '../views/results/ElectionResultView.vue'
 import NationalElectionResultView from '../views/results/NationalElectionResultView.vue'
+import Registration from '@/components/RegistrationComponents/Registration.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,7 +29,13 @@ const router = createRouter({
       path: '/result/National-election-result',
       name: 'national-election-result',
       component: NationalElectionResultView
+    },
+    {
+      path: '/registration',
+      name: 'registration',
+      component: Registration
     }
+
   ]
 })
 
