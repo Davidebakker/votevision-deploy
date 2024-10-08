@@ -20,7 +20,7 @@ export default {
       };
 
       try {
-        const response = await axios.post('http://localhost:8080/api/users/data', userData);
+        const response = await axios.post('http://localhost:8080/users/create', userData);
         console.log(response.data);
         alert("Data submitted successfully");
       } catch (error) {
