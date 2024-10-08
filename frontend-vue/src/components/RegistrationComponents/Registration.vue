@@ -1,39 +1,42 @@
-<script setup lang="ts">
+<script>
 import { ref } from 'vue';
+import axios from 'axios'
 
-const name = ref('');
-const username = ref('');
-const email = ref('');
-const password = ref('');
-const region = ref('');
+export default {
+  setup() {
+    const name = ref('');
+    const username = ref('');
+    const email = ref('');
+    const password = ref('');
+    const region = ref('');
 
-const handleSubmit = async () => {
-  const userData = {
-    name: name.value,
-    username: username.value,
-    email: email.value,
-    password: password.value,
-    region: region.value,
-  };
+    const handleSubmit = async () => {
+      const userData = {
+        name: name.value,
+        username: username.value,
+        email: email.value,
+        password: password.value,
+        region: region.value,
+      };
 
-  try {
-    const response = await fetch('http://localhost:8080/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
+      try {
+        const response = await axios.post('http://localhost:8080/api/users/data', userData);
+        console.log(response.data);
+        alert("Data submitted successfully");
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-    if (response.ok) {
-      alert('Registration successful!');
-    } else {
-      alert('Failed to register user.');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('An error occurred while registering.');
-  }
+    return {
+      name,
+      username,
+      email,
+      password,
+      region,
+      handleSubmit,
+    };
+  },
 };
 </script>
 
