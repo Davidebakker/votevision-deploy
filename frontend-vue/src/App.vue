@@ -1,9 +1,7 @@
 <template>
   <div class="app-container flex">
-    <!-- Sidebar Component -->
     <Navbar />
 
-    <!-- Main Content Area -->
     <div class="flex-1">
       <RouterView />
     </div>
@@ -11,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import Navbar from '@/components/NavBarComponents/NavBar.vue';
+import Navbar from '@/components/NavBarComponents/NavBar.vue'
 </script>
 
 <style scoped>

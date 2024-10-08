@@ -2,8 +2,14 @@
   <div>
     <button @click="toggleMenu" class="block text-gray-800 hover:text-gray-700 focus:outline-none">
       <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
-        <path v-if="isMenuOpen" d="M16.24 14.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 0 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12l2.83 2.83z"/>
-        <path v-else d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2z"/>
+        <path
+          v-if="isMenuOpen"
+          d="M16.24 14.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 0 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12l2.83 2.83z"
+        />
+        <path
+          v-else
+          d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2z"
+        />
       </svg>
     </button>
     <transition name="fade" appear>
@@ -41,7 +47,7 @@ export default {
   },
   methods: {
     toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen;
+      this.isMenuOpen = !this.isMenuOpen
     }
   }
 }
