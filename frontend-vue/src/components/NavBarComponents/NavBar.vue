@@ -21,32 +21,32 @@
 </template>
 
 <script>
-import Results from '@/components/NavBarComponents/NavBarResults.vue';
-import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
+import Results from '@/components/NavBarComponents/NavBarResults.vue'
+import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue'
 
 export default {
   name: 'nav-bar',
   components: {
     Results,
-    BurgerNav,
+    BurgerNav
   },
   data() {
     return {
-      windowWidth: window.innerWidth,
-    };
+      windowWidth: window.innerWidth
+    }
   },
   mounted() {
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener('resize', this.handleResize)
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
     handleResize() {
-      this.windowWidth = window.innerWidth;
-    },
-  },
-};
+      this.windowWidth = window.innerWidth
+    }
+  }
+}
 </script>
 
 <style>

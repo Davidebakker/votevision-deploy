@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <main class="container">
@@ -25,7 +24,6 @@
 </template>
 
 <style scoped>
-
 .container {
   display: flex;
   flex-direction: column;
@@ -38,7 +36,6 @@
   padding: 0;
   box-sizing: border-box;
 }
-
 
 .row {
   width: 100%;
@@ -80,7 +77,9 @@
   position: absolute;
   bottom: -50px;
   opacity: 0;
-  transition: opacity 0.3s ease, bottom 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    bottom 0.3s ease;
   font-size: 1rem;
   color: #fff;
 }
@@ -94,7 +93,6 @@
   color: black;
 }
 
-
 h2 a {
   cursor: pointer;
   color: inherit;
@@ -104,8 +102,8 @@ h2 a {
   background-color: inherit;
 }
 
-
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   overflow-x: hidden;

@@ -19,8 +19,8 @@
 <script>
 export default {
   name: 'nav-bar-results',
-  props: ['title'],
-};
+  props: ['title']
+}
 </script>
 
 <style scoped>

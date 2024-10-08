@@ -24,13 +24,13 @@
 </template>
 
 <script>
-import Results from '@/components/NavBarComponents/NavBarResults.vue';
+import Results from '@/components/NavBarComponents/NavBarResults.vue'
 
 export default {
   name: 'burger-nav',
   components: { Results },
-  props: ['title'],
-};
+  props: ['title']
+}
 </script>
 
 <style scoped>

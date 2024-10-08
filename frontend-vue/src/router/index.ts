@@ -35,7 +35,6 @@ const router = createRouter({
       name: 'registration',
       component: Registration
     }
-
   ]
 })
 

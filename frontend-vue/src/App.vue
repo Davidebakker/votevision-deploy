@@ -2,7 +2,6 @@
 import HelloWorld from './views/NavBarView.vue'
 </script>
 
-
 <template>
   <header>
     <div class="wrapper">
@@ -13,6 +12,4 @@ import HelloWorld from './views/NavBarView.vue'
   <RouterView />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

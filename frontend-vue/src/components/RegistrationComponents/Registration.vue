@@ -1,7 +1,11 @@
-<script>
-import { ref } from 'vue';
-import axios from 'axios'
+<script setup lang="ts">
+import { ref } from 'vue'
 
+const name = ref('')
+const username = ref('')
+const email = ref('')
+const password = ref('')
+const region = ref('')
 export default {
   setup() {
     const name = ref('');
@@ -10,6 +14,14 @@ export default {
     const password = ref('');
     const region = ref('');
 
+const handleSubmit = async () => {
+  const userData = {
+    name: name.value,
+    username: username.value,
+    email: email.value,
+    password: password.value,
+    region: region.value
+  }
     const handleSubmit = async () => {
       const userData = {
         name: name.value,
@@ -19,6 +31,25 @@ export default {
         region: region.value,
       };
 
+  try {
+    const response = await fetch('http://localhost:8080/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userData)
+    })
+
+    if (response.ok) {
+      alert('Registration successful!')
+    } else {
+      alert('Failed to register user.')
+    }
+  } catch (error) {
+    console.error('Error:', error)
+    alert('An error occurred while registering.')
+  }
+}
       try {
         const response = await axios.post('http://localhost:8080/users/create', userData);
         console.log(response.data);
