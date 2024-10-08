@@ -1,113 +1,47 @@
-<script setup lang="ts"></script>
-
 <template>
-  <main class="container">
-    <section class="row election">
-      <h2>
-        <router-link to="/election-result">Election</router-link>
-      </h2>
-      <p class="hover-text">The election overview and results...</p>
-    </section>
-    <section class="row conversations">
-      <h2>
-        <router-link to="/conversations">Conversations</router-link>
-      </h2>
-      <p class="hover-text">See what people think about the election and be part of it...</p>
-    </section>
-    <section class="row about">
-      <h2>
-        <router-link to="/about">About</router-link>
-      </h2>
-      <p class="hover-text">Read about what the election process and more about our site...</p>
-    </section>
-  </main>
+  <div class="w-full">
+    <div class="flex bg-white" style="height:729px;">
+      <div class="flex items-center text-center lg:text-left px-8 md:px-12 lg:w-1/2">
+        <div>
+          <h2 class="text-3xl font-semibold text-gray-800 md:text-4xl">
+            Welcome to <span class="text-indigo-600">People’s Choice NL</span>
+          </h2>
+          <p class="mt-2 text-sm text-gray-500 md:text-base">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis commodi cum cupiditate ducimus, fugit harum id necessitatibus odio quam quasi, quibusdam rem tempora voluptates. Cumque debitis dignissimos id quam vel!
+          </p>
+          <div class="flex justify-center lg:justify-start mt-6">
+            <a class="px-4 py-3 bg-gray-900 text-gray-200 text-xs font-semibold rounded hover:bg-gray-800" href="#">Get Started</a>
+            <a class="mx-4 px-4 py-3 bg-gray-300 text-gray-900 text-xs font-semibold rounded hover:bg-gray-400" href="#">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden lg:block lg:w-1/2" style="clip-path: polygon(10% 0, 100% 0%, 100% 100%, 0 100%);">
+        <div class="h-full object-cover" style="background-image: url('src/assets/img/election.png');">
+          <div class="h-full bg-black opacity-25"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: calc(96vh - 60px);
-  width: 100%;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+<script>
+import { ref } from 'vue';
 
-.row {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 33.33%;
-  position: relative;
-  transition: all 0.3s ease;
-  font-size: 2rem;
-  color: white;
-  font-weight: bold;
-  overflow: hidden;
-  box-sizing: border-box;
-}
+export default {
+  setup() {
+    const isMenuOpen = ref(false);
 
-.election {
-  background-color: red;
-}
+    const toggleMenu = () => {
+      isMenuOpen.value = !isMenuOpen.value;
+    };
 
-.conversations {
-  background-color: white;
-  color: black;
-}
+    return {
+      isMenuOpen,
+      toggleMenu,
+    };
+  },
+};
+</script>
 
-.about {
-  background-color: blue;
-}
-
-.row:hover {
-  flex-grow: 2;
-}
-
-.container:hover .row {
-  flex-grow: 0.5;
-}
-
-.hover-text {
-  position: absolute;
-  bottom: -50px;
-  opacity: 0;
-  transition:
-    opacity 0.3s ease,
-    bottom 0.3s ease;
-  font-size: 1rem;
-  color: #fff;
-}
-
-.row:hover .hover-text {
-  bottom: 20px;
-  opacity: 1;
-}
-
-.conversations:hover .hover-text {
-  color: black;
-}
-
-h2 a {
-  cursor: pointer;
-  color: inherit;
-  text-decoration: none;
-  font-size: inherit;
-  font-weight: inherit;
-  background-color: inherit;
-}
-
-body,
-html {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  height: 100%;
-  box-sizing: border-box;
-}
-</style>
+<style scoped></style>
