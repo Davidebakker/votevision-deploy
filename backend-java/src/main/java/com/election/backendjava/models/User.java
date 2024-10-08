@@ -1,4 +1,4 @@
-package com.election.backendjava.api.models;
+package com.election.backendjava.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,6 +22,5 @@ public class User {
     private String email;
     private String password;
     private String region;
-
-
+    private String role;
 }
