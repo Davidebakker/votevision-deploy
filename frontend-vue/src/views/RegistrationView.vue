@@ -1,14 +1,11 @@
 <script setup lang="ts">
-
-import Registration from '../components/RegistrationComponents/RegistrationItem.vue'
+import Registration from '../components/RegistrationComponents/Registration.vue'
 </script>
 
 <template>
   <main>
-    <registration/>
+    <registration />
   </main>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
