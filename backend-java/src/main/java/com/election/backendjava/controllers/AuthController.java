@@ -35,6 +35,7 @@ import com.election.backendjava.repositories.UserRepository;
 import com.election.backendjava.security.jwt.JwtUtils;
 import com.election.backendjava.security.services.UserDetailsImpl;
 
+@SuppressWarnings("DuplicatedCode")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -133,17 +134,28 @@ public class AuthController {
         }
 
         user.setRoles(roles);
-        User userBuild = User.builder()
-                .username(signUpRequest.getUsername())
-                .email(signUpRequest.getEmail())
-                .name(signUpRequest.getName())
-                .region(signUpRequest.getRegion())
-                .roles(roles)
-                .password(encoder.encode(signUpRequest.getPassword()))
-                .build();
+        userRepository.save(user);
 
-        userRepository.save(userBuild);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(signUpRequest.getUsername(), signUpRequest.getPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        List<String> rolesList = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new JwtResponse(jwt,
+                userDetails.getId(),
+                userDetails.getUsername(),
+                userDetails.getEmail(),
+                rolesList));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> signOut() {
+        return ResponseEntity.ok(new MessageResponse("Signed out successfully!"));
     }
 }
