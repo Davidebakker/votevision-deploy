@@ -4,17 +4,17 @@ import axios from 'axios'
 
 export default {
   setup() {
-    const email = ref('');
+    const username = ref('');
     const password = ref('');
 
     const handleSubmit = async () => {
       const userData = {
-        email: email.value,
+        username: username.value,
         password: password.value,
       };
 
       try {
-        const response = await axios.get(`http://localhost:8080/users/getByEmail/${userData.email}`);
+        const response = await axios.post(`http://localhost:8080/api/auth/login`, userData);
         console.log(response.data);
         alert("Data submitted successfully");
       } catch (error) {
@@ -23,7 +23,7 @@ export default {
     };
 
     return {
-      email,
+      username,
       password,
       handleSubmit,
     };
@@ -39,8 +39,8 @@ export default {
       <div class="Login">Login</div>
 
       <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" v-model="email" required />
+        <label for="username">username:</label>
+        <input type="username" id="username" v-model="username" required />
       </div>
 
       <div>

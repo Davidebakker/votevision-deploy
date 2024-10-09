@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import Registration from '../components/RegistrationComponents/Registration.vue'
+import Registration from '../components/RegistrationComponents/RegistrationItem.vue'
 </script>
 
 <template>

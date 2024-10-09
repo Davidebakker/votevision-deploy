@@ -20,11 +20,16 @@ export default {
       };
 
       try {
-        const response = await axios.post('http://localhost:8080/users/create', userData);
+        const response = await axios.post('http://localhost:8080/api/auth/signup', userData);
         console.log(response.data);
-        alert("Data submitted successfully");
+        alert(response.data.message || "Data submitted successfully");
       } catch (error) {
         console.error(error);
+        if (error.response && error.response.data && error.response.data.message) {
+          alert(error.response.data.message); // Display the specific error message
+        } else {
+          alert("An unexpected error occurred.");
+        }
       }
     };
 
