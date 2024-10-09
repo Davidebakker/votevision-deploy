@@ -1,9 +1,11 @@
 <script>
 import { ref } from 'vue';
 import axios from 'axios'
+import { useRouter } from 'vue-router'
 
 export default {
   setup() {
+    const router = useRouter();
     const username = ref('');
     const password = ref('');
 
@@ -16,7 +18,17 @@ export default {
       try {
         const response = await axios.post(`http://localhost:8080/api/auth/login`, userData);
         console.log(response.data);
+
+        if (response.data.token) {
+          const jwtToken = response.data.token;
+          localStorage.setItem('jwtToken', jwtToken);
+          axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+        }
+
         alert("Data submitted successfully");
+
+        router.push({ name: 'home' });
+        window.location.reload();
       } catch (error) {
         console.error(error);
       }
@@ -33,69 +45,61 @@ export default {
 
 
 <template>
-  <div class="Login-form">
-    <h1>{{ value }}</h1>
-    <form @submit.prevent="handleSubmit">
-      <div class="Login">Login</div>
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <div class="px-6 py-4">
+        <h3 class="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
+          Login
+        </h3>
 
-      <div>
-        <label for="username">username:</label>
-        <input type="username" id="username" v-model="username" required />
+        <form @submit.prevent="handleSubmit">
+          <div class="w-full mt-4">
+            <input
+              class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+              type="text"
+              placeholder="Username"
+              v-model="username"
+              required
+            />
+          </div>
+
+          <div class="w-full mt-4">
+            <input
+              class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+              type="password"
+              placeholder="Password"
+              v-model="password"
+              required
+            />
+          </div>
+
+          <div class="flex items-center justify-between mt-4">
+            <button
+              class="flex center px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+              type="submit"
+            >
+              Login
+            </button>
+          </div>
+        </form>
       </div>
 
-      <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" required />
+      <div class="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700">
+        <span class="text-sm text-gray-600 dark:text-gray-200">Don't have an account? </span>
+        <a href="#" class="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline">
+          Register
+        </a>
       </div>
-
-      <button type="submit">Login</button>
-    </form>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.Login-form {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 1em;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #003049;
-  color: #d37e40;
+.min-h-screen {
+  min-height: 100vh;
 }
 
-.Login-form div {
-  margin-bottom: 1em;
-}
-
-.Login-form label {
-  display: block;
-  margin-bottom: 0.5em;
-}
-
-.Login-form input {
-  width: 100%;
-  padding: 0.5em;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  color: #c1121f ;
-  background-color: #fdf0d5;
-}
-
-button {
-  padding: 0.7em 1.5em;
-  background-color: #f7934c;
-  color: #fdf0d5;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #d37e40;
-}
-
-.Login {
-  color: #d37e40;
+.bg-gray-100 {
+  background-color: #111827;
 }
 </style>

@@ -49,8 +49,6 @@ public class User {
     @Column(name = "region")
     private String region;
 
-    private String role;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(  name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

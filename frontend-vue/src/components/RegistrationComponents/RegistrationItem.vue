@@ -1,9 +1,11 @@
 <script>
 import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router'
 
 export default {
   setup() {
+    const router = useRouter();
     const name = ref('');
     const username = ref('');
     const email = ref('');
@@ -22,7 +24,17 @@ export default {
       try {
         const response = await axios.post('http://localhost:8080/api/auth/signup', userData);
         console.log(response.data);
+
+        if (response.data.token) {
+          const jwtToken = response.data.token;
+          localStorage.setItem('jwtToken', jwtToken);
+          axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+        }
+
         alert(response.data.message || "Data submitted successfully");
+
+        router.push({ name: 'home' });
+        window.location.reload();
       } catch (error) {
         console.error(error);
         if (error.response && error.response.data && error.response.data.message) {
