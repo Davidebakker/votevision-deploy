@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-white dark:bg-gray-900">
+  <section class="bg-white dark:bg-gray-900 min-h-screen h-full flex items-center">
     <div class="container px-6 py-10 mx-auto">
       <h1
         class="text-2xl font-semibold text-center text-gray-800 capitalize lg:text-3xl dark:text-white"
@@ -22,7 +22,6 @@
               src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
               alt="Matin Kh"
             />
-
             <div class="mt-4 sm:mx-4 sm:mt-0">
               <h1
                 class="text-xl font-semibold text-gray-700 capitalize md:text-2xl dark:text-white group-hover:text-white"
@@ -34,7 +33,6 @@
               </p>
             </div>
           </div>
-
           <p class="mt-4 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nesciunt officia aliquam
             neque optio? Cumque facere numquam est.
@@ -50,7 +48,6 @@
               src="https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
               alt="Amelia Anderson"
             />
-
             <div class="mt-4 sm:mx-4 sm:mt-0">
               <h1
                 class="text-xl font-semibold text-gray-700 capitalize md:text-2xl dark:text-white group-hover:text-white"
@@ -62,7 +59,6 @@
               </p>
             </div>
           </div>
-
           <p class="mt-4 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nesciunt officia aliquam
             neque optio? Cumque facere numquam est.
@@ -78,7 +74,6 @@
               src="https://images.unsplash.com/photo-1488508872907-592763824245?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
               alt="Olivia Wathan"
             />
-
             <div class="mt-4 sm:mx-4 sm:mt-0">
               <h1
                 class="text-xl font-semibold text-gray-700 capitalize md:text-2xl dark:text-white group-hover:text-white"
@@ -90,7 +85,6 @@
               </p>
             </div>
           </div>
-
           <p class="mt-4 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nesciunt officia aliquam
             neque optio? Cumque facere numquam est.
@@ -106,7 +100,6 @@
               src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
               alt="John Doe"
             />
-
             <div class="mt-4 sm:mx-4 sm:mt-0">
               <h1
                 class="text-xl font-semibold text-gray-700 capitalize md:text-2xl dark:text-white group-hover:text-white"
@@ -118,7 +111,6 @@
               </p>
             </div>
           </div>
-
           <p class="mt-4 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nesciunt officia aliquam
             neque optio? Cumque facere numquam est.
@@ -131,4 +123,15 @@
 
 <script setup></script>
 
-<style scoped></style>
+<style scoped>
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  height: 100%;
+}
+</style>
