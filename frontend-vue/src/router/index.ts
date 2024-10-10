@@ -5,6 +5,8 @@ import NationalElectionResultView from '../views/results/NationalElectionResultV
 import Registration from '@/components/RegistrationComponents/RegistrationItem.vue'
 import Login from '@/components/loginComponents/LoginItem.vue'
 import Logout from '@/components/loginComponents/LogoutItem.vue'
+import PartiesOverviewView from '@/views/PartiesOverviewView.vue'
+import PartiesOverview from '@/components/PartyOverviewComponents/PartiesOverview.vue'
 
 // Utility function to check if the user is logged in
 function isLoggedIn() {
@@ -53,6 +55,12 @@ const router = createRouter({
       name: 'logout',
       component: Logout,
       meta: { userOnly: true }
+    },
+    {
+      path: '/parties',
+      name: 'parties',
+      component: PartiesOverview,
+      meta: { guestOnly: true }
     }
   ]
 });
