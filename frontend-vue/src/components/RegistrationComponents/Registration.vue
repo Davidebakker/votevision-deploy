@@ -1,14 +1,14 @@
 <script>
-import { ref } from 'vue';
-import axios from 'axios';
+import { ref } from 'vue'
+import axios from 'axios'
 
 export default {
   setup() {
-    const name = ref('');
-    const username = ref('');
-    const email = ref('');
-    const password = ref('');
-    const region = ref('');
+    const name = ref('')
+    const username = ref('')
+    const email = ref('')
+    const password = ref('')
+    const region = ref('')
 
     const handleSubmit = async () => {
       const userData = {
@@ -16,17 +16,17 @@ export default {
         username: username.value,
         email: email.value,
         password: password.value,
-        region: region.value,
-      };
+        region: region.value
+      }
 
       try {
-        const response = await axios.post('http://localhost:8080/users/create', userData);
-        console.log(response.data);
-        alert('Data submitted successfully');
+        const response = await axios.post('http://localhost:8080/users/create', userData)
+        console.log(response.data)
+        alert('Data submitted successfully')
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
-    };
+    }
 
     return {
       name,
@@ -34,18 +34,19 @@ export default {
       email,
       password,
       region,
-      handleSubmit,
-    };
-  },
-};
+      handleSubmit
+    }
+  }
+}
 </script>
 
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <div
+      class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800"
+    >
       <div class="px-6 py-4">
-        <div class="flex justify-center mx-auto">
-        </div>
+        <div class="flex justify-center mx-auto"></div>
 
         <h3 class="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
           Register

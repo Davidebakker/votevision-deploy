@@ -15,12 +15,12 @@
             <a
               class="px-4 py-3 bg-gray-900 text-gray-200 text-xs font-semibold rounded hover:bg-gray-800"
               href="#"
-            >Get Started</a
+              >Get Started</a
             >
             <a
               class="mx-4 px-4 py-3 bg-gray-300 text-gray-900 text-xs font-semibold rounded hover:bg-gray-400"
               href="#"
-            >Learn More</a
+              >Learn More</a
             >
           </div>
         </div>
@@ -32,7 +32,11 @@
       >
         <div
           class="h-full object-cover"
-          style="background-image: url('src/assets/img/election.png'); background-size: cover; background-position: center"
+          style="
+            background-image: url('src/assets/img/election.png');
+            background-size: cover;
+            background-position: center;
+          "
         >
           <div class="h-full bg-black opacity-25"></div>
         </div>
@@ -71,5 +75,4 @@ body {
 #app {
   height: 100%;
 }
-
 </style>
