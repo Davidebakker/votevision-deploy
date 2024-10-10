@@ -1,4 +1,4 @@
-package com.election.backendjava.models;
+package com.election.backendjava.models.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;

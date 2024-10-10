@@ -1,4 +1,4 @@
-package com.election.backendjava.models;
+package com.election.backendjava.models.user;
 
 public enum ERole {
     ROLE_USER,
