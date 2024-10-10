@@ -2,25 +2,31 @@
   <div class="app-container flex">
     <Navbar />
 
-    <div class="flex-1">
-      <RouterView />
+    <div class="content flex-grow p-8">
+      <router-view />
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script>
 import Navbar from '@/components/NavBarComponents/NavBar.vue'
+
+export default {
+  name: 'NavBarView',
+  components: {
+    Navbar
+  }
+}
 </script>
 
 <style scoped>
 .app-container {
   display: flex;
-  height: 100%;
-  width: 100%;
+  min-height: 100vh;
 }
 
-.flex-1 {
+.content {
   flex-grow: 1;
-  background-color: #1a1a1a;
+  padding: 20px;
 }
 </style>
