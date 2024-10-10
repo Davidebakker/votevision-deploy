@@ -29,6 +29,7 @@
       </router-link>
 
       <router-link
+        v-if="!isLoggedIn"
         to="/registration"
         class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
       >
@@ -36,6 +37,15 @@
       </router-link>
 
       <router-link
+        v-if="!isLoggedIn"
+        to="/login"
+        class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+      >
+        <span class="font-medium">log in</span>
+      </router-link>
+
+      <router-link
+        v-if="isLoggedIn"
         to="/dummy-settings"
         class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
       >
@@ -43,6 +53,7 @@
       </router-link>
 
       <router-link
+        v-if="isLoggedIn"
         to="/dummy-profile"
         class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
       >
@@ -50,7 +61,8 @@
       </router-link>
 
       <router-link
-        to="/dummy-logout"
+        v-if="isLoggedIn"
+        to="/logout"
         class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
       >
         <span class="font-medium">Logout</span>
@@ -63,7 +75,7 @@
 </template>
 
 <script>
-import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue'
+import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
 
 export default {
   name: 'NavBar',
@@ -73,6 +85,11 @@ export default {
   data() {
     return {
       windowWidth: window.innerWidth
+    }
+  },
+  computed: {
+    isLoggedIn() {
+      return !!localStorage.getItem('jwtToken'); // Check if the token exists
     }
   },
   mounted() {
