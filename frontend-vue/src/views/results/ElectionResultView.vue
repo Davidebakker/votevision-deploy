@@ -1,35 +1,42 @@
 <template>
-  <div id="map" style="width: 100%; height: 500px"></div>
+  <div id="map-container">
+    <div id="map"></div>
+  </div>
 </template>
 
 <script>
 export default {
   mounted() {
-    // Dynamisch de scriptbestanden inladen
-    this.loadMapScripts()
+    this.loadMapScripts();
   },
   methods: {
     loadMapScripts() {
-      // Voeg de mapdata.js toe
-      const mapDataScript = document.createElement('script')
-      mapDataScript.src = '/maps/mapdata.js' // Zorg ervoor dat dit naar de juiste locatie wijst
-      mapDataScript.onload = this.loadCountryMap // Laad de kaart zodra dit script geladen is
-      document.head.appendChild(mapDataScript)
+      const mapDataScript = document.createElement('script');
+      mapDataScript.src = '/maps/mapdata.js';
+      mapDataScript.onload = this.loadCountryMap;
+      document.head.appendChild(mapDataScript);
     },
     loadCountryMap() {
-      // Voeg het countrymap.js bestand toe
-      const countryMapScript = document.createElement('script')
-      countryMapScript.src = '/maps/countrymap.js' // Zorg ervoor dat dit naar de juiste locatie wijst
-      document.head.appendChild(countryMapScript)
+      const countryMapScript = document.createElement('script');
+      countryMapScript.src = '/maps/countrymap.js';
+      document.head.appendChild(countryMapScript);
     }
   }
 }
 </script>
 
 <style scoped>
+#map-container {
+  display: flex;
+  justify-content:flex-start;
+  width: 300px;
+  height: 500px;
+  background-color: #aeaeae;
+}
+
 #map {
-  width: 50%;
-  height: 50%;
-  margin: 0 auto;
+  width: 300px;
+  height: 500px;
+  background-color: #aeaeae;
 }
 </style>

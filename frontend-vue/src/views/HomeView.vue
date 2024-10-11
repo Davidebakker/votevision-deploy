@@ -12,16 +12,13 @@
             voluptates. Cumque debitis dignissimos id quam vel!
           </p>
           <div class="flex justify-center lg:justify-start mt-6">
-            <a
+            <router-link to="/result/election-result">
+
+            <span
               class="px-4 py-3 bg-gray-900 text-gray-200 text-xs font-semibold rounded hover:bg-gray-800"
-              href="#"
-              >Get Started</a
+              >Get Started</span
             >
-            <a
-              class="mx-4 px-4 py-3 bg-gray-300 text-gray-900 text-xs font-semibold rounded hover:bg-gray-400"
-              href="#"
-              >Learn More</a
-            >
+            </router-link>
           </div>
         </div>
       </div>
