@@ -45,7 +45,7 @@
 import { ref } from 'vue'
 
 export default {
-  setup() {
+   setup() {
     const isMenuOpen = ref(false)
 
     const toggleMenu = () => {

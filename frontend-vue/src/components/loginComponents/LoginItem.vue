@@ -25,11 +25,12 @@ export default {
           axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
         }
 
-        alert("Data submitted successfully");
+        alert("You successfully logged in");
 
         router.push({ name: 'home' });
         window.location.reload();
       } catch (error) {
+        alert("Your email or password is wrong!")
         console.error(error);
       }
     };

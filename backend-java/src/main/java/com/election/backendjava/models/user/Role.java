@@ -1,4 +1,4 @@
-package com.election.backendjava.models;
+package com.election.backendjava.models.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import lombok.Setter;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer roleId;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
