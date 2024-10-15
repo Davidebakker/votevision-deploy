@@ -26,7 +26,7 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id = null;
+    private Long userId = null;
 
     @Column(name = "name")
     private String name;
@@ -61,4 +61,5 @@ public class User {
         this.name = name;
         this.region = region;
     }
+
 }

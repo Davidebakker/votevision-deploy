@@ -89,7 +89,13 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
-//         Create new user's account
+        if (signUpRequest.getPassword().length() < 8 &&
+                signUpRequest.getPassword().matches(".*[A-Z].*") &&
+                signUpRequest.getPassword().matches(".*[^a-zA-Z0-9].*")) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Password must be at least 8 characters and contain at least one a uppercase letter, one lowercase letter and one "));
+        }
 
         User user = new User(
                 signUpRequest.getUsername(),
