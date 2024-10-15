@@ -1,5 +1,6 @@
 package com.election.backendjava.models.election;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,9 +19,12 @@ public class Party {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer partyId = null;
 
+    @Column(unique = true, nullable = false)
     private String name;
+
     private String logo;
 
     @OneToMany(mappedBy = "party", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Candidate> candidates = new ArrayList<>();
 }
