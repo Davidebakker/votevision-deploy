@@ -5,6 +5,8 @@ import NationalElectionResultView from '../views/results/NationalElectionResultV
 import Registration from '@/components/RegistrationComponents/RegistrationItem.vue'
 import Login from '@/components/loginComponents/LoginItem.vue'
 import Logout from '@/components/loginComponents/LogoutItem.vue'
+import PartiesOverviewView from '@/views/PartiesOverviewView.vue'
+import PartiesOverview from '@/components/PartyOverviewComponents/PartiesOverview.vue'
 import Party from '@/components/Elections/TestPartyItem.vue'
 import Candidate from '@/components/Elections/TestCandidateItem.vue'
 
@@ -59,17 +61,23 @@ const router = createRouter({
     },
     // Elections
     {
-      path: '/party/:partyName',
+      path: '/partij/:partyName',
       name: 'party',
       component: Party,
       props: true
     },
     {
-      path: '/candidate/:candidateName',
+      path: '/kandidaat/:candidateName',
       name: 'candidate',
       component: Candidate,
       props: true
     },
+    {
+      path: '/parties',
+      name: 'parties',
+      component: PartiesOverview,
+      meta: { guestOnly: true }
+    }
   ]
 });
 

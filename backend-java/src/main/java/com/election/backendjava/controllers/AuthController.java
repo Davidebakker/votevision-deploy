@@ -158,7 +158,7 @@ public class AuthController {
                 rolesList));
     }
 
-    @PostMapping("/signout")
+    @PostMapping("/logout")
     public ResponseEntity<?> signOut() {
         SecurityContextHolder.clearContext();
 
