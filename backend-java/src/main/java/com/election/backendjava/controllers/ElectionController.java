@@ -2,6 +2,7 @@ package com.election.backendjava.controllers;
 
 import com.election.backendjava.models.election.Candidate;
 import com.election.backendjava.models.election.Party;
+import com.election.backendjava.models.election.Votes;
 import com.election.backendjava.payload.response.MessageResponse;
 import com.election.backendjava.repositories.CandidateRepository;
 import com.election.backendjava.repositories.PartyRepository;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -38,7 +40,7 @@ public class ElectionController {
 
     @GetMapping("/party/{partyName}")
     public ResponseEntity<?> getParty(@PathVariable String partyName) {
-        Optional<Party> getParty = partyRepository.findByName(partyName);
+        Optional<Party> getParty = partyRepository.findByNameIgnoreCase(partyName);
 
         if (getParty.isPresent()) {
             return ResponseEntity.ok(getParty.get());
@@ -50,7 +52,7 @@ public class ElectionController {
 
     @GetMapping("/candidate/{candidateName}")
     public ResponseEntity<?> getPartyCandidate(@PathVariable String candidateName) {
-        Optional<Candidate> getCandidate = candidateRepository.findByLastName(candidateName);
+        Optional<Candidate> getCandidate = candidateRepository.findByLastNameIgnoreCase(candidateName);
 
         if (getCandidate.isPresent()) {
             return ResponseEntity.ok(getCandidate.get());
@@ -59,4 +61,33 @@ public class ElectionController {
                     .body(new MessageResponse("Party not found with name: " + candidateName));
         }
     }
+
+    @GetMapping("/votes/party/{partyName}")
+    public ResponseEntity<?> getPartyVotes(@PathVariable String partyName) {
+        Optional<Party> getParty = partyRepository.findByNameIgnoreCase(partyName);
+
+        if (getParty.isPresent()) {
+            Party party = getParty.get();
+            Long getVotes = votesRepository.getTotalVotesByPartyId(party.getPartyId());
+            return ResponseEntity.ok(getVotes);
+        } else {
+            return ResponseEntity.badRequest().body(new MessageResponse("Party not found with name: " + partyName));
+
+        }
+    }
+
+    @GetMapping("/votes/candidate/{candidateName}")
+    public ResponseEntity<?> getCandidateVotes(@PathVariable String candidateName) {
+        Optional<Candidate> getCandidate = candidateRepository.findByLastNameIgnoreCase(candidateName);
+
+        if (getCandidate.isPresent()) {
+            Candidate candidate = getCandidate.get();
+            Long getVotes = votesRepository.getTotalVotesByCandidateId(candidate.getCandidateId());
+            return ResponseEntity.ok(getVotes);
+        } else {
+            return ResponseEntity.badRequest().body(new MessageResponse("candidate not found with name: " + candidateName));
+        }
+    }
+
+
 }

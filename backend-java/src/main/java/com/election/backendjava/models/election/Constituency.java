@@ -13,11 +13,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "constituencies")
 public class Constituency {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer constituency = null;
+    @Column(name = "constituency_id")
+    private int constituencyId;
+
     private String name;
 
     @OneToMany(mappedBy = "constituency", cascade = CascadeType.ALL)
@@ -25,5 +25,3 @@ public class Constituency {
     private List<Municipality> municipality = new ArrayList<>();
 
 }
-
-
