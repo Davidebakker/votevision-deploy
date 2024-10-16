@@ -18,8 +18,8 @@ export default {
         username: username.value,
         email: email.value,
         password: password.value,
-        region: region.value,
-      };
+        region: region.value
+      }
 
       try {
         const response = await axios.post('http://localhost:8080/api/auth/signup', userData);
@@ -42,8 +42,9 @@ export default {
         } else {
           alert("An unexpected error occurred.");
         }
+        console.error(error)
       }
-    };
+    }
 
     return {
       name,
@@ -51,18 +52,19 @@ export default {
       email,
       password,
       region,
-      handleSubmit,
-    };
-  },
-};
+      handleSubmit
+    }
+  }
+}
 </script>
 
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <div
+      class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800"
+    >
       <div class="px-6 py-4">
-        <div class="flex justify-center mx-auto">
-        </div>
+        <div class="flex justify-center mx-auto"></div>
 
         <h3 class="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
           Register
@@ -71,7 +73,7 @@ export default {
         <form @submit.prevent="handleSubmit">
           <div class="w-full mt-4">
             <input
-              class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+              class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
               type="text"
               placeholder="Name"
               v-model="name"
@@ -81,7 +83,7 @@ export default {
 
           <div class="w-full mt-4">
             <input
-              class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+              class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
               type="text"
               placeholder="Username"
               v-model="username"
@@ -91,7 +93,7 @@ export default {
 
           <div class="w-full mt-4">
             <input
-              class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+              class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
               type="email"
               placeholder="Email"
               v-model="email"
@@ -101,7 +103,7 @@ export default {
 
           <div class="w-full mt-4">
             <input
-              class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+              class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
               type="password"
               placeholder="Password"
               v-model="password"
@@ -111,7 +113,7 @@ export default {
 
           <div class="w-full mt-4">
             <input
-              class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+              class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
               type="text"
               placeholder="Region"
               v-model="region"
