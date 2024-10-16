@@ -1,5 +1,6 @@
 package com.election.backendjava.models.election;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,8 @@ public class Candidate {
 
     private String firstName;
     private String lastNamePrefix;
+
+    @Column(name = "last_name")
     private String lastName;
     private String initials;
     private String locality;
@@ -27,5 +30,6 @@ public class Candidate {
     @ManyToOne
     @MapsId("partyId")
     @JoinColumn(name = "partyId", nullable = false)
+    @JsonBackReference
     private Party party;
 }

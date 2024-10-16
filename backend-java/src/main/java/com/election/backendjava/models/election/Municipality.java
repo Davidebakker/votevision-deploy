@@ -1,5 +1,6 @@
 package com.election.backendjava.models.election;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class Municipality {
 
     @ManyToOne
     @JoinColumn(name = "constituencyId", nullable = false)
+    @JsonBackReference
     private Constituency constituency;
 }
 

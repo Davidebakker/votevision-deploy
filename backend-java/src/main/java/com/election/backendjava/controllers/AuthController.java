@@ -158,8 +158,10 @@ public class AuthController {
                 rolesList));
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/signout")
     public ResponseEntity<?> signOut() {
+        SecurityContextHolder.clearContext();
+
         return ResponseEntity.ok(new MessageResponse("Signed out successfully!"));
     }
 }
