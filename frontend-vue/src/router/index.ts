@@ -82,14 +82,14 @@ const router = createRouter({
     },
     {
       path: '/forum',
-      name: 'ForumPost',
-      component: PostForum,
+      name: 'ForumItem',
+      component: ForumItem,
       meta: {guestOnly: true}
     },
     {
-      path:'/forumPost',
-      name:'Forum',
-      component: ForumItem,
+      path:'/ForumPost',
+      name:'ForumPost',
+      component: PostForum,
       meta: {guestOnly: true}
     },
   ]
