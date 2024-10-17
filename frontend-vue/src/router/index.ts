@@ -10,6 +10,7 @@ import PartiesOverview from '@/components/PartyOverviewComponents/PartiesOvervie
 import Party from '@/components/Elections/TestPartyItem.vue'
 import Candidate from '@/components/Elections/TestCandidateItem.vue'
 import PostForum from "@/components/ForumComponents/PostForum.vue";
+import ForumItem from "@/components/ForumComponents/ForumItem.vue";
 
 // Utility function to check if the user is logged in
 function isLoggedIn() {
@@ -81,8 +82,14 @@ const router = createRouter({
     },
     {
       path: '/forum',
-      name: 'Forum',
+      name: 'ForumPost',
       component: PostForum,
+      meta: {guestOnly: true}
+    },
+    {
+      path:'/forumPost',
+      name:'Forum',
+      component: ForumItem,
       meta: {guestOnly: true}
     },
   ]
