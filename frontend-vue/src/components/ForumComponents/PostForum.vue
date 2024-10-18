@@ -1,47 +1,9 @@
-<template>
-  <div class="forum">
-    <h1>Forum</h1>
-
-    <!-- Form to add a new post -->
-    <div class="new-post">
-      <h2>Plaats een nieuw bericht</h2>
-      <form @submit.prevent="addPost">
-        <input
-            v-model="newPost.title"
-            type="text"
-            placeholder="Titel"
-            required
-        />
-        <textarea
-            v-model="newPost.content"
-            placeholder="Inhoud van het bericht"
-            required
-        ></textarea>
-        <button type="submit">Plaats bericht</button>
-      </form>
-    </div>
-
-    <!-- List of posts -->
-    <div class="posts">
-      <h2>Berichten</h2>
-      <div v-if="posts.length === 0">Er zijn nog geen berichten.</div>
-      <div v-else>
-        <div
-            v-for="(post, index) in posts"
-            :key="index"
-            class="post"
-        >
-          <h3>{{ post.title }}</h3>
-          <p>{{ post.content }}</p>
-          <small>Geplaatst op: {{ post.date }}</small>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import { ref } from "vue";
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+import { onMounted } from 'vue'
+
 
 export default {
   setup() {
@@ -79,6 +41,50 @@ export default {
   },
 };
 </script>
+
+<template>
+
+  <div class="forum">
+    <h1>Forum</h1>
+
+    <div class="new-post">
+      <h2>Plaats een nieuw bericht</h2>
+      <form @submit.prevent="addPost">
+        <input
+            v-model="newPost.title"
+            type="text"
+            placeholder="Titel"
+            required
+        />
+        <textarea
+            v-model="newPost.content"
+            placeholder="Inhoud van het bericht"
+            required
+        ></textarea>
+        <button type="submit">Plaats bericht</button>
+      </form>
+    </div>
+
+    <!-- List of posts -->
+    <div class="posts">
+      <h2>Berichten</h2>
+      <div v-if="posts.length === 0">Er zijn nog geen berichten.</div>
+      <div v-else>
+        <div
+            v-for="(post, index) in posts"
+            :key="index"
+            class="post"
+        >
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.content }}</p>
+          <small>Geplaatst op: {{ post.date }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
 
 <style scoped>
 .forum {
