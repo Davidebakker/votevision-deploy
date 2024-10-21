@@ -15,8 +15,8 @@ export default {
     const posts = ref([
       // Voorbeeldberichten
       {
-        title: "Welkom op het forum",
-        content: "Dit is het eerste bericht op ons nieuwe forum!",
+        title: "Write Your Opinoin",
+        content: "This is the first message on our page",
         date: new Date().toLocaleString(),
       },
     ]);
