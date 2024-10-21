@@ -13,7 +13,6 @@ export default {
     });
 
     const posts = ref([
-      // Voorbeeldberichten
       {
         title: "Write Your Opinoin",
         content: "This is the first message on our page",
@@ -43,7 +42,6 @@ export default {
 </script>
 
 <template>
-
   <div class="forum">
     <h1>Forum</h1>
 
@@ -91,6 +89,7 @@ export default {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  color: #ffffff;
 }
 
 .new-post form {
