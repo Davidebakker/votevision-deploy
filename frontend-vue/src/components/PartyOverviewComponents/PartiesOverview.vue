@@ -33,7 +33,7 @@ onMounted(() => {
             class="object-cover w-full rounded-lg h-96"
             :src="party.logo"
             :alt="`Logo van ${party.name}`"
-          />
+          >
           <h2 class="mt-4 text-xl font-semibold text-gray-800 capitalize dark:text-white">
             {{ party.name }}
           </h2>
