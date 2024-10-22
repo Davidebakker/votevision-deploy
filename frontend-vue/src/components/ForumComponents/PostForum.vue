@@ -10,20 +10,14 @@ export default {
     });
 
     const submitPost = () => {
-      // Haal de bestaande comments uit localStorage
       const existingComments = JSON.parse(localStorage.getItem('comments')) || [];
-
-      // Voeg de nieuwe post toe
       const newComment = {
         content: newPost.value.content,
         date: new Date().toLocaleString(),
       };
       existingComments.push(newComment);
 
-      // Sla de comments weer op in localStorage
       localStorage.setItem('comments', JSON.stringify(existingComments));
-
-      // Leidt de gebruiker terug naar de forum-pagina
       router.push('');
     };
 
@@ -70,6 +64,6 @@ export default {
 }
 
 .bg-gray-100 {
-  background-color: #111827; /* Donkere achtergrond */
+  background-color: #111827;
 }
 </style>

@@ -3,7 +3,6 @@ import { ref } from 'vue';
 
 export default {
   setup() {
-    // Comments worden hier opgeslagen
     const comments = ref([]);
 
     if (localStorage.getItem('comments')) {
@@ -54,7 +53,7 @@ export default {
 }
 
 .bg-gray-100 {
-  background-color: #111827; /* Donkere achtergrond zoals in eerdere styling */
+  background-color: #111827;
 }
 
 button, .router-link-active {
