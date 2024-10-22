@@ -1,4 +1,4 @@
-package com.election.backendjava.repositories;
+package com.election.backendjava.repositories.election;
 
 import com.election.backendjava.models.election.Candidate;
 import org.springframework.data.jpa.repository.JpaRepository;

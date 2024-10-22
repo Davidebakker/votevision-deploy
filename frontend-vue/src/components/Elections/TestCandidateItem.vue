@@ -10,7 +10,7 @@ export default {
 
     async function fetchPartyData() {
       try {
-        const response = await axios.get(`http://localhost:8080/api/elections/candidate/${candidateName}`);
+        const response = await axios.get(`http://localhost:8080/api/elections/votes/candidate/${candidateName}`);
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching party data:", error);
