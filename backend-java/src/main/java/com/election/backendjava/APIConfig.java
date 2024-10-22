@@ -26,7 +26,9 @@ public class APIConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns("https://localhost:8080", "http://localhost:3001","http://localhost:3000", "http://*.hva.nl:*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE");
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 
     @Autowired
