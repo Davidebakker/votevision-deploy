@@ -14,10 +14,10 @@ export default {
         localStorage.removeItem('jwtToken');
         axios.defaults.headers.common['Authorization'] = null;
 
+        alert("You are successfully logged out!")
+
         await router.push({ name: 'login' });
         window.location.reload();
-
-        alert("You are successfully logged out!");
       } catch (error) {
         alert("An error occurred while logging out");
         console.error("Error during sign-out:", error);

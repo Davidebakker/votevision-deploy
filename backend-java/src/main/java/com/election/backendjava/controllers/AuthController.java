@@ -28,8 +28,8 @@ import com.election.backendjava.payload.request.LoginRequest;
 import com.election.backendjava.payload.request.RegisterRequest;
 import com.election.backendjava.payload.response.JwtResponse;
 import com.election.backendjava.payload.response.MessageResponse;
-import com.election.backendjava.repositories.RoleRepository;
-import com.election.backendjava.repositories.UserRepository;
+import com.election.backendjava.repositories.election.RoleRepository;
+import com.election.backendjava.repositories.user.UserRepository;
 import com.election.backendjava.security.jwt.JwtUtils;
 import com.election.backendjava.security.services.UserDetailsImpl;
 
@@ -158,7 +158,7 @@ public class AuthController {
                 rolesList));
     }
 
-    @PostMapping("/signout")
+    @PostMapping("/logout")
     public ResponseEntity<?> signOut() {
         SecurityContextHolder.clearContext();
 

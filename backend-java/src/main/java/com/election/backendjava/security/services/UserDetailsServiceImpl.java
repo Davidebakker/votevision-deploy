@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.election.backendjava.models.user.User;
-import com.election.backendjava.repositories.UserRepository;
+import com.election.backendjava.repositories.user.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

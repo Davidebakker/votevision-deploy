@@ -9,6 +9,7 @@ import PartiesOverviewView from '@/views/PartiesOverviewView.vue'
 import PartiesOverview from '@/components/PartyOverviewComponents/PartiesOverview.vue'
 import Party from '@/components/Elections/TestPartyItem.vue'
 import Candidate from '@/components/Elections/TestCandidateItem.vue'
+import Post from '@/components/chatComponents/PostCommentItem.vue'
 
 // Utility function to check if the user is logged in
 function isLoggedIn() {
@@ -61,13 +62,13 @@ const router = createRouter({
     },
     // Elections
     {
-      path: '/party/:partyName',
+      path: '/partij/:partyName',
       name: 'party',
       component: Party,
       props: true
     },
     {
-      path: '/candidate/:candidateName',
+      path: '/kandidaat/:candidateName',
       name: 'candidate',
       component: Candidate,
       props: true

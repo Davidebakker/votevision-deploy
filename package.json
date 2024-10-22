@@ -4,6 +4,7 @@
     "node.js": "^0.0.1-security"
   },
   "devDependencies": {
+    "esbuild": "^0.21.5",
     "tailwindcss": "^3.4.13"
   }
 }
