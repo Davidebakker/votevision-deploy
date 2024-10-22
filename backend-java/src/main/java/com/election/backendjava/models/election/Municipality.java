@@ -15,11 +15,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Municipality {
+
     @Id
     @Column(name = "municipality_id")
     private String municipalityId;
 
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "province_id", nullable = false)
+    @JsonBackReference
+    private Province province;
 
     @ManyToOne
     @JoinColumn(name = "constituency_id", nullable = false)
