@@ -2,18 +2,16 @@ package com.election.backendjava.controllers;
 
 import com.election.backendjava.models.election.Candidate;
 import com.election.backendjava.models.election.Party;
-import com.election.backendjava.models.election.Votes;
 import com.election.backendjava.payload.response.MessageResponse;
-import com.election.backendjava.repositories.CandidateRepository;
-import com.election.backendjava.repositories.PartyRepository;
-import com.election.backendjava.repositories.StationRepository;
-import com.election.backendjava.repositories.VotesRepository;
+import com.election.backendjava.repositories.election.CandidateRepository;
+import com.election.backendjava.repositories.election.PartyRepository;
+import com.election.backendjava.repositories.election.StationRepository;
+import com.election.backendjava.repositories.election.VotesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)

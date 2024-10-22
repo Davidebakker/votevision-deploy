@@ -5,10 +5,11 @@ import NationalElectionResultView from '../views/results/NationalElectionResultV
 import Registration from '@/components/RegistrationComponents/RegistrationItem.vue'
 import Login from '@/components/loginComponents/LoginItem.vue'
 import Logout from '@/components/loginComponents/LogoutItem.vue'
-import PartiesOverviewView from '@/views/PartiesOverviewView.vue'
-import PartiesOverview from '@/components/PartyOverviewComponents/PartiesOverview.vue'
+// import PartiesOverviewView from '@/views/PartiesOverviewView.vue'
+// import PartiesOverview from '@/components/PartyOverviewComponents/PartiesOverview.vue'
 import Party from '@/components/Elections/TestPartyItem.vue'
 import Candidate from '@/components/Elections/TestCandidateItem.vue'
+import Post from '@/components/chatComponents/PostCommentItem.vue'
 
 // Utility function to check if the user is logged in
 function isLoggedIn() {
@@ -73,11 +74,17 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/parties',
-      name: 'parties',
-      component: PartiesOverview,
-      meta: { guestOnly: true }
-    }
+      path: '/onderwerp/:onderwerpNummer',
+      name: 'onderwerp',
+      component: Post,
+      props: true
+    },
+    // {
+    //   path: '/parties',
+    //   name: 'parties',
+    //   component: PartiesOverview,
+    //   meta: { guestOnly: true }
+    // }
   ]
 });
 

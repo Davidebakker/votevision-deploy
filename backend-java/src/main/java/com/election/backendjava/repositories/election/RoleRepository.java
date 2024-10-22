@@ -1,4 +1,4 @@
-package com.election.backendjava.repositories;
+package com.election.backendjava.repositories.election;
 
 import java.util.Optional;
 
