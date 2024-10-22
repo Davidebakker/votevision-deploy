@@ -2,9 +2,7 @@ package com.election.backendjava.models.election;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,17 @@ public class Party {
     
     @OneToMany(mappedBy = "party", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<Candidate> candidates = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<ElectionResult> electionResults;
+
 
 
     @Override
