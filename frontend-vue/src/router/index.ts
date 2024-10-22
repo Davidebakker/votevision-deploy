@@ -73,7 +73,6 @@ const router = createRouter({
       component: Candidate,
       props: true
     },
-    },
     {
       path: '/parties',
       name: 'parties',
