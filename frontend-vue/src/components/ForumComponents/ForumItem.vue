@@ -2,7 +2,13 @@
 export default {
   setup() {
     // In deze pagina worden de comments getoond
-    return {};
+    const comments = reff ([]);
+    if (localStorage.getItem('comments')){
+      comments.value = JSON.pase (localStorage.getItem('comments'));
+    }
+    return {
+     comments,
+    };
   },
 };
 </script>
