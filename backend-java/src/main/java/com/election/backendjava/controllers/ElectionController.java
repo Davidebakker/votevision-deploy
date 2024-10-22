@@ -31,7 +31,7 @@ public class ElectionController {
     @Autowired
     VotesRepository votesRepository;
 
-    @GetMapping("/parties")
+    @GetMapping("/all-parties")
     public ResponseEntity<?> getAllParties() {
         return ResponseEntity.ok(partyRepository.findAll());
     }
