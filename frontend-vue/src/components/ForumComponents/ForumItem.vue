@@ -1,13 +1,16 @@
 <script>
+import { ref } from 'vue';
+
 export default {
   setup() {
-    // In deze pagina worden de comments getoond
-    const comments = reff ([]);
-    if (localStorage.getItem('comments')){
-      comments.value = JSON.pase (localStorage.getItem('comments'));
+    const comments = ref([]);
+
+    if (localStorage.getItem('comments')) {
+      comments.value = JSON.parse(localStorage.getItem('comments'));
     }
+
     return {
-     comments,
+      comments,
     };
   },
 };
@@ -28,8 +31,17 @@ export default {
     <!-- Comments lijst -->
     <div class="w-full max-w-3xl px-6 py-4">
       <h2 class="text-lg font-medium text-gray-600 dark:text-gray-200">Comments</h2>
-      <div class="text-center text-gray-500 dark:text-gray-400">Er zijn nog geen comments.</div>
-      <!-- De comments worden hier weergegeven wanneer ze beschikbaar zijn -->
+      <div v-if="comments.length === 0" class="text-center text-gray-500 dark:text-gray-400">Er zijn nog geen comments.</div>
+      <div v-else>
+        <div
+            v-for="(comment, index) in comments"
+            :key="index"
+            class="mt-4 p-4 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600"
+        >
+          <p class="text-gray-600 dark:text-gray-200">{{ comment.content }}</p>
+          <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">Geplaatst op: {{ comment.date }}</small>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -41,7 +53,7 @@ export default {
 }
 
 .bg-gray-100 {
-  background-color: #111827; /* Donkere achtergrond zoals in eerdere styling */
+  background-color: #111827;
 }
 
 button, .router-link-active {
