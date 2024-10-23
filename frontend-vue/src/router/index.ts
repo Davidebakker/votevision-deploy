@@ -77,11 +77,13 @@ const router = createRouter({
       path: '/parties',
       name: 'parties',
       component: PartiesOverview,
+
     },
     {
       path: '/forum',
       name: 'ForumItem',
       component: ForumItem,
+      meta: { userOnly: true }
     },
     {
       path:'/onderwerp/:onderwerpNummer',
