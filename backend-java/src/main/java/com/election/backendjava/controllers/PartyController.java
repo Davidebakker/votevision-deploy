@@ -1,7 +1,7 @@
 //package com.election.backendjava.controllers;
 //
 //import com.election.backendjava.models.election.Party;
-//import com.election.backendjava.repositories.election.PartyRepository;
+//import com.election.backendjava.repositories.PartyRepository;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.web.bind.annotation.*;
 //
@@ -13,7 +13,7 @@
 //public class PartyController {
 //
 //    @Autowired
-//    PartyRepository partyRepository;
+//    private PartyRepository partyRepository;
 //
 //    // Endpoint om alle partijen op te halen
 //    @GetMapping("/parties")

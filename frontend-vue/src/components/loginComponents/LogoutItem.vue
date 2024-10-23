@@ -9,9 +9,7 @@ export default {
 
     onMounted(async () => {
       try {
-
-
-        await axios.post('http://localhost:8080/api/auth/signout', { username: 'your_username' });
+        await axios.post('http://localhost:8080/api/auth/logout', { username: 'your_username' });
 
         localStorage.removeItem('jwtToken');
         axios.defaults.headers.common['Authorization'] = null;
