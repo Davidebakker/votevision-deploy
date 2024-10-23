@@ -83,12 +83,12 @@ const router = createRouter({
       path: '/forum',
       name: 'ForumItem',
       component: ForumItem,
-      meta: { userOnly: true }
     },
     {
-      path:'/onderwerp/:onderwerpNummer',
+      path:'/ForumPost',
       name:'ForumPost',
       component: PostForum,
+      meta: { userOnly: true }
     },
   ]
 });
