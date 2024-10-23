@@ -6,31 +6,30 @@ import axios from 'axios';
 
 export default {
   setup() {
-    const router = useRouter();
-    const newPost = ref({
-      content: "",
+    const newComment = ref({
+      commentText: "",
     });
+    const router = useRouter();
 
-    const submitPost = () => {
-      const existingComments = JSON.parse(localStorage.getItem('comments')) || [];
-      const newComment = {
-        content: newPost.value.content,
-        date: new Date().toLocaleString(),
-      };
-      existingComments.push(newComment);
 
-      localStorage.setItem('comments', JSON.stringify(existingComments));
-      router.push('');
+    const submitComment = async () => {
+      try {
+        const response = await axios.post(`http://localhost:8080/api/chat/topic/1/comment/post`, newComment.value);
+        console.log(response.data);
+
+        router.push('/forum');
+      } catch (error) {
+        console.error('Error posting comment:', error);
+      }
     };
 
     const cancelPost = () => {
-      // Bij annuleren terug naar de forum-pagina
       router.push('/forum');
     };
 
     return {
-      newPost,
-      submitPost,
+      newComment,
+      submitComment,
       cancelPost,
     };
   },
