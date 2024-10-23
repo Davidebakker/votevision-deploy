@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "stations")
 public class Station {
     @Id
     @Column(name = "station_id")

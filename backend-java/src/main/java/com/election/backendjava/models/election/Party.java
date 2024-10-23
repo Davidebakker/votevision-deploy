@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "parties")
 public class Party {
 
     @Id

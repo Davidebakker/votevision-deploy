@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "municipalities")
 public class Municipality {
 
     @Id
