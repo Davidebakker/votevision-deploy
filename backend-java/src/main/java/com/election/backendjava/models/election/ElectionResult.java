@@ -16,9 +16,9 @@ public class ElectionResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long resultId;
 
-    @ManyToOne
-    @JoinColumn(name = "province_id", nullable = false)
-    private Province province;
+//    @ManyToOne
+//    @JoinColumn(name = "province_id", nullable = false)
+//    private Province province;
 
     @ManyToOne
     @JoinColumn(name = "party_id", nullable = false)

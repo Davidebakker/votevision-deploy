@@ -22,14 +22,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class APIConfig implements WebMvcConfigurer {
 
-    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns("https://localhost:8080", "http://localhost:3001","http://localhost:3000", "http://*.hva.nl:*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
+
+
 
     @Autowired
     UserDetailsServiceImpl userDetailsService;

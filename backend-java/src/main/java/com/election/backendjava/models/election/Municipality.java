@@ -22,10 +22,10 @@ public class Municipality {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "province_id", nullable = false)
-    @JsonBackReference
-    private Province province;
+//    @ManyToOne
+//    @JoinColumn(name = "province_id", nullable = false)
+//    @JsonBackReference
+//    private Province province;
 
     @ManyToOne
     @JoinColumn(name = "constituency_id", nullable = false)
