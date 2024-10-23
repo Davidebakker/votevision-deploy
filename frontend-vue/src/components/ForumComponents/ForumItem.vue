@@ -1,28 +1,32 @@
 <script>
+import { ref } from 'vue';
+
 export default {
   setup() {
     // In deze pagina worden de comments getoond
-    const comments = reff ([]);
-    if (localStorage.getItem('comments')){
-      comments.value = JSON.pase (localStorage.getItem('comments'));
+    const comments = ref([]);
+    if (localStorage.getItem('comments')) {
+      comments.value = JSON.parse(localStorage.getItem('comments'));
     }
     return {
-     comments,
+      comments,
     };
   },
 };
 </script>
+
 
 <template>
   <div class="min-h-screen flex flex-col items-center justify-start bg-gray-100">
     <!-- Header met knop -->
     <div class="w-full max-w-3xl px-6 py-4 flex justify-end">
       <router-link
-          to="/ForumPost"
-          class="px-4 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+        to="/onderwerp/:onderwerpNummer"
+      class="px-4 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
       >
-        Plaats comment
+      Plaats comment
       </router-link>
+
     </div>
 
     <!-- Comments lijst -->
