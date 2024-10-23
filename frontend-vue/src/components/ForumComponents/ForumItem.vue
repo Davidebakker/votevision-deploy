@@ -6,7 +6,7 @@ export default {
     const comments = ref([]);
 
     if (localStorage.getItem('comments')) {
-      comments.value = JSON.parse(localStorage.getItem('comments'));
+      comments.value = JSON.parse(localStorage.getItem('comments')).reverse();
     }
 
     return {

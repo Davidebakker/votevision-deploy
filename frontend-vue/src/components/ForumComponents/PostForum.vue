@@ -21,9 +21,15 @@ export default {
       router.push('');
     };
 
+    const cancelPost = () => {
+      // Bij annuleren terug naar de forum-pagina
+      router.push('/forum');
+    };
+
     return {
       newPost,
       submitPost,
+      cancelPost,
     };
   },
 };
@@ -45,12 +51,22 @@ export default {
               class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
               required
           ></textarea>
-          <button
-              type="submit"
-              class="flex center w-full px-4 py-2 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
-          >
-            Posten
-          </button>
+          <div class="flex mt-4">
+            <button
+                type="submit"
+                class="w-4/5 px-4 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 mr-2"
+            >
+              Posten
+            </button>
+
+            <button
+                type="button"
+                @click="cancelPost"
+                class="w-1/4 px-4 py-2bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300 focus:ring-opacity-50 mr-2"
+            >
+              Annuleren
+            </button>
+          </div>
         </form>
       </div>
     </div>
