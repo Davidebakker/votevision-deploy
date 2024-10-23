@@ -56,8 +56,9 @@ public class ChatController {
         // Create a new Comment and set the fields
         Comment comment = new Comment();
         comment.setCommentText(commentRequest.getCommentText());
-        comment.setTopic(topic);  // Set topic
-        comment.setUser(user);    // Set user
+        comment.setCommentTitle(commentRequest.getTitle());
+        comment.setTopic(topic);
+        comment.setUser(user);
 
         // Save the comment to the repository
         commentRepository.save(comment);

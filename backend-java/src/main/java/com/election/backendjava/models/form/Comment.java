@@ -20,6 +20,9 @@ public class Comment {
     @Column(nullable = false)
     private String commentText;
 
+    @Column(nullable = false)
+    private String commentTitle;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_id", nullable = false)
     @JsonBackReference
