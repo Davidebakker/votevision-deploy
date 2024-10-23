@@ -28,15 +28,6 @@ public class Party {
     @ToString.Exclude
     private List<Candidate> candidates = new ArrayList<>();
 
-
-    @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private List<ElectionResult> electionResults;
-
-
-
     @Override
     public String toString() {
         StringBuilder candidatesList = new StringBuilder();
