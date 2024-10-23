@@ -1,8 +1,7 @@
 <script>
-import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import axios from 'axios';
-
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
@@ -11,17 +10,17 @@ export default {
     });
     const router = useRouter();
 
-
     const submitComment = async () => {
       try {
         const response = await axios.post(`http://localhost:8080/api/chat/topic/1/comment/post`, newComment.value);
-        console.log(response.data);
+        console.log('Comment geplaatst:', response.data);
 
-        router.push('/forum');
+        await router.push('/forum'); //
       } catch (error) {
         console.error('Error posting comment:', error);
       }
     };
+
 
     const cancelPost = () => {
       router.push('/forum');
@@ -45,13 +44,14 @@ export default {
           Maak een nieuwe post
         </h2>
 
-        <form @submit.prevent="submitPost" class="mt-4">
+        <form @submit.prevent="submitComment" class="mt-4">
           <textarea
-              v-model="newPost.content"
+              v-model="newComment.commentText"
               placeholder="Schrijf je post..."
               class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
               required
           ></textarea>
+
           <div class="flex mt-4">
             <button
                 type="submit"
@@ -63,9 +63,9 @@ export default {
             <button
                 type="button"
                 @click="cancelPost"
-                class="w-1/4 px-4 py-2bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300 focus:ring-opacity-50 mr-2"
+                class="w-1/5 px-4 py-2 bg-red-700 text-white font-small rounded-lg hover:bg-red-900 focus:outline-none focus:ring focus:ring-red-700 focus:ring-opacity-50"
             >
-              Annuleren
+              Cancel
             </button>
           </div>
         </form>
