@@ -5,13 +5,11 @@ import NationalElectionResultView from '../views/results/NationalElectionResultV
 import Registration from '@/components/RegistrationComponents/RegistrationItem.vue'
 import Login from '@/components/loginComponents/LoginItem.vue'
 import Logout from '@/components/loginComponents/LogoutItem.vue'
-// import PartiesOverviewView from '@/views/PartiesOverviewView.vue'
 import PartiesOverview from '@/components/PartyOverviewComponents/PartiesOverview.vue'
 import Party from '@/components/Elections/TestPartyItem.vue'
 import Candidate from '@/components/Elections/TestCandidateItem.vue'
 import PostForum from "@/components/ForumComponents/PostForum.vue";
 import ForumItem from "@/components/ForumComponents/ForumItem.vue";
-// import Post from '@/components/chatComponents/PostCommentItem.vue'
 
 // Utility function to check if the user is logged in
 function isLoggedIn() {
@@ -82,14 +80,15 @@ const router = createRouter({
     {
       path: '/forum',
       name: 'ForumItem',
-      component: ForumItem
+      component: ForumItem,
+      meta: { userOnly: true }
     },
     {
-      path: '/forum/:topicId',  // Ensure dynamic `topicId` here
-      name: 'ForumPost',
+      path:'/onderwerp/:onderwerpNummer',
+      name:'ForumPost',
       component: PostForum,
-      props: true  // Pass topicId as a prop
-    }
+      meta: { userOnly: true }
+    },
   ]
 });
 
