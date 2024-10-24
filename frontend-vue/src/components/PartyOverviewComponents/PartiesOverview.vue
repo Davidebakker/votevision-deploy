@@ -30,10 +30,11 @@ onMounted(() => {
       <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
         <div v-for="party in parties" :key="party.partyId">
           <img
-            class="object-cover w-full rounded-lg h-96"
+            class="object-cover w-64 rounded-lg h-64"
             :src="party.logo"
             :alt="`Logo van ${party.name}`"
-          >
+          />
+
           <h2 class="mt-4 text-xl font-semibold text-gray-800 capitalize dark:text-white">
             {{ party.name }}
           </h2>
