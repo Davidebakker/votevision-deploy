@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "parties")
 public class Party {
 
     @Id
@@ -27,15 +28,6 @@ public class Party {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<Candidate> candidates = new ArrayList<>();
-
-
-    @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private List<ElectionResult> electionResults;
-
-
 
     @Override
     public String toString() {

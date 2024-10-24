@@ -1,35 +1,35 @@
 <template>
-  <div id="map-container">
-    <div id="map"></div>
-    <div id="election-results" v-if="selectedProvince">
-      <h3>Election Results for {{ selectedProvinceName }}</h3>
-      <div v-if="isLoading">
-        <p>Loading data...</p>
-      </div>
-      <div v-else-if="electionData">
-        <p><strong>Winning Party:</strong> {{ electionData.winningParty }}</p>
-        <p><strong>Total Votes:</strong> {{ electionData.totalVotes }}</p>
-      </div>
-      <div v-else-if="error">
-        <p>{{ error }}</p>
+  <div class="flex flex-col items-center bg-gray-900 min-h-screen text-white">
+    <div id="map-container" class="w-full flex justify-center p-6">
+      <!-- The map will be dynamically injected here -->
+      <div id="map" class="w-full lg:w-3/4 xl:w-1/2 h-[600px]"></div>
+    </div>
+    <div id="election-summary" class="w-full max-w-4xl p-6 mt-6 bg-gray-800 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-semibold mb-4">Overall Election Information in the Netherlands 2023</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-gray-700 p-4 rounded-lg shadow-md">
+          <h3 class="text-xl font-bold">Total Voting Locations</h3>
+          <p class="text-lg mt-2">19,226 voting locations across the country.</p>
+        </div>
+        <div class="bg-gray-700 p-4 rounded-lg shadow-md">
+          <h3 class="text-xl font-bold">Average Turnout Rate</h3>
+          <p class="text-lg mt-2">Estimated to be around 76.5% nationwide.</p>
+        </div>
+        <div class="bg-gray-700 p-4 rounded-lg shadow-md">
+          <h3 class="text-xl font-bold">Most Popular Party</h3>
+          <p class="text-lg mt-2">"Party PVV" with 32% of the votes.</p>
+        </div>
+        <div class="bg-gray-700 p-4 rounded-lg shadow-md">
+          <h3 class="text-xl font-bold">Highest Turnout Province</h3>
+          <p class="text-lg mt-2">Zuid-Holland with 82% turnout.</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
-  data() {
-    return {
-      selectedProvince: null,
-      selectedProvinceName: "",
-      electionData: null,
-      isLoading: false,
-      error: null,
-    };
-  },
   mounted() {
     this.loadMapScripts();
   },
@@ -47,60 +47,16 @@ export default {
       document.head.appendChild(countryMapScript);
     },
     addMapFunctions() {
-      for (let stateKey in simplemaps_countrymap_mapdata.state_specific) {
-        let province = simplemaps_countrymap_mapdata.state_specific[stateKey];
-        let element = document.getElementById(stateKey);
-
-        if (element) {
-          element.addEventListener('click', () => {
-            this.selectedProvince = stateKey;
-            this.selectedProvinceName = province.name;
-            this.fetchElectionData(stateKey);
-          });
-        }
-      }
-    },
-    fetchElectionData(provinceId) {
-      this.isLoading = true;
-      this.electionData = null;
-      this.error = null;
-      axios.get(`/api/elections/province/${provinceId}`)
-        .then(response => {
-          this.electionData = response.data;
-          this.isLoading = false;
-        })
-        .catch(error => {
-          console.error("Error fetching election data:", error);
-          this.error = "Failed to load election data. Please try again.";
-          this.isLoading = false;
-        });
+      // Optional: Add any custom functionality to the map here if needed
+      console.log("Map is ready and functional");
     }
   }
 };
 </script>
 
 <style scoped>
-#map-container {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  height: 100%;
-}
-
+/* Remove the previous styling to let TailwindCSS handle everything */
 #map {
-  width: 300px;
-  height: 400px;
-  border: 5px solid #f8f9fa;
-  background-color: #1a1a1a;
-  cursor: pointer;
-}
-
-#election-results {
-  margin-right: 20px;
-  color: white;
-  padding: 10px;
-  border: 2px solid #f8f9fa;
-  background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 5px;
+  /* Set to full width and appropriate height using TailwindCSS */
 }
 </style>

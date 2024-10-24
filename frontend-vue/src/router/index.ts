@@ -79,12 +79,13 @@ const router = createRouter({
       path: '/parties',
       name: 'parties',
       component: PartiesOverview,
-      meta: { guestOnly: true }
+
     },
     {
       path: '/forum',
       name: 'ForumItem',
       component: ForumItem,
+      meta: { userOnly: true }
     },
     {
       path:'/ForumPost',
