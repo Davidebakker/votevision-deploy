@@ -32,7 +32,7 @@
       <h2 class="text-2xl font-semibold mb-4">Candidate Data</h2>
       <ag-grid-vue
         style="width: 100%; height: 400px;"
-        class="ag-theme-quartz"
+        class="ag-theme-quartz-dark"
         :columnDefs="columnDefs"
         @grid-ready="onGridReady"
         :rowData="rowData"
