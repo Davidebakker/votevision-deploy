@@ -1,18 +1,11 @@
 <template>
   <aside
     v-if="windowWidth >= 768"
-    class="flex flex-col w-64 h-screen px-4 py-8 overflow-y-auto bg-white border-r dark:bg-gray-900 dark:border-gray-700"
+    class="sticky-sidebar flex flex-col w-64 px-4 py-8 bg-white dark:bg-gray-900 dark:border-gray-700 border-r"
   >
-    <div class="flex flex-col items-center mt-6 -mx-2">
-<!--      <img-->
-<!--        class="object-cover w-24 h-24 mx-2 rounded-full"-->
-<!--        src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"-->
-<!--        alt="avatar"-->
-<!--      />-->
-      <h4 class="mx-2 mt-2 font-medium text-gray-800 dark:text-gray-200">John Doe</h4>
-      <p class="mx-2 mt-1 text-sm font-medium text-gray-600 dark:text-gray-400">john@example.com</p>
+    <div class="flex -space-x-2 overflow-hidden avatar">
+     <img class="inline-block h-10 w-10 rounded-full ring-5 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
     </div>
-
     <nav class="flex flex-col justify-start flex-1 mt-6 space-y-5">
       <router-link
         to="/"
@@ -36,8 +29,8 @@
       </router-link>
 
       <router-link
-          to="/Forum"
-          class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+        to="/forum"
+        class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
       >
         <span class="font-medium">Forum</span>
       </router-link>
@@ -55,23 +48,7 @@
         to="/login"
         class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
       >
-        <span class="font-medium">log in</span>
-      </router-link>
-
-      <router-link
-        v-if="isLoggedIn"
-        to="/dummy-settings"
-        class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-      >
-        <span class="font-medium">Settings</span>
-      </router-link>
-
-      <router-link
-        v-if="isLoggedIn"
-        to="/dummy-profile"
-        class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-      >
-        <span class="font-medium">Profile</span>
+        <span class="font-medium">Log in</span>
       </router-link>
 
       <router-link
@@ -94,41 +71,44 @@ import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
 export default {
   name: 'NavBar',
   components: {
-    BurgerNav
+    BurgerNav,
   },
   data() {
     return {
-      windowWidth: window.innerWidth
-    }
+      windowWidth: window.innerWidth,
+    };
   },
   computed: {
     isLoggedIn() {
       return !!localStorage.getItem('jwtToken'); // Check if the token exists
-    }
+    },
   },
   mounted() {
-    window.addEventListener('resize', this.handleResize)
+    window.addEventListener('resize', this.handleResize);
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.handleResize)
+    window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     handleResize() {
-      this.windowWidth = window.innerWidth
-    }
-  }
-}
+      this.windowWidth = window.innerWidth;
+    },
+  },
+};
 </script>
 
 <style scoped>
-aside {
+.sticky-sidebar {
+  position: sticky;
+  top: 0; /* Sticks the sidebar at the top when scrolling down */
+  height: 100vh; /* Makes sure the sidebar covers the entire viewport height */
+  max-height: 100vh;
   width: 15%;
-  background-color: #f8f9fa;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 100vh;
+  background-color: #1f2937;
 }
 
 nav {
@@ -137,6 +117,7 @@ nav {
   justify-content: start;
   align-items: flex-start;
   width: 100%;
+  height: 100%;
 }
 
 nav > a {
@@ -148,16 +129,18 @@ nav > a {
 }
 
 nav > a:hover {
-  background-color: black;
+  background-color: #4b5563;
 }
+img{
+  text-align: left;
+  justify-content: left;
+  justify-items: flex-start;
 
-.space-y-5 > * + * {
-  margin-top: 1.5rem;
+
 }
-
-img {
-  width: 45%;
-  height: auto;
-  object-fit: cover;
+.avatar{
+  background-color: #0c0c0c;
+  width: 100%;
+  border-radius: 20px;
 }
 </style>

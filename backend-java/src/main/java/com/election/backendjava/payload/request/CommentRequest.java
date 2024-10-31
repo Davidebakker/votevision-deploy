@@ -6,5 +6,8 @@ import lombok.Data;
 @Data
 public class CommentRequest {
     @NotBlank
+    private String title;
+
+    @NotBlank
     private String commentText;
 }

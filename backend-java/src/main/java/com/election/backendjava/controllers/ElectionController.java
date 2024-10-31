@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -31,9 +32,10 @@ public class ElectionController {
     @Autowired
     VotesRepository votesRepository;
 
-    @GetMapping("/all-parties")
-    public ResponseEntity<?> getAllParties() {
-        return ResponseEntity.ok(partyRepository.findAll());
+    // Endpoint om alle partijen op te halen
+    @GetMapping("/parties")
+    public List<Party> getAllParties() {
+        return partyRepository.findAll();
     }
 
     @GetMapping("/party/{partyName}")
@@ -86,6 +88,11 @@ public class ElectionController {
             return ResponseEntity.badRequest().body(new MessageResponse("candidate not found with name: " + candidateName));
         }
     }
+    @GetMapping("/candidate")
+    public ResponseEntity<List<Candidate>> getAllCandidates() {
+        return ResponseEntity.ok(candidateRepository.findAll());
+    }
+
 
 
 }

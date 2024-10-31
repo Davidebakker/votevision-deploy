@@ -7,9 +7,8 @@
             Welcome to <span class="text-indigo-600">VoteVision</span>
           </h2>
           <p class="mt-2 text-sm text-gray-500 md:text-base">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis commodi cum
-            cupiditate ducimus, fugit harum id necessitatibus odio quam quasi, quibusdam rem tempora
-            voluptates. Cumque debitis dignissimos id quam vel!
+           Lets get you started with how the dutch election works and start a conversation from people
+            all around the world!!
           </p>
           <div class="flex justify-center lg:justify-start mt-6">
             <router-link to="/result/election-result">

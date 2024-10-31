@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "constituencies")
 public class Constituency {
     @Id
     @Column(name = "constituency_id")
