@@ -88,6 +88,11 @@ public class ElectionController {
             return ResponseEntity.badRequest().body(new MessageResponse("candidate not found with name: " + candidateName));
         }
     }
+    @GetMapping("/candidate")
+    public ResponseEntity<List<Candidate>> getAllCandidates() {
+        return ResponseEntity.ok(candidateRepository.findAll());
+    }
+
 
 
 }
