@@ -65,6 +65,4 @@ public class ChatController {
 
         return ResponseEntity.ok("Comment added");
     }
-
-
 }
