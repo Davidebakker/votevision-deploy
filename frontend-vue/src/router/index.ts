@@ -85,7 +85,7 @@ const router = createRouter({
       component: ForumItem,
     },
     {
-      path:'/ForumPost',
+      path:'/onderwerp/:onderwerpNummer',
       name:'ForumPost',
       component: PostForum,
       meta: { userOnly: true }
