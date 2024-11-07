@@ -14,13 +14,18 @@ export default {
     const onderwerpNummer = route.params.onderwerpNummer;
 
     const handleSubmit = async () => {
+      if (!jwtToken) {
+        alert('You must be logged in to post.');
+        return;
+      }
+
       const newPost = {
         title: title.value,
-        content: content.value,
+        commentText: content.value,
       };
 
       try {
-        console.log(newPost);
+        console.log('before message: ' + newPost.commentText);
 
         const response = await axios.post(`http://localhost:8080/api/chat/topic/${onderwerpNummer}/comment/post`, newPost, {
           headers: {
@@ -28,7 +33,7 @@ export default {
             'Content-Type': 'application/json',
           },
         });
-        console.log(response.data);
+        console.log('after message: ' + response.data);
 
         alert(response.data.message || 'Data submitted successfully');
 
