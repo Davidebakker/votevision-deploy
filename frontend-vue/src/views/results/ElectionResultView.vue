@@ -4,6 +4,7 @@
       <!-- The map will be dynamically injected here -->
       <div id="map" class="w-full lg:w-3/4 xl:w-1/2 h-[600px]"></div>
     </div>
+
     <div id="election-summary" class="w-full max-w-4xl p-6 mt-6 bg-gray-800 rounded-lg shadow-lg">
       <h2 class="text-2xl font-semibold mb-4">Overall Election Information in the Netherlands 2023</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -25,11 +26,71 @@
         </div>
       </div>
     </div>
+
+    <!-- ag-grid Section for Candidate Data -->
+    <div class="w-full max-w-4xl p-6 mt-6 bg-gray-800 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-semibold mb-4">Candidate Data</h2>
+      <ag-grid-vue
+        style="width: 100%; height: 400px;"
+        class="ag-theme-quartz-dark"
+        :columnDefs="columnDefs"
+        @grid-ready="onGridReady"
+        :rowData="rowData"
+        :defaultColDef="defaultColDef"
+        :pagination="true"
+        :paginationPageSize="paginationPageSize">
+      </ag-grid-vue>
+    </div>
   </div>
 </template>
 
 <script>
+import { AgGridVue } from 'ag-grid-vue3';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
 export default {
+  components: {
+    'ag-grid-vue': AgGridVue
+  },
+  setup() {
+    const columnDefs = ref([
+      { field: "firstName", headerName: "First Name", editable: true },
+      { field: "lastName", headerName: "Last Name" },
+      { field: "locality", headerName: "Locality" },
+      {
+        field: "party",
+        headerName: "Party",
+        valueGetter: params => params.data.party ? params.data.party.name : 'No Party'
+      }
+    ]);
+
+
+    const rowData = ref(null);
+    const defaultColDef = ref({ sortable: true, filter: true, floatingFilter: true });
+    const paginationPageSize = ref(10);
+
+    onMounted(async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/elections/candidate');
+        rowData.value = response.data;
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    });
+
+    const onGridReady = (params) => {
+      params.api.sizeColumnsToFit();
+    };
+
+    return {
+      columnDefs,
+      rowData,
+      defaultColDef,
+      paginationPageSize,
+      onGridReady
+    };
+  },
   mounted() {
     this.loadMapScripts();
   },
@@ -47,7 +108,6 @@ export default {
       document.head.appendChild(countryMapScript);
     },
     addMapFunctions() {
-      // Optional: Add any custom functionality to the map here if needed
       console.log("Map is ready and functional");
     }
   }
@@ -55,8 +115,8 @@ export default {
 </script>
 
 <style scoped>
-/* Remove the previous styling to let TailwindCSS handle everything */
+/* Styles for map container */
 #map {
-  /* Set to full width and appropriate height using TailwindCSS */
+  /* Managed by TailwindCSS for full width and height */
 }
 </style>

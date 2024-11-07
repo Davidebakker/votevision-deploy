@@ -3,6 +3,9 @@
     v-if="windowWidth >= 768"
     class="sticky-sidebar flex flex-col w-64 px-4 py-8 bg-white dark:bg-gray-900 dark:border-gray-700 border-r"
   >
+    <div class="flex -space-x-2 overflow-hidden avatar">
+     <img class="inline-block h-10 w-10 rounded-full ring-5 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+    </div>
     <nav class="flex flex-col justify-start flex-1 mt-6 space-y-5">
       <router-link
         to="/"
@@ -105,7 +108,7 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  background-color: #f8f9fa;
+  background-color: #1f2937;
 }
 
 nav {
@@ -127,5 +130,17 @@ nav > a {
 
 nav > a:hover {
   background-color: #4b5563;
+}
+img{
+  text-align: left;
+  justify-content: left;
+  justify-items: flex-start;
+
+
+}
+.avatar{
+  background-color: #0c0c0c;
+  width: 100%;
+  border-radius: 20px;
 }
 </style>

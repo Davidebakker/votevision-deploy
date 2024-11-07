@@ -5,15 +5,49 @@ import { useRouter } from 'vue-router';
 
 export default {
   setup() {
-    const newComment = ref({
-      commentText: "",
-    });
-    const router = useRouter();
+    const title = ref('');
+    const content = ref('');
+
+    const posts = ref([]);
+    const jwtToken = localStorage.getItem('jwtToken');
+    const route = useRoute();
+    const onderwerpNummer = route.params.onderwerpNummer;
+
+    const handleSubmit = async () => {
+      if (!jwtToken) {
+        alert('You must be logged in to post.');
+        return;
+      }
+
+      const newPost = {
+        title: title.value,
+        commentText: content.value,
+      };
 
     const submitComment = async () => {
       try {
-        const response = await axios.post(`http://localhost:8080/api/chat/topic/1/comment/post`, newComment.value);
-        console.log('Comment geplaatst:', response.data);
+        console.log('before message: ' + newPost.commentText);
+
+        const response = await axios.post(`http://localhost:8080/api/chat/topic/${onderwerpNummer}/comment/post`, newPost, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        console.log('after message: ' + response.data);
+
+        alert(response.data.message || 'Data submitted successfully');
+
+        // Add the new post/comment to the posts array
+        posts.value.push({
+          title: newPost.title,
+          content: newPost.content,
+          date: new Date().toLocaleString(),
+        });
+
+        // Clear the input fields after successful submission
+        title.value = '';
+        content.value = '';
 
         await router.push('/forum'); //
       } catch (error) {
