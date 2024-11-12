@@ -93,6 +93,10 @@ public class ElectionController {
         return ResponseEntity.ok(candidateRepository.findAll());
     }
 
+    @GetMapping("/parties/seats")
+    public List<Party> getPartiesWithSeats() {
+        return partyRepository.findAll();
+    }
 
 
 }
