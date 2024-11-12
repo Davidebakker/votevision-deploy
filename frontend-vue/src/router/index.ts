@@ -10,6 +10,7 @@ import Party from '@/components/Elections/TestPartyItem.vue'
 import Candidate from '@/components/Elections/TestCandidateItem.vue'
 import PostForum from "@/components/ForumComponents/PostForum.vue";
 import ForumItem from "@/components/ForumComponents/ForumItem.vue";
+import AdminHomeItem from '@/components/managment/AdminComponents/AdminHomeItem.vue'
 
 // Utility function to check if the user is logged in
 function isLoggedIn() {
@@ -90,6 +91,13 @@ const router = createRouter({
       component: PostForum,
       meta: { userOnly: true }
     },
+    //admin
+    {
+      path:'/admin',
+      name: 'Admin',
+      component: AdminHomeItem,
+      meta: { userOnly: true }
+    }
   ]
 });
 

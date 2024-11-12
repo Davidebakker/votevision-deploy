@@ -12,6 +12,7 @@ export default {
         await axios.post('http://localhost:8080/api/auth/logout', { username: 'your_username' });
 
         localStorage.removeItem('jwtToken');
+        localStorage.removeItem('userRoles');
         axios.defaults.headers.common['Authorization'] = null;
 
         alert("You are successfully logged out!")

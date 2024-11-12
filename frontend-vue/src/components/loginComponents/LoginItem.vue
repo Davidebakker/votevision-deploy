@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { toast } from "react-toastify";
 
 export default {
   setup() {
@@ -25,7 +26,11 @@ export default {
           axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
         }
 
-        alert("You successfully logged in");
+        if (response.data.roles) {
+          const userRoles = response.data.roles;
+          localStorage.setItem('userRoles', JSON.stringify(userRoles));
+        }
+        toast("You successfully logged in");
 
         router.push({ name: 'home' });
         window.location.reload();
