@@ -22,6 +22,8 @@ public class Party {
 
     private String logo;
 
+    private int seats;
+
     
     @OneToMany(mappedBy = "party", cascade = CascadeType.ALL)
     @JsonManagedReference
