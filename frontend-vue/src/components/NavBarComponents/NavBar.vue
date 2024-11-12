@@ -66,6 +66,12 @@
           >
             <span class="font-medium">Admin</span>
           </router-link>
+          <router-link
+            to="/admin/users"
+            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
+            <span class="font-medium">Manage users</span>
+          </router-link>
         </template>
       </template>
     </nav>
