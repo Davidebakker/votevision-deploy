@@ -41,7 +41,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Existing JWT validation logic
+        // JWT validation logic
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
