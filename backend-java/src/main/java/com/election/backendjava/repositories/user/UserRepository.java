@@ -3,7 +3,11 @@ package com.election.backendjava.repositories.user;
 
 import java.util.Optional;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.election.backendjava.models.user.User;
@@ -17,4 +21,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByEmail(String email);
 
     User findByEmail(String email);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.banned = true WHERE u.userId = :userId")
+    int banUser(@Param("userId") Long userId);
+
+
 }

@@ -35,4 +35,18 @@ public class UserController {
 
         return ResponseEntity.ok(new MessageResponse("User deleted successfully"));
     }
+
+    @PostMapping("/ban/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+    public ResponseEntity<?> banUser(@PathVariable Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        int updatedRows = userRepository.banUser(userId);
+        if (updatedRows > 0) {
+            return ResponseEntity.ok(new MessageResponse("User banned successfully"));
+        } else {
+            return ResponseEntity.ok(new MessageResponse("An error occurred while banning the user"));
+        }
+    }
 }

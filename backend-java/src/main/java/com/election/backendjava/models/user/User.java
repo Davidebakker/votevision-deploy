@@ -53,6 +53,10 @@ public class User {
     @Column(name = "region")
     private String region;
 
+    @NotBlank
+    @Column(name = "banned")
+    private Boolean banned = Boolean.FALSE;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(  name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

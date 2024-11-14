@@ -1,8 +1,50 @@
+<template>
+  <div class="flex flex-col items-center bg-gray-900 min-h-screen text-white">
+    <!-- Table container -->
+    <div class="w-full max-w-4xl p-6 mt-6 bg-gray-800 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-semibold mb-4">User Management</h2>
+      <table class="w-full text-left rounded-lg overflow-hidden">
+        <thead>
+        <tr class="bg-gray-700">
+          <th class="p-4 font-semibold">User ID</th>
+          <th class="p-4 font-semibold">Name</th>
+          <th class="p-4 font-semibold">Username</th>
+          <th class="p-4 font-semibold">Email</th>
+          <th class="p-4 font-semibold">Delete</th>
+          <th class="p-4 font-semibold">Ban</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="user in users" :key="user.userId" class="bg-gray-600 even:bg-gray-700">
+          <td class="p-4">{{ user.userId }}</td>
+          <td class="p-4">{{ user.name || 'N/A' }}</td>
+          <td class="p-4">{{ user.username }}</td>
+          <td class="p-4">{{ user.email }}</td>
+          <td class="p-4">
+            <button
+              @click="deleteUser(user.userId)"
+              class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-700"
+            >
+              Delete
+            </button>
+          </td>
+          <td class="p-4">
+            <button
+              @click="banUser(user.userId)"
+              class="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-700">
+              Ban
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
 <script>
-import axios from 'axios'
-
-
-import { ref, onMounted } from 'vue'
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
 
 export default {
   name: "UserManagementItem",
@@ -14,64 +56,48 @@ export default {
       try {
         const response = await axios.get('http://localhost:8080/api/user/findAll');
         users.value = response.data;
-      }
-      catch (error) {
+      } catch (error) {
         console.error('Error fetching user list', error);
       }
-    }
+    };
 
     const deleteUser = async (id) => {
       try {
-        const response = await axios.post(`http://localhost:8080/api/user/delete/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${jwtToken}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-        window.location.reload();
+        await axios.post(`http://localhost:8080/api/user/delete/${id}`, null, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        fetchUsers(); // Re-fetch the list instead of reloading the page
+      } catch (error) {
+        console.error('Error deleting user', error);
       }
-      catch (error) {
-        console.error('Error fetching user list', error);
+    };
+
+    const banUser = async (id) => {
+      try {
+        await axios.post(`http://localhost:8080/api/user/ban/${id}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
+          }
+        })
+      } catch (error) {
+        console.error('Error banning user', error);
       }
     }
 
-    onMounted(() => fetchUsers());
+    onMounted(fetchUsers);
 
     return {
       deleteUser,
-      users
-    }
-  }
-}
+      banUser,
+      users,
+    };
+  },
+};
 </script>
-
-<template>
-  <div>
-    <table>
-      <thead>
-      <tr>
-        <th>User ID</th>
-        <th>Name</th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>delete</th>
-        <th>ban</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="user in users" :key="user.userId">
-        <td>{{ user.userId }}</td>
-        <td>{{ user.name || 'N/A' }}</td>
-        <td>{{ user.username }}</td>
-        <td>{{ user.email }}</td>
-        <td><button @click="deleteUser(user.userId)">Delete</button></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</template>
 
 <style scoped>
 table {

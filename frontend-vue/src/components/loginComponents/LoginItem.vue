@@ -37,7 +37,11 @@ export default {
         router.push({ name: 'home' });
         window.location.reload();
       } catch (error) {
-        alert("Your email or password is wrong!")
+        if (error.response && error.response.status === 403) {
+          alert("Your account is banned!");
+        } else {
+          alert("Your email or password is wrong!");
+        }
         console.error(error);
       }
     };
