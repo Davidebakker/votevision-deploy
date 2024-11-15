@@ -45,7 +45,7 @@ export default {
       }
 
       const payload = {
-        replyText: replyTexts.value[commentId], // Gebruik "replyText" zoals de backend verwacht
+        replyText: replyTexts.value[commentId],
       };
 
       const headers = {
@@ -53,20 +53,25 @@ export default {
         'Content-Type': 'application/json',
       };
 
-      console.log("Sending payload:", payload);
-      console.log("Sending headers:", headers);
-
       try {
         const response = await axios.post(
             `http://localhost:8080/api/chat/comment/${commentId}/reply/post`,
             payload,
             { headers }
         );
-        console.log("Reply posted successfully:", response.data);
+
+        const newReply = response.data; // De nieuwe reply van de backend
+        console.log("New reply received:", newReply);
+
+        // Voeg de nieuwe reply toe aan de juiste comment
+        const comment = comments.value.find(c => c.commentId === commentId);
+        if (comment) {
+          comment.replies = comment.replies || []; // Zorg dat er een replies-array is
+          comment.replies.push(newReply); // Voeg de nieuwe reply toe
+        }
 
         replyTexts.value[commentId] = ''; // Clear input after posting
         activeReplyCommentId.value = null; // Close reply field after submission
-        fetchComments(); // Refresh comments to include the new reply
       } catch (error) {
         console.error("Error response:", error.response.data);
         alert(error.response?.data || "An error occurred while posting the reply.");
@@ -128,6 +133,13 @@ export default {
             <button @click="handleReplySubmit(comment.commentId)" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">
               Reageren
             </button>
+          </div>
+          <div v-if="comment.replies && comment.replies.length" class="mt-4">
+            <h5 class="font-medium text-gray-500 dark:text-gray-400">Reacties:</h5>
+            <div v-for="reply in comment.replies" :key="reply.id" class="p-2 border-t dark:border-gray-700">
+              <p class="text-gray-600 dark:text-gray-200">{{ reply.replyText }}</p>
+              <small class="block text-sm text-gray-500 dark:text-gray-400">Geplaatst op: {{ new Date(reply.createdAt).toLocaleString() }}</small>
+            </div>
           </div>
         </div>
       </div>

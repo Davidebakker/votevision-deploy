@@ -79,7 +79,7 @@ public class ChatController {
         }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal(); // Cast to UserDetailsImpl
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Long userId = userDetails.getId();
 
         User user = userRepository.findById(userId)
@@ -95,10 +95,10 @@ public class ChatController {
         reply.setUser(user);
 
         // Save the reply to the repository
-        replyRepository.save(reply);
+        Reply savedReply = replyRepository.save(reply);
 
-        return ResponseEntity.ok("Reply added");
-
+        // Return the saved reply
+        return ResponseEntity.ok(savedReply);
     }
 
 }
