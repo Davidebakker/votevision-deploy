@@ -28,8 +28,6 @@ public class APIConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 
-
-
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 

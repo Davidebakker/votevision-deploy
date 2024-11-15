@@ -7,13 +7,20 @@ export default {
   setup() {
     const comments = ref([]);
     const replyTexts = ref({});
+    const jwtToken = localStorage.getItem('jwtToken');
     const activeReplyCommentId = ref(null); // Track only one active reply field at a time
     const route = useRoute();
     const onderwerpNummer = route.params.onderwerpNummer;
 
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/chat/comments`);
+        const response = await axios.get(`http://localhost:8080/api/chat/comments` ,
+            {
+              headers: {
+                Authorization: `Bearer ${jwtToken}`,
+                'Content-Type': 'application/json',
+              },
+            });
         // console.log("Fetched comments:", response.data); // Debug line
         comments.value = response.data.reverse();
       } catch (error) {
@@ -36,17 +43,36 @@ export default {
         alert('Reply text cannot be empty');
         return;
       }
+
+      const payload = {
+        replyText: replyTexts.value[commentId], // Gebruik "replyText" zoals de backend verwacht
+      };
+
+      const headers = {
+        Authorization: `Bearer ${jwtToken}`,
+        'Content-Type': 'application/json',
+      };
+
+      console.log("Sending payload:", payload);
+      console.log("Sending headers:", headers);
+
       try {
-        await axios.post(`http://localhost:8080/api/chat/comments/${commentId}/reply`, {
-          text: replyTexts.value[commentId],
-        });
+        const response = await axios.post(
+            `http://localhost:8080/api/chat/comment/${commentId}/reply/post`,
+            payload,
+            { headers }
+        );
+        console.log("Reply posted successfully:", response.data);
+
         replyTexts.value[commentId] = ''; // Clear input after posting
         activeReplyCommentId.value = null; // Close reply field after submission
         fetchComments(); // Refresh comments to include the new reply
       } catch (error) {
-        console.error('Error posting reply:', error);
+        console.error("Error response:", error.response.data);
+        alert(error.response?.data || "An error occurred while posting the reply.");
       }
     };
+
 
     onMounted(() => {
       fetchComments();

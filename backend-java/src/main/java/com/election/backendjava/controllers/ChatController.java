@@ -1,10 +1,13 @@
 package com.election.backendjava.controllers;
 
 import com.election.backendjava.models.form.Comment;
+import com.election.backendjava.models.form.Reply;
 import com.election.backendjava.models.form.Topic;
 import com.election.backendjava.models.user.User;
 import com.election.backendjava.payload.request.CommentRequest;
+import com.election.backendjava.payload.request.ReplyRequest;
 import com.election.backendjava.repositories.form.CommentRepository;
+import com.election.backendjava.repositories.form.ReplyRepository;
 import com.election.backendjava.repositories.form.TopicRepository;
 import com.election.backendjava.repositories.user.UserRepository;
 import com.election.backendjava.security.services.UserDetailsImpl;
@@ -30,6 +33,9 @@ public class ChatController {
 
     @Autowired
     TopicRepository topicRepository;
+
+    @Autowired
+    ReplyRepository replyRepository;
 
     @GetMapping("/comments")
     public ResponseEntity<?> getAllComments() {
@@ -65,4 +71,34 @@ public class ChatController {
 
         return ResponseEntity.ok("Comment added");
     }
+
+    @PostMapping("/comment/{commentId}/reply/post")
+    public ResponseEntity<?> addReply(@PathVariable Long commentId, @RequestBody ReplyRequest replyRequest) {
+        if (replyRequest == null || replyRequest.getReplyText() == null || replyRequest.getReplyText().isEmpty()) {
+            return ResponseEntity.status(400).body("Invalid reply request");
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal(); // Cast to UserDetailsImpl
+        Long userId = userDetails.getId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));
+
+        // Create a new Reply and set the fields
+        Reply reply = new Reply();
+        reply.setReplyText(replyRequest.getReplyText());
+        reply.setComment(comment);
+        reply.setUser(user);
+
+        // Save the reply to the repository
+        replyRepository.save(reply);
+
+        return ResponseEntity.ok("Reply added");
+
+    }
+
 }
