@@ -10,7 +10,6 @@ export default {
     const jwtToken = localStorage.getItem('jwtToken');
     const activeReplyCommentId = ref(null); // Track only one active reply field at a time
     const route = useRoute();
-    // const onderwerpNummer = route.params.onderwerpNummer;
 
     const fetchComments = async () => {
       try {
