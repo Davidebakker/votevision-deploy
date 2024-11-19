@@ -83,6 +83,7 @@
 
 <script>
 import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
+import { getCookie } from '@/stores/cookies.ts';
 
 export default {
   name: 'NavBar',
@@ -96,10 +97,11 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      return !!localStorage.getItem('jwtToken');
+      console.log(getCookie('role'));
+      return !!getCookie('role');
     },
     isAdmin() {
-      const userRoles = localStorage.getItem('userRoles');
+      const userRoles = getCookie('role')
       return userRoles && userRoles.includes('ROLE_ADMIN');
     }
   },
