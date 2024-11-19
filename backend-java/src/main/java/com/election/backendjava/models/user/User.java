@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.Email;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -56,6 +57,14 @@ public class User {
     @NotBlank
     @Column(name = "banned")
     private Boolean banned = Boolean.FALSE;
+
+    @NotBlank
+    @Column(name = "ban_expiration")
+    private LocalDateTime banExpiration;
+
+    @NotBlank
+    @Column(name = "ban_count")
+    private int banCount = 0;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(  name = "user_roles",

@@ -30,10 +30,14 @@
           </td>
           <td class="p-4">
             <button
+              v-if="!user.banned"
               @click="banUser(user.userId)"
               class="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-700">
               Ban
             </button>
+            <span v-else class="text-red-500 font-semibold">
+              User is banned for: {{ formatBanDuration(user.banExpiration) }}
+            </span>
           </td>
         </tr>
         </tbody>
@@ -42,9 +46,11 @@
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
+import { formatDuration, intervalToDuration } from 'date-fns';
 
 export default {
   name: "UserManagementItem",
@@ -55,7 +61,10 @@ export default {
     const fetchUsers = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/user/findAll');
-        users.value = response.data;
+        users.value = response.data.map(user => ({
+          ...user,
+          banExpiration: user.banExpiration ? new Date(user.banExpiration) : null,
+        }));
       } catch (error) {
         console.error('Error fetching user list', error);
       }
@@ -69,7 +78,7 @@ export default {
             'Content-Type': 'application/json',
           },
         });
-        fetchUsers(); // Re-fetch the list instead of reloading the page
+        await fetchUsers();
       } catch (error) {
         console.error('Error deleting user', error);
       }
@@ -82,11 +91,20 @@ export default {
             Authorization: `Bearer ${jwtToken}`,
             'Content-Type': 'application/json',
           }
-        })
+        });
+        await fetchUsers();
       } catch (error) {
         console.error('Error banning user', error);
       }
-    }
+    };
+
+    const formatBanDuration = (banExpiration) => {
+      if (!banExpiration) return 'N/A';
+
+      const now = new Date();
+      const duration = intervalToDuration({ start: now, end: banExpiration });
+      return `${duration.days} days and ${duration.hours} hours`;
+    };
 
     onMounted(fetchUsers);
 
@@ -94,9 +112,11 @@ export default {
       deleteUser,
       banUser,
       users,
+      formatBanDuration,
     };
   },
 };
+
 </script>
 
 <style scoped>
