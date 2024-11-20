@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center bg-gray-900 min-h-screen text-white">
     <div id="map-container" class="w-full flex justify-center p-6">
-      <!-- The map will be dynamically injected here -->
+      <!-- The map -->
       <div id="map" class="w-full lg:w-3/4 xl:w-1/2 h-[600px]"></div>
     </div>
 
@@ -27,11 +27,11 @@
       </div>
     </div>
 
-    <!-- ag-grid Section for Candidate Data -->
+    <!--Candidate Data -->
     <div class="w-full max-w-4xl p-6 mt-6 bg-gray-800 rounded-lg shadow-lg">
       <h2 class="text-2xl font-semibold mb-4">Candidate Data</h2>
       <ag-grid-vue
-        style="width: 100%; height: 400px;"
+        style="width: 100%; height: 500px;"
         class="ag-theme-quartz-dark"
         :columnDefs="columnDefs"
         @grid-ready="onGridReady"
@@ -115,8 +115,7 @@ export default {
 </script>
 
 <style scoped>
-/* Styles for map container */
+
 #map {
-  /* Managed by TailwindCSS for full width and height */
 }
 </style>
