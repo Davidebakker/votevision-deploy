@@ -22,7 +22,10 @@ public class Party {
 
     private String logo;
 
-    
+    private int seats;
+
+    private String description;
+
     @OneToMany(mappedBy = "party", cascade = CascadeType.ALL)
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
@@ -40,6 +43,7 @@ public class Party {
         return "Party{" +
                 "partyId=" + partyId +
                 ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 ", candidates=\n" + candidatesList +
                 '}';
     }

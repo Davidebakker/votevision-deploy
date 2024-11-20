@@ -108,6 +108,16 @@ public class ElectionController {
 
 
 
+    @GetMapping("/parties/seats")
+    public List<Party> getPartiesWithSeats() {
+        return partyRepository.findAll();
+    }
+
+    @GetMapping("/parties/description")
+    public List<Party> getAllDescriptions() {
+        return partyRepository.findAll();
+    }
+
 
 
 }
