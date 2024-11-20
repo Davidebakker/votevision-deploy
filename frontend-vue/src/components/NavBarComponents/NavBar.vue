@@ -81,44 +81,35 @@
   </nav>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
-import { getCookie } from '@/stores/cookies.ts';
 
-export default {
-  name: 'NavBar',
-  components: {
-    BurgerNav,
-  },
-  data() {
-    return {
-      windowWidth: window.innerWidth,
-    };
-  },
-  computed: {
-    isLoggedIn() {
-      console.log(getCookie('role'));
-      return !!getCookie('role');
-    },
-    isAdmin() {
-      const userRoles = getCookie('role')
-      return userRoles && userRoles.includes('ROLE_ADMIN');
-    }
-  },
-  mounted() {
-    window.addEventListener('resize', this.handleResize);
-    this.handleResize(); // Initial check for window size
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.handleResize);
-  },
-  methods: {
-    handleResize() {
-      this.windowWidth = window.innerWidth;
-    },
-  },
+const windowWidth = ref(window.innerWidth);
+const jwt = ref(localStorage.getItem('jwt'));
+const userRoles = ref(localStorage.getItem('userRoles'));
+
+const isLoggedIn = computed(() => !!jwt.value);
+const isAdmin = computed(() => {
+  const roles = userRoles.value?.split(',') || [];
+  return roles.includes('ROLE_ADMIN');
+});
+
+const handleResize = () => {
+  windowWidth.value = window.innerWidth;
 };
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  jwt.value = localStorage.getItem('jwt');
+  userRoles.value = localStorage.getItem('userRoles');
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
 </script>
+
 
 <style scoped>
 .sticky-sidebar {

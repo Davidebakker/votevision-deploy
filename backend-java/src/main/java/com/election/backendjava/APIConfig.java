@@ -30,8 +30,8 @@ public class APIConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(corsOrigin)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowedHeaders("*");
+//                .allowCredentials(true);
     }
 
     @Autowired
