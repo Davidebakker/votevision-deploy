@@ -2,11 +2,14 @@ package com.election.backendjava.models.form;
 
 import com.election.backendjava.models.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -33,6 +36,11 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     private User user;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Reply> replies = new ArrayList<>();
+
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

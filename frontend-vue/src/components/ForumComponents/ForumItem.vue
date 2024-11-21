@@ -77,6 +77,54 @@ export default {
       }
     };
 
+    const handleNestedReplySubmit = async (replyId) => {
+      if (!replyTexts.value[replyId]) {
+        alert('Reply text cannot be empty');
+        return;
+      }
+
+      const payload = {
+        replyText: replyTexts.value[replyId],
+      };
+
+      try {
+        const response = await axios.post(
+            `http://localhost:8080/api/chat/reply/${replyId}/reply/post`,
+            payload,
+            {
+              headers: {
+                Authorization: `Bearer ${jwtToken}`,
+                'Content-Type': 'application/json',
+              },
+            }
+        );
+
+        const newNestedReply = response.data;
+
+        // Zoek de parent reply en voeg de nested reply toe
+        const findNestedReply = (replies) => {
+          for (const reply of replies) {
+            if (reply.replyId === replyId) {
+              reply.childReplies = reply.childReplies || [];
+              reply.childReplies.push(newNestedReply);
+              return true;
+            }
+            if (reply.childReplies) {
+              if (findNestedReply(reply.childReplies)) return true;
+            }
+          }
+          return false;
+        };
+
+        comments.value.forEach(comment => findNestedReply(comment.replies || []));
+
+        replyTexts.value[replyId] = ''; // Clear input
+        activeReplyCommentId.value = null; // Close reply field
+      } catch (error) {
+        console.error("Error posting nested reply:", error.response?.data);
+      }
+    };
+
 
     onMounted(() => {
       fetchComments();
@@ -88,6 +136,8 @@ export default {
       activeReplyCommentId,
       toggleReplyField,
       handleReplySubmit,
+      handleNestedReplySubmit,
+
     };
   },
 };
@@ -106,38 +156,77 @@ export default {
     <!-- Comments lijst -->
     <div class="w-full max-w-3xl px-6 py-4">
       <h2 class="text-lg font-medium text-gray-600 dark:text-gray-200">Comments</h2>
-      <div v-if="comments.length === 0" class="text-center text-gray-500 dark:text-gray-400">Er zijn nog geen comments.</div>
+      <div v-if="comments.length === 0" class="text-center text-gray-500 dark:text-gray-400">
+        Er zijn nog geen comments.
+      </div>
       <div v-else>
         <div v-for="comment in comments" :key="comment.commentId" class="mt-4 p-4 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600">
+          <!-- Titel en tekst van de comment -->
+          <h3 class="text-lg font-bold text-gray-700 dark:text-gray-300">{{ comment.commentTitle }}</h3>
           <p class="text-gray-600 dark:text-gray-200">{{ comment.commentText }}</p>
-          <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">Geplaatst op: {{ new Date(comment.createdAt).toLocaleString() }}</small>
+          <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">
+            Geplaatst op: {{ new Date(comment.createdAt).toLocaleString() }}
+          </small>
 
-          <!-- Display replies -->
-          <div v-if="comment.replies && comment.replies.length" class="mt-4">
-            <h5 class="font-medium text-gray-500 dark:text-gray-400">Reacties:</h5>
-            <div v-for="reply in comment.replies" :key="reply.id" class="p-2 border-t dark:border-gray-700">
-              <p class="text-gray-600 dark:text-gray-200">{{ reply.text }}</p>
-              <small class="block text-sm text-gray-500 dark:text-gray-400">Geplaatst op: {{ new Date(reply.createdAt).toLocaleString() }}</small>
-            </div>
-          </div>
-
-          <!-- Button to open reply field -->
-          <button @click="toggleReplyField(comment.commentId)" class="mt-2 text-blue-500 hover:underline">
-            Reageer
+          <!-- Button to toggle reply field for comments -->
+          <button @click="toggleReplyField(comment.commentId)" class="mt-4 text-blue-500 hover:underline">
+            Reageer op deze comment
           </button>
 
-          <!-- Add a reply (conditionally rendered) -->
-          <div v-if="activeReplyCommentId === comment.commentId" class="mt-2">
-            <textarea v-model="replyTexts[comment.commentId]" placeholder="Schrijf een reactie..." class="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400"></textarea>
-            <button @click="handleReplySubmit(comment.commentId)" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">
+          <!-- Reply field for comments -->
+          <div v-if="activeReplyCommentId === comment.commentId" class="mt-4">
+            <textarea
+                v-model="replyTexts[comment.commentId]"
+                placeholder="Schrijf een reactie..."
+                class="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400"
+            ></textarea>
+            <button
+                @click="handleReplySubmit(comment.commentId)"
+                class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400"
+            >
               Reageren
             </button>
           </div>
-          <div v-if="comment.replies && comment.replies.length" class="mt-4">
+
+          <!-- Replies -->
+          <div v-if="comment.replies && comment.replies.length" class="mt-6 pl-4 border-l dark:border-gray-700">
             <h5 class="font-medium text-gray-500 dark:text-gray-400">Reacties:</h5>
-            <div v-for="reply in comment.replies" :key="reply.id" class="p-2 border-t dark:border-gray-700">
+            <div v-for="reply in comment.replies" :key="reply.replyId" class="mt-4">
               <p class="text-gray-600 dark:text-gray-200">{{ reply.replyText }}</p>
-              <small class="block text-sm text-gray-500 dark:text-gray-400">Geplaatst op: {{ new Date(reply.createdAt).toLocaleString() }}</small>
+              <small class="block text-sm text-gray-500 dark:text-gray-400">
+                Geplaatst op: {{ new Date(reply.createdAt).toLocaleString() }}
+              </small>
+
+              <!-- Button to reply to a reply -->
+              <button @click="toggleReplyField(reply.replyId)" class="mt-2 text-blue-500 hover:underline">
+                Reageer op deze reactie
+              </button>
+
+              <!-- Reply field for a reply -->
+              <div v-if="activeReplyCommentId === reply.replyId" class="mt-2">
+                <textarea
+                    v-model="replyTexts[reply.replyId]"
+                    placeholder="Schrijf een reactie..."
+                    class="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400"
+                ></textarea>
+                <button
+                    @click="handleNestedReplySubmit(reply.replyId)"
+                    class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400"
+                >
+                  Reageren
+                </button>
+              </div>
+
+              <!-- Nested replies -->
+              <div v-if="reply.childReplies && reply.childReplies.length" class="mt-4 pl-4 border-l dark:border-gray-700">
+                <h6 class="font-medium text-gray-500 dark:text-gray-400">Reacties op deze reactie:</h6>
+                <div v-for="nestedReply in reply.childReplies" :key="nestedReply.replyId" class="mt-2">
+                  <p class="text-gray-600 dark:text-gray-200">{{ nestedReply.replyText }}</p>
+                  <small class="block text-sm text-gray-500 dark:text-gray-400">
+                    Geplaatst op: {{ new Date(nestedReply.createdAt).toLocaleString() }}
+                  </small>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -145,6 +234,9 @@ export default {
     </div>
   </div>
 </template>
+
+
+
 
 <style scoped>
 .min-h-screen {

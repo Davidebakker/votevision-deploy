@@ -67,8 +67,8 @@ public class ChatController {
         comment.setUser(user);
 
         // Save the comment to the repository
-        commentRepository.save(comment);
-
+//        commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
         return ResponseEntity.ok("Comment added");
     }
 
@@ -100,5 +100,36 @@ public class ChatController {
         // Return the saved reply
         return ResponseEntity.ok(savedReply);
     }
+
+    @PostMapping("/reply/{replyId}/reply/post")
+    public ResponseEntity<?> addNestedReply(@PathVariable Long replyId, @RequestBody ReplyRequest replyRequest) {
+        if (replyRequest == null || replyRequest.getReplyText() == null || replyRequest.getReplyText().isEmpty()) {
+            return ResponseEntity.status(400).body("Invalid reply request");
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = userDetails.getId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        Reply parentReply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Parent reply not found"));
+
+        // Gebruik de comment van de parent reply
+        Comment parentComment = parentReply.getComment();
+
+        Reply reply = new Reply();
+        reply.setReplyText(replyRequest.getReplyText());
+        reply.setParentReply(parentReply);
+        reply.setComment(parentComment); // Stel de comment in
+        reply.setUser(user);
+
+        Reply savedReply = replyRepository.save(reply);
+
+        return ResponseEntity.ok(savedReply);
+    }
+
 
 }

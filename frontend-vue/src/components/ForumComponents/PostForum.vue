@@ -15,7 +15,7 @@ export default {
     // const replyTekst = ref('');
     // const activeReplyPostIndex = ref(null)
 
-    const handleSubmit = async () => { // Ensure this matches the template
+    const handleSubmit = async () => {
       if (!jwtToken) {
         alert('You must be logged in to post.');
         return;
@@ -29,35 +29,43 @@ export default {
       isSubmitting.value = true;
       try {
         const response = await axios.post(
-          `http://localhost:8080/api/chat/topic/${onderwerpNummer}/comment/post`,
-          {
-            title: newComment.value.title,
-            commentText: newComment.value.commentText,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${jwtToken}`,
-              'Content-Type': 'application/json',
+            `http://localhost:8080/api/chat/topic/${onderwerpNummer}/comment/post`,
+            {
+              title: newComment.value.title,
+              commentText: newComment.value.commentText,
             },
-          }
+            {
+              headers: {
+                Authorization: `Bearer ${jwtToken}`,
+                'Content-Type': 'application/json',
+              },
+            }
         );
 
-        alert(response.data.message || 'Data submitted successfully');
+        // Gebruik de respons van de backend
+        const savedComment = response.data;
 
+        // Voeg de nieuwe comment toe aan de lijst
         posts.value.unshift({
-          title: newComment.value.title,
-          commentText: newComment.value.commentText,
-          date: new Date().toLocaleString(),
+          commentId: savedComment.commentId,
+          title: savedComment.commentTitle, // Dit komt van de backend
+          commentText: savedComment.commentText,
+          date: new Date(savedComment.createdAt).toLocaleString(), // Gebruik server-timestamp
         });
 
-        newComment.value.title = ''; // Clear the input fields
+        // Maak de inputvelden leeg
+        newComment.value.title = '';
         newComment.value.commentText = '';
+
+        alert('Comment successfully posted!');
       } catch (error) {
         console.error(error);
         alert(error.response?.data?.message || 'An unexpected error occurred.');
       } finally {
         isSubmitting.value = false;
       }
+
+      // Optioneel: navigeer naar de forumlijst
       router.push('/forum');
     };
 
