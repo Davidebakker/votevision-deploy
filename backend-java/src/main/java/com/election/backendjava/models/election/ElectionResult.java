@@ -16,13 +16,17 @@ public class ElectionResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long resultId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "province_id", nullable = false)
-//    private Province province;
+    @ManyToOne
+    @JoinColumn(name = "municipality_id", nullable = false)
+    private Municipality municipality;  // References `municipalities` table
 
     @ManyToOne
     @JoinColumn(name = "party_id", nullable = false)
-    private Party party;
+    private Party party;  // References `parties` table
+
+    @ManyToOne
+    @JoinColumn(name = "province_id", nullable = true)
+    private Province province;  // References `provinces` table
 
     private Long votesReceived;
 

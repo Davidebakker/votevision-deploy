@@ -8,3 +8,4 @@ import java.util.Optional;
 public interface PartyRepository extends JpaRepository<Party, Long> {
     public <T> Optional<T> findByNameIgnoreCase(String name);
 }
+

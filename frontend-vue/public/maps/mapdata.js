@@ -79,13 +79,17 @@ var simplemaps_countrymap_mapdata={
     NLDR: {
       name: "Drenthe",
       description: "Er zijn 653 stembureaus in de provincie Drenthe, waarvoor gegevens bekend zijn.",
-      url: "https://allecijfers.nl/provincie/drenthe/#verkiezingsuitslagen"
-    },
+      url: "",
+      onclick: function() {
+        window.location.href = `/results/Drenthe`;
+      } },
     NLFL: {
       name: "Flevoland",
       description: "Er zijn 418 stembureaus in de provincie Flevoland, waarvoor gegevens bekend zijn.",
-      url: "https://allecijfers.nl/provincie/flevoland/#verkiezingsuitslagen"
-    },
+      url: "",
+      onclick: function() {
+        window.location.href = `/results/Flevoland`;
+      }},
     NLFR: {
       name: "Friesland",
       description: "Er zijn 1.081 stembureaus in de provincie Friesland, waarvoor gegevens bekend zijn.",
