@@ -62,9 +62,8 @@ public class User {
     @Column(name = "ban_expiration")
     private LocalDateTime banExpiration;
 
-    @NotBlank
     @Column(name = "ban_count")
-    private int banCount = 0;
+    private Integer banCount = 0;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(  name = "user_roles",

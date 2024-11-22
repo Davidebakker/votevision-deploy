@@ -11,14 +11,18 @@ import com.election.backendjava.repositories.form.ReplyRepository;
 import com.election.backendjava.repositories.form.TopicRepository;
 import com.election.backendjava.repositories.user.UserRepository;
 import com.election.backendjava.security.services.UserDetailsImpl;
+import com.election.backendjava.dto.ReplyDTO;
+import com.election.backendjava.dto.CommentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -36,11 +40,6 @@ public class ChatController {
 
     @Autowired
     ReplyRepository replyRepository;
-
-    @GetMapping("/comments")
-    public ResponseEntity<?> getAllComments() {
-        return ResponseEntity.ok(commentRepository.findAll());
-    }
 
     @PostMapping("/topic/{topicId}/comment/post")
     public ResponseEntity<?> addComment(@PathVariable Long topicId, @RequestBody CommentRequest commentRequest) {
@@ -130,5 +129,36 @@ public class ChatController {
 
         return ResponseEntity.ok(savedReply);
     }
+
+    @GetMapping("/comments")
+    public ResponseEntity<List<CommentDTO>> getAllComments() {
+        List<Comment> comments = commentRepository.findAll();
+
+        List<CommentDTO> commentDTOs = comments.stream().map(comment -> {
+            CommentDTO commentDTO = new CommentDTO();
+            commentDTO.setCommentId(comment.getCommentId());
+            commentDTO.setCommentText(comment.getCommentText());
+            commentDTO.setCommentTitle(comment.getCommentTitle());
+            commentDTO.setCreatedAt(comment.getCreatedAt());
+            commentDTO.setUserName(comment.getUser().getUsername()); // Voeg gebruikersnaam toe
+
+            // Map de replies
+            List<ReplyDTO> replies = comment.getReplies().stream().map(reply -> {
+                ReplyDTO replyDTO = new ReplyDTO();
+                replyDTO.setReplyId(reply.getReplyId());
+                replyDTO.setReplyText(reply.getReplyText());
+                replyDTO.setCreatedAt(reply.getCreatedAt());
+                replyDTO.setUserName(reply.getUser().getUsername()); // Voeg gebruikersnaam toe
+                return replyDTO;
+            }).toList();
+
+            commentDTO.setReplies(replies);
+            return commentDTO;
+        }).toList();
+
+        return ResponseEntity.ok(commentDTOs);
+    }
+
+
 
 }

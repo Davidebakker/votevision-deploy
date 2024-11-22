@@ -162,6 +162,7 @@ export default {
       <div v-else>
         <div v-for="comment in comments" :key="comment.commentId" class="mt-4 p-4 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600">
           <!-- Titel en tekst van de comment -->
+          <p>Geplaatst door: {{ comment.userName }}</p>
           <h3 class="text-lg font-bold text-gray-700 dark:text-gray-300">{{ comment.commentTitle }}</h3>
           <p class="text-gray-600 dark:text-gray-200">{{ comment.commentText }}</p>
           <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">
@@ -192,6 +193,7 @@ export default {
           <div v-if="comment.replies && comment.replies.length" class="mt-6 pl-4 border-l dark:border-gray-700">
             <h5 class="font-medium text-gray-500 dark:text-gray-400">Reacties:</h5>
             <div v-for="reply in comment.replies" :key="reply.replyId" class="mt-4">
+              <p>Geplaatst door: {{ reply.userName }}</p>
               <p class="text-gray-600 dark:text-gray-200">{{ reply.replyText }}</p>
               <small class="block text-sm text-gray-500 dark:text-gray-400">
                 Geplaatst op: {{ new Date(reply.createdAt).toLocaleString() }}
@@ -221,6 +223,7 @@ export default {
               <div v-if="reply.childReplies && reply.childReplies.length" class="mt-4 pl-4 border-l dark:border-gray-700">
                 <h6 class="font-medium text-gray-500 dark:text-gray-400">Reacties op deze reactie:</h6>
                 <div v-for="nestedReply in reply.childReplies" :key="nestedReply.replyId" class="mt-2">
+                  <p>Geplaatst door: {{ nestedReply.userName }}</p>
                   <p class="text-gray-600 dark:text-gray-200">{{ nestedReply.replyText }}</p>
                   <small class="block text-sm text-gray-500 dark:text-gray-400">
                     Geplaatst op: {{ new Date(nestedReply.createdAt).toLocaleString() }}
