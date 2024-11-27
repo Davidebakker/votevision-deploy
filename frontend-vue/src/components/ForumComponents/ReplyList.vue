@@ -1,6 +1,13 @@
 <script>
+import CommentAction from "@/components/ForumComponents/CommentAction.vue";
+import { formatDistanceToNow } from "date-fns";
+import { nl } from "date-fns/locale"; // Nederlandse vertaling voor tijd
+
 export default {
   name: 'ReplyList',
+  components: {
+    CommentAction, // Voeg de CommentAction-component toe
+  },
   props: {
     replies: {
       type: Array,
@@ -16,6 +23,11 @@ export default {
     },
   },
   emits: ["toggle-reply-field", "submit-nested-reply"],
+  methods: {
+    formatTimeAgo(date) {
+      return formatDistanceToNow(new Date(date), {addSuffix: true, locale: nl});
+    },
+  },
 };
 </script>
 
@@ -26,14 +38,14 @@ export default {
       <p>Geplaatst door: {{ reply.userName }}</p>
       <p class="text-gray-600 dark:text-gray-200">{{ reply.replyText }}</p>
       <small class="block text-sm text-gray-500 dark:text-gray-400">
-        Geplaatst op: {{ new Date(reply.createdAt).toLocaleString() }}
+        {{ formatTimeAgo(reply.createdAt) }}
       </small>
-
       <!-- Reply button -->
       <button @click="$emit('toggle-reply-field', reply.replyId)" class="mt-2 text-blue-500 hover:underline">
         Reply
       </button>
-
+      <!-- comment action-->
+      <CommentAction :upvotesCount="reply.upvotes || 0" :replyId="reply.replyId" />
       <!-- Reply input field -->
       <div v-if="activeReplyId === reply.replyId" class="mt-2">
         <textarea
