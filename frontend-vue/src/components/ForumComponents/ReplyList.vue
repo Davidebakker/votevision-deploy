@@ -43,7 +43,11 @@ export default {
       <!-- Interaction buttons -->
       <div class="mt-2 flex space-x-4">
         <!-- Upvote -->
-        <CommentAction :upvotesCount="reply.upvotes || 0" :replyId="reply.replyId" />
+        <CommentAction
+            :upvotesCount="reply.upvotes || 0"
+            :replyId="reply.replyId"
+            :commentId="commentId || null"
+        />
         <!-- Reply -->
         <button @click="$emit('toggle-reply-field', reply.replyId)" class="text-blue-500 hover:underline">
           Reply

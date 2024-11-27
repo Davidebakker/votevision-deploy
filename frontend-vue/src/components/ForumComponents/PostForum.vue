@@ -41,6 +41,10 @@ export default {
               },
             }
         );
+        console.log({
+          title: newComment.value.title,
+          commentText: newComment.value.commentText,
+        });
 
         // Gebruik de respons van de backend
         const savedComment = response.data;
