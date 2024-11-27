@@ -6,20 +6,20 @@ import { nl } from "date-fns/locale"; // Nederlandse vertaling voor tijd
 export default {
   name: 'ReplyList',
   components: {
-    CommentAction, // Voeg de CommentAction-component toe
+    CommentAction, // De CommentAction-component toevoegen voor upvote en report functies
   },
   props: {
     replies: {
       type: Array,
-      required: true,
+      required: true, // Array van replies wordt verwacht
     },
     replyTexts: {
       type: Object,
-      required: true,
+      required: true, // Object voor het beheren van tekstinvoer van nested replies
     },
     activeReplyId: {
       type: [String, Number, null],
-      required: true,
+      required: true, // ID van de actieve reply waarin een reactie wordt toegevoegd
     },
   },
   emits: ["toggle-reply-field", "submit-nested-reply"],
@@ -35,17 +35,21 @@ export default {
   <div>
     <div v-for="reply in replies.slice().reverse()" :key="reply.replyId" class="mt-4">
       <!-- Reply details -->
-      <p>Geplaatst door: {{ reply.userName }}</p>
+      <strong>{{ reply.userName }}</strong>
       <p class="text-gray-600 dark:text-gray-200">{{ reply.replyText }}</p>
       <small class="block text-sm text-gray-500 dark:text-gray-400">
         {{ formatTimeAgo(reply.createdAt) }}
       </small>
-      <!-- Reply button -->
-      <button @click="$emit('toggle-reply-field', reply.replyId)" class="mt-2 text-blue-500 hover:underline">
-        Reply
-      </button>
-      <!-- comment action-->
-      <CommentAction :upvotesCount="reply.upvotes || 0" :replyId="reply.replyId" />
+      <!-- Interaction buttons -->
+      <div class="mt-2 flex space-x-4">
+        <!-- Upvote -->
+        <CommentAction :upvotesCount="reply.upvotes || 0" :replyId="reply.replyId" />
+        <!-- Reply -->
+        <button @click="$emit('toggle-reply-field', reply.replyId)" class="text-blue-500 hover:underline">
+          Reply
+        </button>
+      </div>
+
       <!-- Reply input field -->
       <div v-if="activeReplyId === reply.replyId" class="mt-2">
         <textarea
@@ -57,7 +61,7 @@ export default {
             @click="$emit('submit-nested-reply', reply.replyId)"
             class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400"
         >
-          Reageren
+          Reply
         </button>
       </div>
 

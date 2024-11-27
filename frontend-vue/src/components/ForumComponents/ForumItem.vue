@@ -3,8 +3,6 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import ReplyList from './ReplyList.vue';
 import CommentAction from "@/components/ForumComponents/CommentAction.vue";
-import { formatDistanceToNow } from "date-fns";
-import { nl } from "date-fns/locale";
 
 export default {
   components: { ReplyList,
@@ -29,10 +27,6 @@ export default {
       } catch (error) {
         console.error('Error fetching comments:', error);
       }
-    };
-
-    const formatTimeAgo = (date) => {
-      return formatDistanceToNow(new Date(date), { addSuffix: true, locale: nl });
     };
 
     const toggleReplyField = (id) => {
@@ -131,7 +125,6 @@ export default {
       toggleReplyField,
       handleReplySubmit,
       handleNestedReplySubmit,
-      formatTimeAgo,
     };
   },
 };
@@ -144,14 +137,14 @@ export default {
           to="/onderwerp/1"
           class="px-4 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
       >
-        Place a Comment
+        Plaats comment
       </router-link>
     </div>
 
     <div class="w-full max-w-3xl px-6 py-4">
       <h2 class="text-lg font-medium text-gray-600 dark:text-gray-200">Comments</h2>
       <div v-if="comments.length === 0" class="text-center text-gray-500 dark:text-gray-400">
-        Comments Loading...
+        Er zijn nog geen comments.
       </div>
       <div v-else>
         <div
@@ -159,27 +152,45 @@ export default {
             :key="comment.commentId"
             class="mt-4 p-4 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600"
         >
-          <!-- Comment details -->
           <p>Geplaatst door: {{ comment.userName }}</p>
           <h3 class="text-lg font-bold text-gray-700 dark:text-gray-300">{{ comment.commentTitle }}</h3>
           <p class="text-gray-600 dark:text-gray-200">{{ comment.commentText }}</p>
           <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">
-            {{ formatTimeAgo(comment.createdAt) }}
+            Geplaatst op: {{ new Date(comment.createdAt).toLocaleString() }}
           </small>
 
-          <!-- CommentAction -->
-          <CommentAction :upvotesCount="comment.upvotes || 0" :replyId="comment.commentId" />
-
-          <!-- ReplyList -->
-          <div v-if="comment.replies && comment.replies.length" class="mt-6 pl-4 border-l dark:border-gray-700">
-            <ReplyList
-                :replies="comment.replies"
-                :replyTexts="replyTexts"
-                :activeReplyId="activeReplyId"
-                @toggle-reply-field="toggleReplyField"
-                @submit-nested-reply="handleReplySubmit"
-            />
+          <!-- Interaction buttons -->
+          <div class="mt-2 flex space-x-4">
+            <!-- Upvote -->
+            <CommentAction :upvotesCount="0" :commentId="comment.commentId" />
+            <!-- Reply -->
+            <button @click="toggleReplyField(comment.commentId)" class="mt-4 text-blue-500 hover:underline">
+              Reply
+            </button>
           </div>
+
+          <div v-if="activeReplyId === comment.commentId" class="mt-4">
+            <textarea
+                v-model="replyTexts[comment.commentId]"
+                placeholder="Schrijf een reactie..."
+                class="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400"
+            ></textarea>
+            <CommentAction :upvotesCount="0" :commentId="comment.commentId" />
+            <button
+                @click="handleReplySubmit(comment.commentId)"
+                class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400"
+            >
+              Reageren
+            </button>
+          </div>
+
+          <ReplyList
+              :replies="comment.replies"
+              :replyTexts="replyTexts"
+              :activeReplyId="activeReplyId"
+              @toggle-reply-field="toggleReplyField"
+              @submit-nested-reply="handleNestedReplySubmit"
+          />
         </div>
       </div>
     </div>
