@@ -4,9 +4,9 @@
     <label for="chartSelect" class="block mb-4">
       Kies welke data je wilt zien:
       <select id="chartSelect" v-model="selectedChart" @change="updateChart">
-        <option value="party">Stemmen per Partij</option>
-        <option value="municipality">Stemmen per Gemeente</option>
-        <option value="original">Originele Data</option>
+        <option value="municipality">Vote's per party</option>
+        <option value="party">Vote's per Municipality</option>
+        <option value="original">Original Data</option>
       </select>
     </label>
     <ag-charts :options="chartOptions" style="width: 100%; height: 400px;"></ag-charts>
@@ -63,7 +63,7 @@ export default {
           return acc;
         }, {});
         chartData = Object.values(groupedByParty);
-        title = "Stemmen per Partij";
+        title = "Vote per municipality";
       } else if (selectedChart.value === "municipality") {
         const groupedByMunicipality = rawData.value.reduce((acc, item) => {
           if (!acc[item.municipality]) {
@@ -76,13 +76,13 @@ export default {
           party: item.municipality,
           votes: item.votes,
         }));
-        title = "Stemmen per Gemeente";
+        title = "Vote's per Party";
       } else {
         chartData = rawData.value.map((item) => ({
           party: `${item.party} (${item.municipality})`,
           votes: item.votes,
         }));
-        title = "Originele Data";
+        title = "Original Data";
       }
 
       console.log("Mapped Chart Data:", chartData);
@@ -112,12 +112,12 @@ export default {
           {
             type: "category",
             position: "bottom",
-            title: { text: selectedChart.value === "municipality" ? "Gemeente" : "Partij" },
+            // title: { text: selectedChart.value === "municipality" ? "Party" : "municipality" },
           },
           {
             type: "number",
             position: "left",
-            title: { text: "Stemmen" },
+            title: { text: "Vote's" },
           },
         ],
       };
