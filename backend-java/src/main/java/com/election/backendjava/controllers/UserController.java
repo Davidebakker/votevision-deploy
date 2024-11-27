@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -32,12 +33,34 @@ public class UserController {
     @Autowired
     RoleRepository roleRepository;
 
-    @GetMapping("/findAll")
-    public ResponseEntity<?> getAllUsers() {
-        List<User> users = userRepository.findAllByRoleName(ERole.ROLE_USER);
+    @GetMapping("/findAll/{userRole}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+    public ResponseEntity<?> getAllUsersByRole(@PathVariable String userRole) {
+        List<User> users = userRepository.findAllByRoleName(userRole.toUpperCase());
+
         return ResponseEntity.ok(users);
     }
 
+    @PostMapping("/add/admin/{userId}")
+    @PreAuthorize("hasRole('MODERATOR')")
+    public ResponseEntity<?> addAdmin(@PathVariable Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        userRepository.addAdmin(userId);
+
+
+        return ResponseEntity.ok(new MessageResponse("Admin added Successfully"));
+    }
+
+    @PostMapping("/demote/admin/{userId}")
+    @PreAuthorize("hasRole('MODERATOR')")
+    public ResponseEntity<?> deleteAdmin(@PathVariable Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        userRepository.demoteAdminToUser(userId);
+
+        return ResponseEntity.ok(new MessageResponse("Admin deleted Successfully"));
+    }
 
     @PostMapping("/delete/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
