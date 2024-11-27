@@ -34,7 +34,7 @@ public class Reply {
     @JsonBackReference
     private User user;
 
-    @OneToMany(mappedBy = "parentReply", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parentReply", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Reply> childReplies = new ArrayList<>();
 
