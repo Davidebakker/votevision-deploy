@@ -12,6 +12,7 @@
           <th class="p-4 font-semibold">Email</th>
           <th class="p-4 font-semibold">Delete</th>
           <th class="p-4 font-semibold">Ban</th>
+          <th class="p-4 font-semibold" v-if="isMod">add admin</th>
         </tr>
         </thead>
         <tbody>
@@ -39,6 +40,14 @@
               User is banned for: {{ formatBanDuration(user.banExpiration) }}
             </span>
           </td>
+          <td class="p-4" v-if="isMod">
+            <button
+              @click="addAsAdmin(user.userId)"
+              class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-700"
+            >
+              add admin
+            </button>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -50,7 +59,7 @@
 <script>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
-import { formatDuration, intervalToDuration } from 'date-fns';
+import { intervalToDuration } from 'date-fns';
 
 export default {
   name: "UserManagementItem",
@@ -60,7 +69,7 @@ export default {
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/user/findAll');
+        const response = await axios.get('http://localhost:8080/api/user/findAll/role_user');
         users.value = response.data.map(user => ({
           ...user,
           banExpiration: user.banExpiration ? new Date(user.banExpiration) : null,
@@ -98,6 +107,20 @@ export default {
       }
     };
 
+    const addAsAdmin = async (id) => {
+      try {
+        await axios.post(`http://localhost:8080/api/user/add/admin/${id}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
+          }
+        });
+        await fetchUsers();
+      } catch (error) {
+        console.error('Error adding admin', error);
+      }
+    };
+
     const formatBanDuration = (banExpiration) => {
       if (!banExpiration) return 'N/A';
 
@@ -111,10 +134,17 @@ export default {
     return {
       deleteUser,
       banUser,
+      addAsAdmin,
       users,
       formatBanDuration,
     };
   },
+  computed: {
+    isMod() {
+      const userRoles = localStorage.getItem('userRoles');
+      return userRoles && userRoles.includes('ROLE_MODERATOR');
+    }
+  }
 };
 
 </script>

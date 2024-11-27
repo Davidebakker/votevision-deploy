@@ -33,6 +33,9 @@ export default {
           axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
         }
 
+        localStorage.setItem('userRoles', "USER_ROLE");
+
+
         alert(response.data.message || "Data submitted successfully");
 
         router.push({ name: 'home' });

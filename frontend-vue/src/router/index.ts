@@ -14,6 +14,8 @@ import AdminHomeItem from '@/components/managment/AdminComponents/AdminHomeItem.
 import UserManagementItem from '@/components/managment/AdminComponents/UserManagementItem.vue'
 import UnauthorizedItem from '@/components/unauthorizedComponents/UnauthorizedItem.vue'
 import PartyDetails from '@/components/PartyOverviewComponents/PartyDetails.vue'
+import AdminManagementItem from '@/components/managment/ModComponents/AdminManagementItem.vue'
+import ModeratorHomeItem from '@/components/managment/ModComponents/ModeratorHomeItem.vue'
 
 // Utility function to check if the user is logged in
 function isLoggedIn() {
@@ -45,6 +47,9 @@ const router = createRouter({
     // Admin
     { path: '/admin', name: 'Admin', component: AdminHomeItem, meta: { adminOnly: true } },
     { path: '/admin/users', name: 'userManagement', component: UserManagementItem, meta: { adminOnly: true } },
+    // Moderator
+    { path: '/moderator', name: 'Moderator', component: ModeratorHomeItem, meta: { adminOnly: true } },
+    { path: '/moderator/admins', name: 'adminManagement', component: AdminManagementItem, meta: { adminOnly: true } },
     // Unauthorized
     { path: '/unauthorized', name: 'unauthorized', component: UnauthorizedItem },
   ]
