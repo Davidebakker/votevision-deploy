@@ -37,7 +37,11 @@ public class ChatController {
 
     @PostMapping("/topic/{topicId}/comment/post")
     public ResponseEntity<?> addComment(@PathVariable Long topicId, @RequestBody CommentRequest commentRequest) {
+        System.out.println("POST endpoint aangeroepen met topicId: " + topicId);
+        System.out.println("Ontvangen comment request: " + commentRequest);
+
         // Validate and fetch user
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         User user = userRepository.findById(userDetails.getId())
