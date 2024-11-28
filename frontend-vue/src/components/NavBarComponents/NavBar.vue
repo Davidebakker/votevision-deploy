@@ -60,12 +60,12 @@
 
 
         <template v-if="isAdmin || isModerator">
-          <router-link
-            to="/moderator"
-            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-          >
-            <span class="font-medium">Moderator Page</span>
-          </router-link>
+<!--          <router-link-->
+<!--            to="/moderator"-->
+<!--            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"-->
+<!--          >-->
+<!--            <span class="font-medium">Moderator Page</span>-->
+<!--          </router-link>-->
           <router-link
             to="/moderator/users"
             class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
