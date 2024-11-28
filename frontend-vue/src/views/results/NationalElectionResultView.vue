@@ -2,7 +2,7 @@
   <div class="national-results">
     <h1 class="text-2xl font-semibold mb-4">National Election Results</h1>
     <label for="chartSelect" class="block mb-4">
-      Kies welke data je wilt zien:
+      Chose the data you want to see:
       <select id="chartSelect" v-model="selectedChart" @change="updateChart">
         <option value="municipality">Vote's per party</option>
         <option value="party">Vote's per Municipality</option>
