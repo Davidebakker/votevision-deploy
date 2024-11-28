@@ -1,18 +1,26 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
-
 <template>
-  <header>
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+  <div class="app-container flex">
+    <Navbar />
 
-  <RouterView />
+    <div class="flex-1">
+      <RouterView />
+    </div>
+  </div>
 </template>
 
-<style scoped>
+<script setup lang="ts">
+import Navbar from '@/components/NavBarComponents/NavBar.vue'
+</script>
 
+<style scoped>
+.app-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.flex-1 {
+  flex-grow: 1;
+  background-color: #1a1a1a;
+}
 </style>
