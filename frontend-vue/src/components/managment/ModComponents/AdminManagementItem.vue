@@ -49,7 +49,7 @@ export default {
   <div class="flex flex-col items-center bg-gray-900 min-h-screen text-white">
     <!-- Table Container -->
     <div class="w-full max-w-6xl p-6 mt-6 bg-gray-800 rounded-lg shadow-lg">
-      <h2 class="text-2xl font-semibold mb-4">Admin Management</h2>
+      <h2 class="text-2xl font-semibold mb-4">Moderator Management</h2>
       <table class="w-full text-left rounded-lg overflow-hidden">
         <thead>
         <tr class="bg-gray-700">
