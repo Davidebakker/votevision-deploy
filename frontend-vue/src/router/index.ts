@@ -38,12 +38,10 @@ const router = createRouter({
     { path: '/logout', name: 'logout', component: Logout, meta: { userOnly: true } },
     // Elections
     {
-      path: '/parties/:name',
+      path: '/parties/:partyName',
       name: 'PartyDetails',
-      component: PartyDetails,
-      props: true,
+      component: PartyDetails
     },
-
     { path: '/partij/:partyName', name: 'party', component: Party, props: true },
     { path: '/kandidaat/:candidateName', name: 'candidate', component: Candidate, props: true },
     { path: '/parties', name: 'parties', component: PartiesOverview },
