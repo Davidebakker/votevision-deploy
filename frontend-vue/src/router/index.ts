@@ -14,6 +14,8 @@ import AdminHomeItem from '@/components/managment/AdminComponents/AdminHomeItem.
 import UserManagementItem from '@/components/managment/AdminComponents/UserManagementItem.vue'
 import UnauthorizedItem from '@/components/unauthorizedComponents/UnauthorizedItem.vue'
 import PartyDetails from '@/components/PartyOverviewComponents/PartyDetails.vue'
+import AdminManagementItem from '@/components/managment/ModComponents/AdminManagementItem.vue'
+import ModeratorHomeItem from '@/components/managment/ModComponents/ModeratorHomeItem.vue'
 
 // Utility function to check if the user is logged in
 function isLoggedIn() {
@@ -22,7 +24,12 @@ function isLoggedIn() {
 
 function isAdmin() {
   const userRoles = localStorage.getItem('userRoles');
-  return userRoles && userRoles.includes('ROLE_ADMIN');
+  return userRoles && userRoles.includes('ROLE_ADMIN') || userRoles.includes('ROLE_MODERATOR');
+}
+
+function isMod() {
+  const userRoles = localStorage.getItem('userRoles');
+    return userRoles && userRoles.includes('ROLE_MODERATOR');
 }
 
 const router = createRouter({
@@ -49,8 +56,11 @@ const router = createRouter({
     { path: '/forum', name: 'ForumItem', component: ForumItem },
     { path: '/onderwerp/:onderwerpNummer', name: 'ForumPost', component: PostForum, meta: { userOnly: true } },
     // Admin
-    { path: '/admin', name: 'Admin', component: AdminHomeItem, meta: { adminOnly: true } },
-    { path: '/admin/users', name: 'userManagement', component: UserManagementItem, meta: { adminOnly: true } },
+    { path: '/moderator', name: 'Moderator', component: AdminHomeItem, meta: { adminOnly: true } },
+    { path: '/moderator/users', name: 'userManagement', component: UserManagementItem, meta: { adminOnly: true } },
+    // Moderator
+    { path: '/admin', name: 'Moderator', component: ModeratorHomeItem, meta: { modOnly: true } },
+    { path: '/admin/moderators', name: 'moderatorManagement', component: AdminManagementItem, meta: { modOnly: true } },
     // Unauthorized
     { path: '/unauthorized', name: 'unauthorized', component: UnauthorizedItem },
   ]
@@ -61,12 +71,15 @@ router.beforeEach((to, from, next) => {
   const userOnly = to.matched.some(record => record.meta.userOnly);
   const guestOnly = to.matched.some(record => record.meta.guestOnly);
   const adminOnly = to.matched.some(record => record.meta.adminOnly);
+  const modOnly = to.matched.some(record => record.meta.modOnly);
 
   if (userOnly && !isLoggedIn()) {
     next({ name: 'login' });
   } else if (guestOnly && isLoggedIn()) {
     next({ name: 'home' });
   } else if (adminOnly && (!isLoggedIn() || !isAdmin())) {
+    next({ name: 'unauthorized' });
+  } else if (modOnly && (!isLoggedIn() || !isMod())) {
     next({ name: 'unauthorized' });
   } else {
     next();

@@ -59,18 +59,33 @@
         </router-link>
 
 
-        <template v-if="isAdmin">
+        <template v-if="isAdmin || isModerator">
+<!--          <router-link-->
+<!--            to="/moderator"-->
+<!--            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"-->
+<!--          >-->
+<!--            <span class="font-medium">Moderator Page</span>-->
+<!--          </router-link>-->
+          <router-link
+            to="/moderator/users"
+            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
+            <span class="font-medium">Manage users</span>
+          </router-link>
+        </template>
+        <!-- Moderator-only links -->
+        <template v-if="isModerator">
           <router-link
             to="/admin"
             class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
           >
-            <span class="font-medium">Admin</span>
+            <span class="font-medium">Admin page</span>
           </router-link>
           <router-link
-            to="/admin/users"
+            to="/admin/moderators"
             class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
           >
-            <span class="font-medium">Manage users</span>
+            <span class="font-medium">Manage moderators</span>
           </router-link>
         </template>
       </template>
@@ -83,6 +98,7 @@
 
 <script>
 import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
+// import { getCookie } from '@/stores/cookies.ts';
 
 export default {
   name: 'NavBar',
@@ -101,11 +117,15 @@ export default {
     isAdmin() {
       const userRoles = localStorage.getItem('userRoles');
       return userRoles && userRoles.includes('ROLE_ADMIN');
+    },
+    isModerator() {
+      const userRoles = localStorage.getItem('userRoles');
+      return userRoles && userRoles.includes('ROLE_MODERATOR');
     }
   },
   mounted() {
     window.addEventListener('resize', this.handleResize);
-    this.handleResize(); // Initial check for window size
+    this.handleResize();
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
