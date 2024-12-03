@@ -1,22 +1,17 @@
 <script>
 import axios from 'axios';
+import { onMounted, ref } from 'vue'
 
 export default {
   props: ['name'],
-  data() {
-    return {
-      party: {},
-    };
-  },
-  created() {
-    this.fetchPartyDetails();
-  },
-  methods: {
-    async fetchPartyDetails() {
-      console.log("Fetching details for party:", this.name);
+  setup(props) {
+    const party = ref({});
+
+    const fetchPartyDetails = async () => {
+      console.log("Fetching details for party:", props.name);
       try {
-        const response = await axios.get(`http://localhost:8080/api/elections/party/d66`);
-        this.party = response.data;
+        const response = await axios.get(`http://localhost:8080/api/elections/party/${props.name}`);
+        party.value = response.data;
       } catch (error) {
         if (error.response && error.response.status === 404) {
           console.error("De partij bestaat niet. Controleer de ingevoerde naam.");
@@ -24,11 +19,17 @@ export default {
           console.error("Er is een fout opgetreden:", error);
         }
       }
+    };
 
-    },
+
+    onMounted(fetchPartyDetails);
+
+
+    return { party };
   },
 };
 </script>
+
 
 <template>
   <div class="min-h-screen bg-gray-200 flex flex-col items-center justify-start py-10">
@@ -56,6 +57,7 @@ export default {
     </div>
   </div>
 </template>
+
 
 <style scoped>
 body {
