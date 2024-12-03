@@ -15,7 +15,7 @@ export default {
     async fetchPartyDetails() {
       console.log("Fetching details for party:", this.name);
       try {
-        const response = await axios.get(`http://localhost:8080/api/elections/party/${this.name}`);
+        const response = await axios.get(`http://localhost:8080/api/elections/party/d66`);
         this.party = response.data;
       } catch (error) {
         if (error.response && error.response.status === 404) {
