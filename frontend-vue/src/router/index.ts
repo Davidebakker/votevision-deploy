@@ -17,7 +17,6 @@ import PartyDetails from '@/components/PartyOverviewComponents/PartyDetails.vue'
 import AdminManagementItem from '@/components/managment/ModComponents/AdminManagementItem.vue'
 import ModeratorHomeItem from '@/components/managment/ModComponents/ModeratorHomeItem.vue'
 
-// Utility function to check if the user is logged in
 function isLoggedIn() {
   return !!localStorage.getItem('jwtToken');
 }
@@ -44,11 +43,7 @@ const router = createRouter({
     { path: '/login', name: 'login', component: Login, meta: { guestOnly: true } },
     { path: '/logout', name: 'logout', component: Logout, meta: { userOnly: true } },
     // Elections
-    {
-      path: '/parties/:partyName',
-      name: 'PartyDetails',
-      component: PartyDetails
-    },
+    { path: '/parties/:partyName', name: 'PartyDetails', component: PartyDetails },
     { path: '/partij/:partyName', name: 'party', component: Party, props: true },
     { path: '/kandidaat/:candidateName', name: 'candidate', component: Candidate, props: true },
     { path: '/parties', name: 'parties', component: PartiesOverview },
