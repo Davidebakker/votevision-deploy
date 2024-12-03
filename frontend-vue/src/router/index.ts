@@ -49,6 +49,11 @@ const router = createRouter({
       name: 'PartyDetails',
       component: PartyDetails
     },
+    {
+      path: '/party/:name',
+      component: PartyDetails,
+      props: true,
+    },
     { path: '/partij/:partyName', name: 'party', component: Party, props: true },
     { path: '/kandidaat/:candidateName', name: 'candidate', component: Candidate, props: true },
     { path: '/parties', name: 'parties', component: PartiesOverview },
