@@ -21,10 +21,8 @@ export default {
       }
     };
 
-    // Fetch details on initial load
     onMounted(fetchPartyDetails);
 
-    // Watch for changes in props.name and fetch details again
     watch(() => props.name, fetchPartyDetails);
 
     return { party };
@@ -32,11 +30,8 @@ export default {
 };
 </script>
 
-
 <template>
-  <div
-    class="min-h-screen bg-gray-200 flex flex-col items-center justify-start py-10"
-  >
+  <div class="min-h-screen bg-gray-200 flex flex-col items-center justify-start py-10">
     <div class="w-full bg-gray-700 text-white py-6 px-8 mb-12 text-center">
       <h1 class="text-4xl font-extrabold">{{ party.name }}</h1>
     </div>
@@ -59,10 +54,20 @@ export default {
         </div>
       </div>
     </div>
+
+    <div class="w-full max-w-6xl bg-white shadow-lg rounded-2xl overflow-hidden mt-8 p-8">
+      <h2 class="text-2xl font-semibold mb-6">Kandidaten:</h2>
+      <ul>
+        <li v-for="candidate in party.candidates" :key="candidate.firstName + candidate.lastName" class="mt-4">
+          <div class="border p-4 rounded-lg shadow-sm hover:bg-gray-100 transition">
+            <p class="font-bold">{{ candidate.firstName }} {{ candidate.initials }} {{ candidate.lastName }}</p>
+            <p class="text-gray-600">{{ candidate.locality }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
-
-
 
 <style scoped>
 body {
@@ -70,18 +75,13 @@ body {
   background-color: #f7fafc;
 }
 
-@media (max-width: 768px) {
-  .party-logo {
-    max-width: 150px;
-    max-height: 150px;
-  }
-
-  .party-info {
-    font-size: 1.1rem;
-  }
-}
-
 p {
   margin: 10px 0;
 }
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
 </style>
+
