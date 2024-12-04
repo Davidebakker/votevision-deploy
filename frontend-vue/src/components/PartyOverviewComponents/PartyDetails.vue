@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios';
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue';
 
 export default {
   props: ['name'],
@@ -21,9 +21,11 @@ export default {
       }
     };
 
-
+    // Fetch details on initial load
     onMounted(fetchPartyDetails);
 
+    // Watch for changes in props.name and fetch details again
+    watch(() => props.name, fetchPartyDetails);
 
     return { party };
   },
@@ -32,7 +34,9 @@ export default {
 
 
 <template>
-  <div class="min-h-screen bg-gray-200 flex flex-col items-center justify-start py-10">
+  <div
+    class="min-h-screen bg-gray-200 flex flex-col items-center justify-start py-10"
+  >
     <div class="w-full bg-gray-700 text-white py-6 px-8 mb-12 text-center">
       <h1 class="text-4xl font-extrabold">{{ party.name }}</h1>
     </div>
@@ -57,6 +61,7 @@ export default {
     </div>
   </div>
 </template>
+
 
 
 <style scoped>
