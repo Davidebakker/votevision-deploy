@@ -43,17 +43,9 @@ const router = createRouter({
     { path: '/login', name: 'login', component: Login, meta: { guestOnly: true } },
     { path: '/logout', name: 'logout', component: Logout, meta: { userOnly: true } },
     // Elections
-    {
-      path: '/party/:name',
-      component: PartyDetails,
-      props: true,
-    },
-
-    { path: '/parties/:partyName', name: 'PartyDetails', component: PartyDetails },
-    { path: '/partij/:partyName', name: 'party', component: Party, props: true },
+    { path: '/party/:name', component: PartyDetails, name: 'PartyDetails', props: true, },
     { path: '/kandidaat/:candidateName', name: 'candidate', component: Candidate, props: true },
     { path: '/parties', name: 'parties', component: PartiesOverview },
-    { path: '/party/:partyName', name: 'PartyDetails', component: PartyDetails },
     { path: '/forum', name: 'ForumItem', component: ForumItem },
     { path: '/onderwerp/:onderwerpNummer', name: 'ForumPost', component: PostForum, meta: { userOnly: true } },
     // Admin

@@ -30,7 +30,7 @@ onMounted(() => {
 
       <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
         <div v-for="party in parties" :key="party.partyId">
-          <router-link :to="{ name: 'PartyDetails', params: { partyName: party.name } }">
+          <router-link :to="{ name: 'PartyDetails', params: { name: party.name } }">
           <img
               class="object-cover w-64 rounded-lg h-64"
               :src="party.logo"
