@@ -60,7 +60,7 @@ export default {
       <ul>
         <li v-for="candidate in party.candidates" :key="candidate.firstName + candidate.lastName" class="mt-4">
           <div class="border p-4 rounded-lg shadow-sm hover:bg-gray-100 transition">
-            <p class="font-bold">{{ candidate.firstName }} {{ candidate.initials }} {{ candidate.lastName }}</p>
+            <p class="font-bold">{{ candidate.firstName }} {{ candidate.initials }} {{ candidate.lastNamePrefix}} {{ candidate.lastName }}</p>
             <p class="text-gray-600">{{ candidate.locality }}</p>
           </div>
         </li>
