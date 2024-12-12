@@ -39,10 +39,9 @@ export default {
           const userRoles = response.data.roles;
           localStorage.setItem('userRoles', JSON.stringify(userRoles));
         }
-
         toast("You successfully logged in");
 
-        await router.push({ name: 'home' });
+        router.push({ name: 'home' });
         window.location.reload();
       } catch (error) {
         if (error.response && error.response.status === 403) {

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import AboutView from '../views/AboutView.vue'
 import ElectionResultView from '../views/results/ElectionResultView.vue'
-import NationalElectionResultView from '../views/results/NationalElectionResultView.vue'
 import Registration from '@/components/RegistrationComponents/RegistrationItem.vue'
 import Login from '@/components/loginComponents/LoginItem.vue'
 import Logout from '@/components/loginComponents/LogoutItem.vue'
@@ -35,9 +35,8 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/', name: 'home', component: HomeView },
-    { path: '/about', name: 'about', component: () => import('../views/AboutView.vue') },
+    { path: '/about', name: 'about', component: AboutView },
     { path: '/result/election-result', name: 'election-result', component: ElectionResultView, meta: { userOnly: true } },
-    { path: '/result/National-election-result', name: 'national-election-result', component: NationalElectionResultView, meta: { userOnly: true } },
     // Authentication
     { path: '/registration', name: 'registration', component: Registration, meta: { guestOnly: true } },
     { path: '/login', name: 'login', component: Login, meta: { guestOnly: true } },
