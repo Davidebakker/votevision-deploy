@@ -140,7 +140,6 @@ export default {
         Plaats comment
       </router-link>
     </div>
-
     <div class="w-full max-w-3xl px-6 py-4">
       <h2 class="text-lg font-medium text-gray-600 dark:text-gray-200">Comments</h2>
       <div v-if="comments.length === 0" class="text-center text-gray-500 dark:text-gray-400">
@@ -152,23 +151,18 @@ export default {
             :key="comment.commentId"
             class="mt-4 p-4 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600"
         >
-          <p>Geplaatst door: {{ comment.userName }}</p>
+          <p>{{ comment.userName }}</p>
           <h3 class="text-lg font-bold text-gray-700 dark:text-gray-300">{{ comment.commentTitle }}</h3>
           <p class="text-gray-600 dark:text-gray-200">{{ comment.commentText }}</p>
           <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">
             Geplaatst op: {{ new Date(comment.createdAt).toLocaleString() }}
           </small>
-
-          <!-- Interaction buttons -->
           <div class="mt-2 flex space-x-4">
-            <!-- Upvote -->
             <CommentAction :upvotesCount="0" :commentId="comment.commentId" />
-            <!-- Reply -->
             <button @click="toggleReplyField(comment.commentId)" class="mt-4 text-blue-500 hover:underline">
               Reply
             </button>
           </div>
-
           <div v-if="activeReplyId === comment.commentId" class="mt-4">
             <textarea
                 v-model="replyTexts[comment.commentId]"
@@ -181,12 +175,10 @@ export default {
             />
             <button
                 @click="handleReplySubmit(comment.commentId)"
-                class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400"
-            >
+                class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">
               Reageren
             </button>
           </div>
-
           <ReplyList
               :replies="comment.replies"
               :replyTexts="replyTexts"
