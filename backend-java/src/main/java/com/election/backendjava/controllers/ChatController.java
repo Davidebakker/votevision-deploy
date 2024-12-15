@@ -148,4 +148,32 @@ public class ChatController {
                 .toList());
         return replyDTO;
     }
+
+    // upvotes verwerken in de database
+    @PutMapping("/comment/{commentId}/upvote")
+    public ResponseEntity<?> upvoteComment(@PathVariable Integer commentId) {
+        // Zoek de comment
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));
+
+        // Verhoog het aantal upvotes
+        comment.setUpvotes(comment.getUpvotes() + 1);
+        commentRepository.save(comment);
+
+        return ResponseEntity.ok(comment.getUpvotes());
+    }
+
+    // upvotes verwerken in de database
+    @PutMapping("/reply/{replyId}/upvote")
+    public ResponseEntity<?> upvoteReply(@PathVariable Integer replyId) {
+        // Zoek de reply
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reply not found"));
+
+        // Verhoog het aantal upvotes
+        reply.setUpvotes(reply.getUpvotes() + 1);
+        replyRepository.save(reply);
+
+        return ResponseEntity.ok(reply.getUpvotes());
+    }
 }

@@ -1,4 +1,6 @@
 <script>
+import axios from "axios";
+
 export default {
   props: {
     upvotesCount: {
@@ -21,10 +23,13 @@ export default {
     };
   },
   methods: {
-    handleUpvote() {
-      // Simuleer een API-call
-      this.upvotes += 1;
-      console.log(`Upvoted comment/reply with ID: ${this.commentId || this.replyId}`);
+    async upvoteComment(commentId) {
+      try {
+        const response = await axios.put(`/api/chat/comment/${commentId}/upvote`);
+        this.comment.upvotes = response.data; // Update de UI met het nieuwe aantal upvotes
+      } catch (error) {
+        console.error("Failed to upvote:", error);
+      }
     },
     handleReport() {
       if (this.reported) {
@@ -41,10 +46,8 @@ export default {
 
 <template>
   <div class="flex items-center space-x-4">
-    <button @click="handleUpvote" class="flex items-center space-x-1 text-green-600 hover:underline">
-      <span>▲</span>
-      <span>{{ upvotes }}</span>
-    </button>
+    <button @click="upvoteComment(comment.id)">Upvote</button>
+    <span>{{ comment.upvotes }}</span>
     <button @click="handleReport" class="text-red-600 hover:underline">
       Report
     </button>

@@ -49,4 +49,8 @@ public class Comment {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+    @Column(nullable = false) //upvotes bijhouden
+    private int upvotes = 0;
+
 }
