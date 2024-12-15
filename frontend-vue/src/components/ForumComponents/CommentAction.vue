@@ -1,5 +1,6 @@
 <script>
 import axios from "axios";
+import {comment} from "postcss";
 
 export default {
   props: {
@@ -23,6 +24,7 @@ export default {
     };
   },
   methods: {
+    comment,
     async upvoteComment(commentId) {
       try {
         const response = await axios.put(`/api/chat/comment/${commentId}/upvote`);

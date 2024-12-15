@@ -19,7 +19,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer commentId;
+    private long commentId;
 
     @Column(nullable = false)
     private String commentText;
@@ -51,6 +51,6 @@ public class Comment {
     }
 
     @Column(nullable = false) //upvotes bijhouden
-    private int upvotes = 0;
+    private long upvotes = 0;
 
 }

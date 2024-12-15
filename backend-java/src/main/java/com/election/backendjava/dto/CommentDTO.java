@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class CommentDTO {
-    private Integer commentId;
+    private long commentId;
     private String commentText;
     private String commentTitle;
     private LocalDateTime createdAt;
@@ -15,11 +15,11 @@ public class CommentDTO {
     private List<ReplyDTO> replies; // De lijst met replies
 
     // Getters en setters
-    public Integer getCommentId() {
+    public long getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(Integer commentId) {
+    public void setCommentId(long commentId) {
         this.commentId = commentId;
     }
 
