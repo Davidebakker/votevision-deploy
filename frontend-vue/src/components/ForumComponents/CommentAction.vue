@@ -7,10 +7,12 @@ export default {
     upvotesCount: {
       type: Number,
       required: true,
+      default: 0,
     },
     commentId: {
       type: Number,
       required: true,
+      default: null,
     },
     replyId: {
       type: Number,
@@ -25,12 +27,14 @@ export default {
   },
   methods: {
     comment,
-    async upvoteComment(commentId) {
+    async upvoteComment() {
+      console.log("Comment ID:", this.commentId);
       try {
-        const response = await axios.put(`/api/chat/comment/${commentId}/upvote`);
-        this.comment.upvotes = response.data; // Update de UI met het nieuwe aantal upvotes
+        const response = await axios.put(`/api/chat/comment/${this.commentId}/upvote`);
+        console.log("Upvote success:", response.data);
+        this.$emit("update-upvotes", response.data);
       } catch (error) {
-        console.error("Failed to upvote:", error);
+        console.error("Failed to upvote:", error.response || error.message);
       }
     },
     handleReport() {
@@ -42,14 +46,18 @@ export default {
       console.log(`Reported comment/reply with ID: ${this.commentId || this.replyId}`);
       alert("This comment/reply has been reported.");
     },
-  },
+    handleUpvotes(newUpvotes) {
+      console.log("Updated upvotes:", newUpvotes);
+        // Update de state of UI met de nieuwe waarde
+      },
+    },
 };
 </script>
 
 <template>
   <div class="flex items-center space-x-4">
-    <button @click="upvoteComment(comment.id)">Upvote</button>
-    <span>{{ comment.upvotes }}</span>
+    <button @click="upvoteComment">Upvote</button>
+    <span>{{ upvotesCount }}</span>
     <button @click="handleReport" class="text-red-600 hover:underline">
       Report
     </button>

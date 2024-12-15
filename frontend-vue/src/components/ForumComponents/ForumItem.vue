@@ -51,7 +51,10 @@ export default {
                 'Content-Type': 'application/json',
               },
             }
-        );
+        )
+        console.log("Comment ID in ForumItem:", comment.commentId);
+
+
 
         const newReply = response.data;
         const comment = comments.value.find((c) => c.commentId === commentId);
@@ -158,7 +161,11 @@ export default {
             Geplaatst op: {{ new Date(comment.createdAt).toLocaleString() }}
           </small>
           <div class="mt-2 flex space-x-4">
-            <CommentAction :upvotesCount="0" :commentId="comment.commentId" />
+            <CommentAction
+                :upvotesCount="comment.upvotes || 0"
+                :commentId="comment.commentId"
+                @update-upvotes="handleUpvotes"
+            />
             <button @click="toggleReplyField(comment.commentId)" class="mt-4 text-blue-500 hover:underline">
               Reply
             </button>
@@ -172,6 +179,7 @@ export default {
             <CommentAction
                 :upvotesCount="comment.upvotes || 0"
                 :commentId="comment.commentId"
+                @update-upvotes="handleUpvotes"
             />
             <button
                 @click="handleReplySubmit(comment.commentId)"
