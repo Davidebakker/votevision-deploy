@@ -20,6 +20,12 @@
       >
         <span class="font-medium">About</span>
       </router-link>
+      <router-link
+        to="/parties"
+        class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+      >
+        <span class="font-medium">Parties</span>
+      </router-link>
 
 
       <template v-if="!isLoggedIn">
@@ -40,12 +46,6 @@
 
       <template v-else>
         <router-link
-          to="/parties"
-          class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-        >
-          <span class="font-medium">Parties</span>
-        </router-link>
-        <router-link
           to="/forum"
           class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
         >
@@ -59,15 +59,15 @@
         </router-link>
 
 
-        <template v-if="isAdmin">
+        <template v-if="isAdmin || isModerator">
+<!--          <router-link-->
+<!--            to="/moderator"-->
+<!--            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"-->
+<!--          >-->
+<!--            <span class="font-medium">Moderator Page</span>-->
+<!--          </router-link>-->
           <router-link
-            to="/admin"
-            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-          >
-            <span class="font-medium">Admin</span>
-          </router-link>
-          <router-link
-            to="/admin/users"
+            to="/moderator/users"
             class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
           >
             <span class="font-medium">Manage users</span>
@@ -76,16 +76,16 @@
         <!-- Moderator-only links -->
         <template v-if="isModerator">
           <router-link
-            to="/moderator"
+            to="/admin"
             class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
           >
-            <span class="font-medium">Moderator</span>
+            <span class="font-medium">Admin page</span>
           </router-link>
           <router-link
-            to="/moderator/admins"
+            to="/admin/moderators"
             class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
           >
-            <span class="font-medium">Manage admins</span>
+            <span class="font-medium">Manage moderators</span>
           </router-link>
         </template>
       </template>
@@ -96,7 +96,8 @@
   </nav>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
 // import { getCookie } from '@/stores/cookies.ts';
 
@@ -136,7 +137,18 @@ export default {
     },
   },
 };
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  jwt.value = localStorage.getItem('jwt');
+  userRoles.value = localStorage.getItem('userRoles');
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
 </script>
+
 
 <style scoped>
 .sticky-sidebar {
