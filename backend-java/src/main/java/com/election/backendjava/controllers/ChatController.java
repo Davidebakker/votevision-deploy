@@ -152,6 +152,8 @@ public class ChatController {
     // upvotes verwerken in de database
     @PutMapping("/comment/{commentId}/upvote")
     public ResponseEntity<?> upvoteComment(@PathVariable Long commentId) {
+        System.out.println("Comment ID received: " + commentId);
+        System.out.println("Does Comment exist? " + commentRepository.existsById(commentId));
         // Zoek de comment
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));
@@ -164,7 +166,7 @@ public class ChatController {
 
     // upvotes verwerken in de database
     @PutMapping("/reply/{replyId}/upvote")
-    public ResponseEntity<?> upvoteReply(@PathVariable long replyId) {
+    public ResponseEntity<?> upvoteReply(@PathVariable Long replyId) {
         // Zoek de reply
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reply not found"));

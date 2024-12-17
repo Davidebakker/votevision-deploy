@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 public class ReplyDTO {
     // Getters en setters
-    private long replyId;
+    private Integer replyId;
     private String replyText;
     private LocalDateTime createdAt;
     private String userName; // De naam van de gebruiker die de reply plaatste

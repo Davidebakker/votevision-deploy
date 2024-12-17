@@ -19,7 +19,7 @@ public class Reply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long replyId;
+    private Integer replyId;
 
     @Column(nullable = false)
     private String replyText;
@@ -52,5 +52,5 @@ public class Reply {
     }
 
     @Column(nullable = false) //upvotes bijhouden
-    private long upvotes = 0;
+    private Integer upvotes = 0;
 }
