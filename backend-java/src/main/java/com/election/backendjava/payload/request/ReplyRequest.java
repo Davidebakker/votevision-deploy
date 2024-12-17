@@ -9,5 +9,5 @@ public class ReplyRequest {
     private String title;
 
     @NotBlank
-    private String replyText;
+    private String ReplyText;
 }

@@ -6,7 +6,7 @@ import CommentAction from "@/components/ForumComponents/CommentAction.vue";
 
 export default {
   components: { ReplyList,
-    CommentAction, // Voeg CommentAction toe
+    CommentAction,
   },
   setup() {
     const comments = ref([]);
@@ -116,6 +116,41 @@ export default {
         console.error('Error submitting nested reply:', error.response?.data);
       }
     };
+    const handleUpvotes = (eventData) => {
+      // eventData bevat: { replyId, commentId, updatedUpvotes }
+      // Zoek de juiste comment of reply en update de waarde lokaal.
+
+      if (eventData.commentId) {
+        // Update een comment
+        const comment = comments.value.find(c => c.commentId === eventData.commentId);
+        if (comment) {
+          comment.upvotes = eventData.updatedUpvotes;
+        }
+      }
+
+      if (eventData.replyId) {
+        // Update een reply
+        // Je zal hiervoor door de replies heen moeten gaan.
+        const updateReplyUpvotes = (replies) => {
+          for (const reply of replies) {
+            if (reply.replyId === eventData.replyId) {
+              reply.upvotes = eventData.updatedUpvotes;
+              return true;
+            }
+            if (reply.childReplies && updateReplyUpvotes(reply.childReplies)) {
+              return true;
+            }
+          }
+          return false;
+        };
+
+        comments.value.forEach(comment => {
+          if (comment.replies) {
+            updateReplyUpvotes(comment.replies);
+          }
+        });
+      }
+    };
 
     onMounted(() => {
       fetchComments();
@@ -128,6 +163,7 @@ export default {
       toggleReplyField,
       handleReplySubmit,
       handleNestedReplySubmit,
+      handleUpvotes,
     };
   },
 };
@@ -162,7 +198,7 @@ export default {
           </small>
           <div class="mt-2 flex space-x-4">
             <CommentAction
-                :upvotesCount="comment.upvotes || 0"
+                :upvotesCount="comment.upvotes"
                 :commentId="comment.commentId"
                 @update-upvotes="handleUpvotes"
             />
@@ -177,7 +213,7 @@ export default {
                 class="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400"
             ></textarea>
             <CommentAction
-                :upvotesCount="comment.upvotes || 0"
+                :upvotesCount="comment.upvotes"
                 :commentId="comment.commentId"
                 @update-upvotes="handleUpvotes"
             />
@@ -188,12 +224,15 @@ export default {
             </button>
           </div>
           <ReplyList
-              :replies="comment.replies"
+              :replies="comment.replies || []"
               :replyTexts="replyTexts"
               :activeReplyId="activeReplyId"
+              :commentId="comment.commentId"
               @toggle-reply-field="toggleReplyField"
               @submit-nested-reply="handleNestedReplySubmit"
           />
+
+
         </div>
       </div>
     </div>

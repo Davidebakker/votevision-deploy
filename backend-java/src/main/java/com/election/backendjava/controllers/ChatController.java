@@ -10,6 +10,7 @@ import com.election.backendjava.repositories.form.CommentRepository;
 import com.election.backendjava.repositories.form.ReplyRepository;
 import com.election.backendjava.repositories.form.TopicRepository;
 import com.election.backendjava.repositories.user.UserRepository;
+import com.election.backendjava.security.services.UpvoteService;
 import com.election.backendjava.security.services.UserDetailsImpl;
 import com.election.backendjava.dto.ReplyDTO;
 import com.election.backendjava.dto.CommentDTO;
@@ -34,6 +35,9 @@ public class ChatController {
 
     @Autowired
     CommentRepository commentRepository;
+
+    @Autowired
+    private UpvoteService upvoteService;
 
     @Autowired
     ReplyRepository replyRepository;
@@ -149,32 +153,15 @@ public class ChatController {
         return replyDTO;
     }
 
-    // upvotes verwerken in de database
     @PutMapping("/comment/{commentId}/upvote")
-    public ResponseEntity<?> upvoteComment(@PathVariable Long commentId) {
-        System.out.println("Comment ID received: " + commentId);
-        System.out.println("Does Comment exist? " + commentRepository.existsById(commentId));
-        // Zoek de comment
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));
-
-        // Verhoog het aantal upvotes
-        comment.setUpvotes(comment.getUpvotes() + 1);
-        commentRepository.save(comment);
-        return ResponseEntity.ok(comment.getUpvotes());
+    public ResponseEntity<Integer> upvoteComment(@PathVariable Long commentId) {
+        Integer updatedUpvotes = upvoteService.upvoteComment(commentId);
+        return ResponseEntity.ok(updatedUpvotes);
     }
 
-    // upvotes verwerken in de database
     @PutMapping("/reply/{replyId}/upvote")
-    public ResponseEntity<?> upvoteReply(@PathVariable Long replyId) {
-        // Zoek de reply
-        Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reply not found"));
-
-        // Verhoog het aantal upvotes
-        reply.setUpvotes(reply.getUpvotes() + 1);
-        replyRepository.save(reply);
-
-        return ResponseEntity.ok(reply.getUpvotes());
+    public ResponseEntity<Integer> upvoteReply(@PathVariable Long replyId) {
+        Integer updatedUpvotes = upvoteService.upvoteReply(replyId);
+        return ResponseEntity.ok(updatedUpvotes);
     }
 }
