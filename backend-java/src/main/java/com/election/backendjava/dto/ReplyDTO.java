@@ -10,11 +10,12 @@ import java.util.List;
 @Setter
 @Getter
 public class ReplyDTO {
-    // Getters en setters
     private Integer replyId;
     private String replyText;
     private LocalDateTime createdAt;
-    private String userName; // De naam van de gebruiker die de reply plaatste
-    private List<ReplyDTO> childReplies = new ArrayList<>(); // De lijst met nested replies
+    private String userName;
+    private List<ReplyDTO> childReplies = new ArrayList<>();
 
+    // Voeg hier ook upvotes toe
+    private Integer upvotes;
 }

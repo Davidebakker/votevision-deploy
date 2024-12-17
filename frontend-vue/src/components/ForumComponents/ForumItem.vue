@@ -6,7 +6,7 @@ import CommentAction from "@/components/ForumComponents/CommentAction.vue";
 
 export default {
   components: { ReplyList,
-    CommentAction, // Voeg CommentAction toe
+    CommentAction,
   },
   setup() {
     const comments = ref([]);
@@ -51,7 +51,10 @@ export default {
                 'Content-Type': 'application/json',
               },
             }
-        );
+        )
+        console.log("Comment ID in ForumItem:", comment.commentId);
+
+
 
         const newReply = response.data;
         const comment = comments.value.find((c) => c.commentId === commentId);
@@ -113,6 +116,41 @@ export default {
         console.error('Error submitting nested reply:', error.response?.data);
       }
     };
+    const handleUpvotes = (eventData) => {
+      // eventData bevat: { replyId, commentId, updatedUpvotes }
+      // Zoek de juiste comment of reply en update de waarde lokaal.
+
+      if (eventData.commentId) {
+        // Update een comment
+        const comment = comments.value.find(c => c.commentId === eventData.commentId);
+        if (comment) {
+          comment.upvotes = eventData.updatedUpvotes;
+        }
+      }
+
+      if (eventData.replyId) {
+        // Update een reply
+        // Je zal hiervoor door de replies heen moeten gaan.
+        const updateReplyUpvotes = (replies) => {
+          for (const reply of replies) {
+            if (reply.replyId === eventData.replyId) {
+              reply.upvotes = eventData.updatedUpvotes;
+              return true;
+            }
+            if (reply.childReplies && updateReplyUpvotes(reply.childReplies)) {
+              return true;
+            }
+          }
+          return false;
+        };
+
+        comments.value.forEach(comment => {
+          if (comment.replies) {
+            updateReplyUpvotes(comment.replies);
+          }
+        });
+      }
+    };
 
     onMounted(() => {
       fetchComments();
@@ -125,6 +163,7 @@ export default {
       toggleReplyField,
       handleReplySubmit,
       handleNestedReplySubmit,
+      handleUpvotes,
     };
   },
 };
@@ -140,7 +179,6 @@ export default {
         Plaats comment
       </router-link>
     </div>
-
     <div class="w-full max-w-3xl px-6 py-4">
       <h2 class="text-lg font-medium text-gray-600 dark:text-gray-200">Comments</h2>
       <div v-if="comments.length === 0" class="text-center text-gray-500 dark:text-gray-400">
@@ -152,23 +190,22 @@ export default {
             :key="comment.commentId"
             class="mt-4 p-4 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600"
         >
-          <p>Geplaatst door: {{ comment.userName }}</p>
+          <p>{{ comment.userName }}</p>
           <h3 class="text-lg font-bold text-gray-700 dark:text-gray-300">{{ comment.commentTitle }}</h3>
           <p class="text-gray-600 dark:text-gray-200">{{ comment.commentText }}</p>
           <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">
             Geplaatst op: {{ new Date(comment.createdAt).toLocaleString() }}
           </small>
-
-          <!-- Interaction buttons -->
           <div class="mt-2 flex space-x-4">
-            <!-- Upvote -->
-            <CommentAction :upvotesCount="0" :commentId="comment.commentId" />
-            <!-- Reply -->
+            <CommentAction
+                :upvotesCount="comment.upvotes"
+                :commentId="comment.commentId"
+                @update-upvotes="handleUpvotes"
+            />
             <button @click="toggleReplyField(comment.commentId)" class="mt-4 text-blue-500 hover:underline">
               Reply
             </button>
           </div>
-
           <div v-if="activeReplyId === comment.commentId" class="mt-4">
             <textarea
                 v-model="replyTexts[comment.commentId]"
@@ -176,24 +213,26 @@ export default {
                 class="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400"
             ></textarea>
             <CommentAction
-                :upvotesCount="comment.upvotes || 0"
+                :upvotesCount="comment.upvotes"
                 :commentId="comment.commentId"
+                @update-upvotes="handleUpvotes"
             />
             <button
                 @click="handleReplySubmit(comment.commentId)"
-                class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400"
-            >
+                class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">
               Reageren
             </button>
           </div>
-
           <ReplyList
-              :replies="comment.replies"
+              :replies="comment.replies || []"
               :replyTexts="replyTexts"
               :activeReplyId="activeReplyId"
+              :commentId="comment.commentId"
               @toggle-reply-field="toggleReplyField"
               @submit-nested-reply="handleNestedReplySubmit"
           />
+
+
         </div>
       </div>
     </div>
