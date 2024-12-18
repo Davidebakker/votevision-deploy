@@ -1,26 +1,26 @@
 package com.election.backendjava.controllers;
 
-import com.election.backendjava.models.election.Party;
 import com.election.backendjava.models.user.EBanPeriod;
-import com.election.backendjava.models.user.ERole;
-import com.election.backendjava.models.user.Role;
 import com.election.backendjava.models.user.User;
 import com.election.backendjava.payload.response.MessageResponse;
 import com.election.backendjava.repositories.election.RoleRepository;
 import com.election.backendjava.repositories.user.UserRepository;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
+import com.election.backendjava.security.services.UserDetailsImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.access.prepost.PreAuthorize;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -39,6 +39,20 @@ public class UserController {
         List<User> users = userRepository.findAllByRoleName(userRole.toUpperCase());
 
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/getDetails")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> getUserDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication.getPrincipal() instanceof UserDetailsImpl userDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user authentication");
+        }
+
+        User user = userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        return ResponseEntity.ok(userRepository.findById(user.getUserId()));
     }
 
     @PostMapping("/add/admin/{userId}")

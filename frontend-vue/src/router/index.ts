@@ -6,7 +6,6 @@ import Registration from '@/components/RegistrationComponents/RegistrationItem.v
 import Login from '@/components/loginComponents/LoginItem.vue'
 import Logout from '@/components/loginComponents/LogoutItem.vue'
 import PartiesOverview from '@/components/PartyOverviewComponents/PartiesOverview.vue'
-import Party from '@/components/Elections/TestPartyItem.vue'
 import Candidate from '@/components/Elections/TestCandidateItem.vue'
 import PostForum from "@/components/ForumComponents/PostForum.vue";
 import ForumItem from "@/components/ForumComponents/ForumItem.vue";
@@ -16,6 +15,7 @@ import UnauthorizedItem from '@/components/unauthorizedComponents/UnauthorizedIt
 import PartyDetails from '@/components/PartyOverviewComponents/PartyDetails.vue'
 import AdminManagementItem from '@/components/managment/ModComponents/AdminManagementItem.vue'
 import ModeratorHomeItem from '@/components/managment/ModComponents/ModeratorHomeItem.vue'
+import ProfilePageComponent from '@/components/profileComponents/ProfilePageComponent.vue'
 
 function isLoggedIn() {
   return !!localStorage.getItem('jwtToken');
@@ -41,6 +41,7 @@ const router = createRouter({
     { path: '/registration', name: 'registration', component: Registration, meta: { guestOnly: true } },
     { path: '/login', name: 'login', component: Login, meta: { guestOnly: true } },
     { path: '/logout', name: 'logout', component: Logout, meta: { userOnly: true } },
+    { path: '/profile', name: 'profile', component: ProfilePageComponent, meta: { userOnly: true }},
     // Elections
     { path: '/party/:name', component: PartyDetails, name: 'PartyDetails', props: true, },
     { path: '/kandidaat/:candidateName', name: 'candidate', component: Candidate, props: true },
