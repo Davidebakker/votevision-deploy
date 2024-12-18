@@ -45,15 +45,21 @@ public class ElectionController {
 
     @GetMapping("/party/{partyName}")
     public ResponseEntity<?> getParty(@PathVariable String partyName) {
+        System.out.println("Searching for party: " + partyName);
         Optional<Party> getParty = partyRepository.findByNameIgnoreCase(partyName);
 
         if (getParty.isPresent()) {
+            System.out.println("Party found: " + getParty.get());
             return ResponseEntity.ok(getParty.get());
         } else {
+            System.out.println("Party not found: " + partyName);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new MessageResponse("Party not found with name: " + partyName));
         }
     }
+
+
+
 
     @GetMapping("/candidate/{candidateName}")
     public ResponseEntity<?> getPartyCandidate(@PathVariable String candidateName) {
@@ -106,17 +112,6 @@ public class ElectionController {
 
 
 
-
-
-    @GetMapping("/parties/seats")
-    public List<Party> getPartiesWithSeats() {
-        return partyRepository.findAll();
-    }
-
-    @GetMapping("/parties/description")
-    public List<Party> getAllDescriptions() {
-        return partyRepository.findAll();
-    }
 
 
 

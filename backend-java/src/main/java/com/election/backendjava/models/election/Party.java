@@ -31,20 +31,4 @@ public class Party {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<Candidate> candidates = new ArrayList<>();
-
-    @Override
-    public String toString() {
-        StringBuilder candidatesList = new StringBuilder();
-        if (candidates != null) {
-            for (Candidate candidate : candidates) {
-                candidatesList.append(candidate.toString()).append("\n");
-            }
-        }
-        return "Party{" +
-                "partyId=" + partyId +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", candidates=\n" + candidatesList +
-                '}';
-    }
 }

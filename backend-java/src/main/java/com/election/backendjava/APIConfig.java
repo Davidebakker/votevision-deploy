@@ -4,6 +4,7 @@ import com.election.backendjava.security.jwt.AuthEntryPointJwt;
 import com.election.backendjava.security.jwt.AuthTokenFilter;
 import com.election.backendjava.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,11 +22,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class APIConfig implements WebMvcConfigurer {
+    @Value("${cors.origin}")
+    private String corsOrigin;
 
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("https://localhost:8080", "http://localhost:3001","http://localhost:3000", "http://*.hva.nl:*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE");
+                .allowedOrigins(corsOrigin)
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
+                .allowedHeaders("*");
+//                .allowCredentials(true);
     }
 
     @Autowired

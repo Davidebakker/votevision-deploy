@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.election.backendjava.models.user.ERole;
 import com.election.backendjava.models.user.Role;
@@ -31,6 +30,7 @@ import com.election.backendjava.payload.response.JwtResponse;
 import com.election.backendjava.payload.response.MessageResponse;
 import com.election.backendjava.repositories.election.RoleRepository;
 import com.election.backendjava.repositories.user.UserRepository;
+import com.election.backendjava.repositories.CookieRepository;
 import com.election.backendjava.security.jwt.JwtUtils;
 import com.election.backendjava.security.services.UserDetailsImpl;
 
@@ -54,8 +54,11 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+//    @Autowired
+//    CookieRepository cookieRepository;
+
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -76,6 +79,12 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+//        cookieRepository.addJwtToCookie(response, jwt);
+//
+//        if (!roles.isEmpty()) {
+//            cookieRepository.addRoleToCookie(response, roles.get(0));
+//        }
+
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
@@ -84,7 +93,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest signUpRequest, HttpServletResponse response) {
 
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
@@ -103,7 +112,7 @@ public class AuthController {
                 signUpRequest.getPassword().matches(".*[^a-zA-Z0-9].*")) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Password must be at least 8 characters and contain at least one a uppercase letter, one lowercase letter and one "));
+                    .body(new MessageResponse("Error: Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one special character"));
         }
 
         User user = new User(
@@ -113,8 +122,6 @@ public class AuthController {
                 signUpRequest.getRegion(),
                 encoder.encode(signUpRequest.getPassword())
         );
-
-
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
@@ -130,13 +137,11 @@ public class AuthController {
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
-
                         break;
                     case "mod":
                         Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(modRole);
-
                         break;
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -160,6 +165,12 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+//        cookieRepository.addJwtToCookie(response, jwt);
+//
+//        if (!rolesList.isEmpty()) {
+//            cookieRepository.addRoleToCookie(response, rolesList.get(0));
+//        }
+
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
@@ -168,9 +179,13 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> signOut() {
+    public ResponseEntity<?> signOut(HttpServletResponse response) {
         SecurityContextHolder.clearContext();
+
+//        cookieRepository.deleteJwtCookie(response);
+//        cookieRepository.deleteRoleCookie(response);
 
         return ResponseEntity.ok(new MessageResponse("Signed out successfully!"));
     }
+
 }
