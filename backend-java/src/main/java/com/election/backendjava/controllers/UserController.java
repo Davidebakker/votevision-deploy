@@ -1,10 +1,13 @@
 package com.election.backendjava.controllers;
 
 import com.election.backendjava.models.user.EBanPeriod;
+import com.election.backendjava.models.user.ERole;
 import com.election.backendjava.models.user.User;
+import com.election.backendjava.payload.request.EditUserRequest;
 import com.election.backendjava.payload.response.MessageResponse;
 import com.election.backendjava.repositories.election.RoleRepository;
 import com.election.backendjava.repositories.user.UserRepository;
+import com.election.backendjava.services.user.UserServices;
 import com.election.backendjava.security.services.UserDetailsImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +30,20 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserServices userServices;
 
     @Autowired
-    RoleRepository roleRepository;
+    public UserController(UserRepository userRepository, UserServices userServices, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.userServices = userServices;
+    }
 
     @GetMapping("/findAll/{userRole}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> getAllUsersByRole(@PathVariable String userRole) {
-        List<User> users = userRepository.findAllByRoleName(userRole.toUpperCase());
+        ERole role = ERole.valueOf(userRole.toUpperCase());
+        List<User> users = userRepository.findAllByRoles_Name(role);
 
         return ResponseEntity.ok(users);
     }
@@ -44,15 +51,8 @@ public class UserController {
     @GetMapping("/getDetails")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getUserDetails() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication.getPrincipal() instanceof UserDetailsImpl userDetails)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user authentication");
-        }
-
-        User user = userRepository.findById(userDetails.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
-        return ResponseEntity.ok(userRepository.findById(user.getUserId()));
+        User user = userServices.getUserFromAuthentication();
+        return ResponseEntity.ok(userServices.getUserWithComments(user.getUserId()));
     }
 
     @PostMapping("/add/admin/{userId}")
@@ -60,7 +60,7 @@ public class UserController {
     public ResponseEntity<?> addAdmin(@PathVariable Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-        userRepository.addAdmin(userId);
+        userServices.addAdmin(userId);
 
 
         return ResponseEntity.ok(new MessageResponse("Admin added Successfully"));
@@ -71,7 +71,7 @@ public class UserController {
     public ResponseEntity<?> deleteAdmin(@PathVariable Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-        userRepository.demoteAdminToUser(userId);
+        userServices.demoteAdminToUser(userId);
 
         return ResponseEntity.ok(new MessageResponse("Admin deleted Successfully"));
     }
@@ -89,18 +89,25 @@ public class UserController {
     @PostMapping("/ban/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> banUser(@PathVariable Long userId) {
-        userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        int banAmount = userRepository.findBanAmountByUserId(userId);
+        int banAmount = user.getBanCount();
 
         EBanPeriod banPeriod = EBanPeriod.getNextPeriod(banAmount);
 
-        int updatedRows = userRepository.banUser(userId, LocalDateTime.now().plusDays(banPeriod.getDays()));
-        if (updatedRows > 0) {
+        try {
+            userServices.banUser(userId, LocalDateTime.now().plusDays(banPeriod.getDays()));
             return ResponseEntity.ok(new MessageResponse("User banned successfully"));
-        } else {
+        } catch (Exception e) {
             return ResponseEntity.ok(new MessageResponse("An error occurred while banning the user"));
         }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<?> editUser(@RequestBody EditUserRequest editUserRequest) {
+        User user = userServices.getUserFromAuthentication();
+
+        return ResponseEntity.ok("");
     }
 }
