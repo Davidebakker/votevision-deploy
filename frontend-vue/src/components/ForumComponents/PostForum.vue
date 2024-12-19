@@ -12,8 +12,8 @@ export default {
     const router = useRouter();
     const onderwerpNummer = route.params.onderwerpNummer;
     const isSubmitting = ref(false);
-    // const replyTekst = ref('');
-    // const activeReplyPostIndex = ref(null)
+    const replyTekst = ref('');
+    const activeReplyPostIndex = ref(null)
 
     const handleSubmit = async () => {
       if (!jwtToken) {
