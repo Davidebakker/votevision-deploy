@@ -54,11 +54,9 @@ public class User {
     @Column(name = "region")
     private String region;
 
-    @NotBlank
     @Column(name = "banned")
     private Boolean banned = Boolean.FALSE;
 
-    @NotBlank
     @Column(name = "ban_expiration")
     private LocalDateTime banExpiration;
 

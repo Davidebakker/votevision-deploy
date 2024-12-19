@@ -19,7 +19,14 @@ export default {
       };
 
       try {
-        const response = await axios.post(`http://localhost:8080/api/auth/login`, userData);
+        const response = await axios.post(
+          `http://localhost:8080/api/auth/login`,
+          userData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
         console.log(response.data);
 
         if (response.data.token) {
@@ -32,9 +39,10 @@ export default {
           const userRoles = response.data.roles;
           localStorage.setItem('userRoles', JSON.stringify(userRoles));
         }
+
         toast("You successfully logged in");
 
-        router.push({ name: 'home' });
+        await router.push({ name: 'home' });
         window.location.reload();
       } catch (error) {
         if (error.response && error.response.status === 403) {
