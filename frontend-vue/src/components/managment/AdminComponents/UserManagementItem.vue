@@ -12,7 +12,7 @@
           <th class="p-4 font-semibold">Email</th>
           <th class="p-4 font-semibold">Delete</th>
           <th class="p-4 font-semibold">Ban</th>
-          <th class="p-4 font-semibold" v-if="isMod">Add Admin</th>
+          <th class="p-4 font-semibold" v-if="isMod">Add Moderator</th>
         </tr>
         </thead>
         <tbody>
@@ -46,7 +46,7 @@
               @click="addAsAdmin(user.userId)"
               class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-700"
             >
-              Add Admin
+              Add Moderator
             </button>
           </td>
         </tr>
