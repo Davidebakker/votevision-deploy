@@ -26,7 +26,12 @@
       >
         <span class="font-medium">Parties</span>
       </router-link>
-
+      <router-link
+        to="/forum"
+        class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+      >
+        <span class="font-medium">Forum</span>
+      </router-link>
 
       <template v-if="!isLoggedIn">
         <router-link
@@ -41,31 +46,26 @@
         >
           <span class="font-medium">Log in</span>
         </router-link>
+
       </template>
 
 
       <template v-else>
-        <router-link
-          to="/forum"
-          class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-        >
-          <span class="font-medium">Forum</span>
-        </router-link>
         <router-link
           to="/logout"
           class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
         >
           <span class="font-medium">Logout</span>
         </router-link>
+        <router-link
+          to="/profile"
+          class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+        >
+          <span class="font-medium">profile</span>
+        </router-link>
 
 
         <template v-if="isAdmin || isModerator">
-<!--          <router-link-->
-<!--            to="/moderator"-->
-<!--            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"-->
-<!--          >-->
-<!--            <span class="font-medium">Moderator Page</span>-->
-<!--          </router-link>-->
           <router-link
             to="/moderator/users"
             class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import {onMounted, onUnmounted } from 'vue';
 import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
 // import { getCookie } from '@/stores/cookies.ts';
 

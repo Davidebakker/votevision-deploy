@@ -29,7 +29,7 @@
                 Matin Kh
               </h1>
               <p class="mt-2 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
-                Senior Developer
+                junior Developer
               </p>
             </div>
           </div>
@@ -107,7 +107,7 @@
                 David Bakker
               </h1>
               <p class="mt-2 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
-                Full Stack Developer
+                Senior Full Stack Developer
               </p>
             </div>
           </div>
