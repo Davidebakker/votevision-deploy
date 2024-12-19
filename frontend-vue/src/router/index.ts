@@ -23,7 +23,7 @@ function isLoggedIn() {
 
 function isAdmin() {
   const userRoles = localStorage.getItem('userRoles');
-  return userRoles && userRoles.includes('ROLE_ADMIN') || userRoles.includes('ROLE_MODERATOR');
+  return userRoles && userRoles.includes('ROLE_ADMIN') || userRoles?.includes('ROLE_MODERATOR');
 }
 
 function isMod() {

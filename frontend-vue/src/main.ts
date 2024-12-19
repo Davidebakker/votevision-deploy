@@ -13,9 +13,9 @@ import router from './router';
 const app = createApp(App);
 
 // Check if `window.agCharts` is loaded; if not, log a warning
-if (!window.agCharts) {
-  console.warn("Warning: agCharts library not loaded. Make sure the script URL is correct in index.html.");
-}
+// if (!window.agCharts) {
+//   console.warn("Warning: agCharts library not loaded. Make sure the script URL is correct in index.html.");
+// }
 
 app.use(createPinia());
 app.use(router);
