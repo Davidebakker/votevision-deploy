@@ -9,12 +9,20 @@ export default {
     },
     commentId: {
       type: Number,
-      required: false, // Kan nu optioneel zijn
+      required: false,
     },
     replyId: {
       type: Number,
-      required: false, // Alleen nodig voor replies
+      required: false,
     },
+    showUpvote: {
+      type: Boolean,
+      default: true,
+    },
+    showReport: {
+      type: Boolean,
+      default: true,
+    }
   },
   data() {
     return {
@@ -24,8 +32,7 @@ export default {
   },
   methods: {
     async upvoteItem() {
-      // Bepaal het juiste ID en endpoint
-      const id = this.replyId || this.commentId; // replyId heeft voorrang
+      const id = this.replyId || this.commentId;
       if (!id || id <= 0) {
         console.error("Invalid ID:", id);
         alert("Cannot upvote. Invalid ID.");
@@ -36,15 +43,9 @@ export default {
           ? `http://localhost:8080/api/chat/reply/${id}/upvote`
           : `http://localhost:8080/api/chat/comment/${id}/upvote`;
 
-
-      console.log("Upvoting ID:", id, "via endpoint:", endpoint);
-
       try {
         const response = await axios.put(endpoint);
-        console.log("Upvote success:", response.data);
-
-        // Bijwerken van lokale state
-        this.upvotes = response.data; // Aantal upvotes wordt teruggegeven
+        this.upvotes = response.data;
         this.$emit("update-upvotes", {
           replyId: this.replyId,
           commentId: this.commentId,
@@ -61,9 +62,7 @@ export default {
         return;
       }
       this.reported = true;
-      console.log(
-          `Reported comment/reply with ID: ${this.commentId || this.replyId}`
-      );
+      console.log(`Reported comment/reply with ID: ${this.commentId || this.replyId}`);
       alert("This comment/reply has been reported.");
     },
   },
@@ -72,18 +71,17 @@ export default {
 
 <template>
   <div class="flex items-center space-x-4">
-    <!-- Upvote Button -->
-    <button @click="upvoteItem" class="text-blue-500 hover:underline">
-      Upvote
-    </button>
-    <span>{{ upvotes }}</span>
+    <!-- Upvote enkel tonen indien showUpvote true is -->
+    <button v-if="showUpvote" @click="upvoteItem" class="text-green-500 hover:text-white-600 w-10 h-10"> <i class="fas fa-thumbs-up"></i></button>
+    <span v-if="showUpvote">{{ upvotes }}</span>
 
-    <!-- Report Button -->
-    <button @click="handleReport" class="text-red-600 hover:underline">
+    <!-- Report enkel tonen indien showReport true is -->
+    <button v-if="showReport" @click="handleReport" class="ml-auto text-red-600 hover:underline">
       Report
     </button>
   </div>
 </template>
+
 <CommentAction
     :upvotesCount="comment.upvotes"
     :commentId="comment.commentId"

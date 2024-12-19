@@ -188,41 +188,59 @@ export default {
         <div
             v-for="comment in comments"
             :key="comment.commentId"
-            class="mt-4 p-4 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600"
+            class="mt-4 p-4 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 flex flex-col"
         >
-          <p>{{ comment.userName }}</p>
-          <h3 class="text-lg font-bold text-gray-700 dark:text-gray-300">{{ comment.commentTitle }}</h3>
-          <p class="text-gray-600 dark:text-gray-200">{{ comment.commentText }}</p>
-          <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">
-            Geplaatst op: {{ new Date(comment.createdAt).toLocaleString() }}
-          </small>
-          <div class="mt-2 flex space-x-4">
+          <!-- Bovenste rij: comment links, upvote rechts -->
+          <div class="flex justify-between items-center">
+            <div>
+              <p>{{ comment.userName }}</p>
+              <h3 class="text-lg font-bold text-gray-700 dark:text-gray-300">{{ comment.commentTitle }}</h3>
+              <p class="text-gray-600 dark:text-gray-200">{{ comment.commentText }}</p>
+              <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">
+                Geplaatst op: {{ new Date(comment.createdAt).toLocaleString() }}
+              </small>
+            </div>
+
+            <!-- Upvote alleen hier tonen -->
             <CommentAction
                 :upvotesCount="comment.upvotes"
                 :commentId="comment.commentId"
                 @update-upvotes="handleUpvotes"
+                :showUpvote="true"
+                :showReport="false"
             />
-            <button @click="toggleReplyField(comment.commentId)" class="mt-4 text-blue-500 hover:underline">
+          </div>
+
+          <!-- Onderste rij: Reply en Report samen -->
+          <div class="mt-2 flex items-center space-x-4">
+            <button @click="toggleReplyField(comment.commentId)" class="text-blue-500 hover:underline">
               Reply
             </button>
+
+            <!-- Alleen Report knop tonen -->
+            <CommentAction
+                :upvotesCount="comment.upvotes"
+                :commentId="comment.commentId"
+                @update-upvotes="handleUpvotes"
+                :showUpvote="false"
+                :showReport="true"
+            />
           </div>
+
+          <!-- Als er gereageerd wordt -->
           <div v-if="activeReplyId === comment.commentId" class="mt-4">
             <textarea
                 v-model="replyTexts[comment.commentId]"
                 placeholder="Schrijf een reactie..."
                 class="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400"
             ></textarea>
-            <CommentAction
-                :upvotesCount="comment.upvotes"
-                :commentId="comment.commentId"
-                @update-upvotes="handleUpvotes"
-            />
             <button
                 @click="handleReplySubmit(comment.commentId)"
                 class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">
               Reageren
             </button>
           </div>
+
           <ReplyList
               :replies="comment.replies || []"
               :replyTexts="replyTexts"
@@ -231,14 +249,11 @@ export default {
               @toggle-reply-field="toggleReplyField"
               @submit-nested-reply="handleNestedReplySubmit"
           />
-
-
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <style scoped>
 .min-h-screen {
   min-height: 100vh;
