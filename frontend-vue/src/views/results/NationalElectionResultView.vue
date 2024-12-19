@@ -1,15 +1,40 @@
 <template>
-  <div class="national-results">
-    <h1 class="text-2xl font-semibold mb-4">National Election Results</h1>
-    <label for="chartSelect" class="block mb-4">
-      Chose the data you want to see:
-      <select id="chartSelect" v-model="selectedChart" @change="updateChart">
-        <option value="municipality">Vote's per party</option>
-        <option value="party">Vote's per Municipality</option>
-        <option value="original">Original Data</option>
-      </select>
-    </label>
-    <ag-charts :options="chartOptions" style="width: 100%; height: 400px;"></ag-charts>
+  <div class="national-results bg-gray-50 min-h-screen px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl md:text-4xl font-bold mb-2 text-gray-800">National Election Results</h1>
+      <p class="text-gray-600 mb-6 text-sm sm:text-base">Compare different datasets by switching between views.</p>
+
+      <div class="flex flex-wrap gap-3 mb-6">
+        <button
+          @click="handleSwitch('municipality')"
+          :class="selectedChart === 'municipality'
+            ? 'bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 transition-all'
+            : 'bg-gray-200 text-gray-800 hover:bg-gray-300 font-semibold rounded-lg px-4 py-2 transition-all'"
+        >
+          Vote's per Party
+        </button>
+        <button
+          @click="handleSwitch('party')"
+          :class="selectedChart === 'party'
+            ? 'bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 transition-all'
+            : 'bg-gray-200 text-gray-800 hover:bg-gray-300 font-semibold rounded-lg px-4 py-2 transition-all'"
+        >
+          Vote's per Municipality
+        </button>
+        <button
+          @click="handleSwitch('original')"
+          :class="selectedChart === 'original'
+            ? 'bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 transition-all'
+            : 'bg-gray-200 text-gray-800 hover:bg-gray-300 font-semibold rounded-lg px-4 py-2 transition-all'"
+        >
+          Original Data
+        </button>
+      </div>
+
+      <div class="shadow-lg bg-white p-6 rounded-lg overflow-hidden">
+        <ag-charts :options="chartOptions" style="width: 100%; height: 400px;"></ag-charts>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -33,15 +58,49 @@ export default {
       title: {
         text: "Loading...",
       },
+      theme: {
+        palette: {
+          fills: ["#2196f3", "#66bb6a", "#ffca28", "#ab47bc", "#ef5350"],
+          strokes: ["#1e88e5"],
+        },
+        overrides: {
+          cartesian: {
+            title: {
+              fontSize: 18,
+              fontWeight: 'bold',
+              fontFamily: 'sans-serif',
+              padding: { top: 20, bottom: 20 },
+            },
+            axes: {
+              category: {
+                label: {
+                  fontSize: 12,
+                  fontFamily: 'sans-serif'
+                }
+              },
+              number: {
+                label: {
+                  fontSize: 12,
+                  fontFamily: 'sans-serif'
+                }
+              }
+            },
+            series: {
+              bar: {
+                label: {
+                  fontSize: 12,
+                  fontFamily: 'sans-serif'
+                }
+              }
+            }
+          }
+        }
+      },
     });
 
-    // Data ophalen
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/api/elections/results"
-        );
-        console.log("API Response Data:", response.data);
+        const response = await axios.get("http://localhost:8080/api/elections/results");
         rawData.value = response.data;
         updateChart();
       } catch (error) {
@@ -49,7 +108,6 @@ export default {
       }
     };
 
-    // Grafiekopties bijwerken op basis van selectie
     const updateChart = () => {
       let chartData = [];
       let title = "";
@@ -85,9 +143,8 @@ export default {
         title = "Original Data";
       }
 
-      console.log("Mapped Chart Data:", chartData);
-
       chartOptions.value = {
+        ...chartOptions.value,
         data: chartData,
         title: {
           text: title,
@@ -112,7 +169,6 @@ export default {
           {
             type: "category",
             position: "bottom",
-            // title: { text: selectedChart.value === "municipality" ? "Party" : "municipality" },
           },
           {
             type: "number",
@@ -123,12 +179,18 @@ export default {
       };
     };
 
+    const handleSwitch = (value) => {
+      selectedChart.value = value;
+      updateChart();
+    };
+
     onMounted(fetchData);
 
     return {
       selectedChart,
       chartOptions,
       updateChart,
+      handleSwitch,
     };
   },
 };
@@ -136,7 +198,6 @@ export default {
 
 <style scoped>
 .national-results {
-  padding: 2rem;
-  color: #2376a8;
+  font-family: sans-serif;
 }
 </style>
