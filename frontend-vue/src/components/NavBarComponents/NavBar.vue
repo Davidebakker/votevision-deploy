@@ -96,7 +96,7 @@
   </nav>
 </template>
 
-<script setup lang="ts">
+<script>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
 // import { getCookie } from '@/stores/cookies.ts';
