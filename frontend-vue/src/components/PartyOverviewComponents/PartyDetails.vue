@@ -31,23 +31,21 @@ export default {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-200 flex flex-col items-center justify-start py-10">
+  <div class="min-h-screen bg-gray-200 flex flex-col items-center py-10">
     <div class="w-full bg-gray-700 text-white py-6 px-8 mb-12 text-center">
       <h1 class="text-4xl font-extrabold">{{ party.name }}</h1>
     </div>
 
     <div class="w-full max-w-6xl bg-white shadow-lg rounded-2xl overflow-hidden">
       <div class="flex flex-col md:flex-row items-center p-8">
-
         <div class="flex justify-center md:w-1/3 mb-6 md:mb-0">
-          <img :src="party.logo" alt="Party Logo" class="w-60 h-60 object-cover">
+          <img :src="party.logo" alt="Party Logo" class="w-40 h-40 md:w-60 md:h-60 object-cover rounded-lg">
         </div>
-
+>
         <div class="md:w-2/3 md:pl-10">
           <p class="text-xl font-medium text-gray-700 mb-4">
             <span class="font-bold text-gray-800">Aantal zetels:</span> {{ party.seats }}
           </p>
-
           <div class="mt-4 text-lg text-gray-600 leading-relaxed">
             <p>{{ party.description }}</p>
           </div>
@@ -57,14 +55,18 @@ export default {
 
     <div class="w-full max-w-6xl bg-white shadow-lg rounded-2xl overflow-hidden mt-8 p-8">
       <h2 class="text-2xl font-semibold mb-6">Kandidaten:</h2>
-      <ul>
-        <li v-for="candidate in party.candidates" :key="candidate.firstName + candidate.lastName" class="mt-4">
-          <div class="border p-4 rounded-lg shadow-sm hover:bg-gray-100 transition">
-            <p class="font-bold">{{ candidate.firstName }} {{ candidate.initials }} {{ candidate.lastNamePrefix}} {{ candidate.lastName }}</p>
-            <p class="text-gray-600">{{ candidate.locality }}</p>
-          </div>
-        </li>
-      </ul>
+      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          v-for="candidate in party.candidates"
+          :key="candidate.firstName + candidate.lastName"
+          class="border p-4 rounded-lg shadow-sm hover:bg-gray-100 transition"
+        >
+          <p class="font-bold">
+            {{ candidate.firstName }} {{ candidate.initials }} {{ candidate.lastNamePrefix }} {{ candidate.lastName }}
+          </p>
+          <p class="text-gray-600">{{ candidate.locality }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -84,4 +86,3 @@ ul {
   padding: 0;
 }
 </style>
-
