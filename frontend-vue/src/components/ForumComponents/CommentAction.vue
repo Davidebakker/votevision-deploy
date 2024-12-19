@@ -72,7 +72,16 @@ export default {
 <template>
   <div class="flex items-center space-x-4">
     <!-- Upvote enkel tonen indien showUpvote true is -->
-    <button v-if="showUpvote" @click="upvoteItem" class="text-green-500 hover:text-white-600 w-10 h-10"> <i class="fas fa-thumbs-up"></i></button>
+    <button
+        v-if="showUpvote"
+        @click="upvoteItem"
+        class="text-green-500 hover:text-green-600 w-8 h-8 flex justify-center items-center"
+    >
+      <!-- Kleinere SVG driehoek -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="12,6 18,18 6,18"/>
+      </svg>
+    </button>
     <span v-if="showUpvote">{{ upvotes }}</span>
 
     <!-- Report enkel tonen indien showReport true is -->
