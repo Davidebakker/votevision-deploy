@@ -6,7 +6,6 @@ export default {
   props: ['name'],
   setup(props) {
     const party = ref({});
-
     const fetchPartyDetails = async () => {
       console.log("Fetching details for party:", props.name);
       try {
@@ -21,7 +20,12 @@ export default {
       }
     };
 
-    onMounted(fetchPartyDetails);
+    onMounted(() => {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+      }
+      fetchPartyDetails();
+    });
 
     watch(() => props.name, fetchPartyDetails);
 
@@ -31,45 +35,45 @@ export default {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-200 flex flex-col items-center py-10">
+  <div class="min-h-screen bg-gray-200 dark:bg-gray-900 flex flex-col items-center py-10">
     <div class="w-full bg-gray-700 text-white py-6 px-8 mb-12 text-center">
       <h1 class="text-4xl font-extrabold">{{ party.name }}</h1>
     </div>
 
-    <div class="w-full max-w-6xl bg-white shadow-lg rounded-2xl overflow-hidden">
+    <div class="w-full max-w-6xl bg-white dark:bg-gray-800 shadow-lg rounded-2xl overflow-hidden">
       <div class="flex flex-col md:flex-row items-center p-8">
         <div class="flex justify-center md:w-1/3 mb-6 md:mb-0">
           <img :src="party.logo" alt="Party Logo" class="w-40 h-40 md:w-60 md:h-60 object-cover rounded-lg">
         </div>
->
         <div class="md:w-2/3 md:pl-10">
-          <p class="text-xl font-medium text-gray-700 mb-4">
-            <span class="font-bold text-gray-800">Aantal zetels:</span> {{ party.seats }}
+          <p class="text-xl font-medium text-gray-700 dark:text-gray-300 mb-4">
+            <span class="font-bold text-gray-800 dark:text-white">Aantal zetels:</span> {{ party.seats }}
           </p>
-          <div class="mt-4 text-lg text-gray-600 leading-relaxed">
+          <div class="mt-4 text-lg text-gray-600 dark:text-gray-200 leading-relaxed">
             <p>{{ party.description }}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="w-full max-w-6xl bg-white shadow-lg rounded-2xl overflow-hidden mt-8 p-8">
-      <h2 class="text-2xl font-semibold mb-6">Kandidaten:</h2>
+    <div class="w-full max-w-6xl bg-white dark:bg-gray-800 shadow-lg rounded-2xl overflow-hidden mt-8 p-8">
+      <h2 class="text-2xl font-semibold mb-6 text-gray-600 dark:text-gray-200">Kandidaten:</h2>
       <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           v-for="candidate in party.candidates"
           :key="candidate.firstName + candidate.lastName"
-          class="border p-4 rounded-lg shadow-sm hover:bg-gray-100 transition"
+          class="border p-4 rounded-lg shadow-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >
-          <p class="font-bold">
+          <p class="font-bold text-gray-600 dark:text-gray-300">
             {{ candidate.firstName }} {{ candidate.initials }} {{ candidate.lastNamePrefix }} {{ candidate.lastName }}
           </p>
-          <p class="text-gray-600">{{ candidate.locality }}</p>
+          <p class="text-gray-600 dark:text-gray-400">{{ candidate.locality }}</p>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 body {
