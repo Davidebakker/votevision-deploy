@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import ReplyList from './ReplyList.vue';
 import CommentAction from "@/components/ForumComponents/CommentAction.vue";
+import {formatDistanceToNow} from "date-fns";
+import { nl } from "date-fns/locale";
 
 export default {
   components: { ReplyList,
@@ -68,6 +70,10 @@ export default {
       } catch (error) {
         console.error('Error submitting reply:', error.response?.data);
       }
+    };
+
+    const formatTimeAgo = (date) => {
+      return formatDistanceToNow(new Date(date), { addSuffix: true, locale: nl });
     };
 
     const handleNestedReplySubmit = async (replyId) => {
@@ -164,6 +170,7 @@ export default {
       handleReplySubmit,
       handleNestedReplySubmit,
       handleUpvotes,
+      formatTimeAgo,
     };
   },
 };
@@ -176,13 +183,13 @@ export default {
           to="/onderwerp/1"
           class="px-4 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
       >
-        Plaats comment
+        Place a commen
       </router-link>
     </div>
     <div class="w-full max-w-3xl px-6 py-4">
       <h2 class="text-lg font-medium text-gray-600 dark:text-gray-200">Comments</h2>
       <div v-if="comments.length === 0" class="text-center text-gray-500 dark:text-gray-400">
-        Er zijn nog geen comments.
+        Comments are loading...
       </div>
       <div v-else>
         <div
@@ -197,7 +204,7 @@ export default {
               <h3 class="text-lg font-bold text-gray-700 dark:text-gray-300">{{ comment.commentTitle }}</h3>
               <p class="text-gray-600 dark:text-gray-200">{{ comment.commentText }}</p>
               <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">
-                Geplaatst op: {{ new Date(comment.createdAt).toLocaleString() }}
+                {{ formatTimeAgo(comment.createdAt) }}
               </small>
             </div>
 
@@ -237,7 +244,7 @@ export default {
             <button
                 @click="handleReplySubmit(comment.commentId)"
                 class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">
-              Reageren
+              Reply
             </button>
           </div>
 
