@@ -35,12 +35,11 @@ onMounted(() => {
       <p class="mt-4 text-center text-gray-500 dark:text-gray-300">
         Bekijk hier de verschillende partijen en hun informatie
       </p>
-      <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
-        <div v-for="party in parties" :key="party.partyId">
+      <div class="grid grid-cols-1 gap-8 mt-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div v-for="party in parties" :key="party.partyId" class="flex flex-col items-center">
           <router-link
             :to="{ name: 'PartyDetails', params: { name: party.name } }"
-            class="block"
-          >
+            class="router-link-wrapper">
             <img
               class="object-cover w-64 rounded-lg h-64"
               :src="party.logo"
@@ -56,5 +55,15 @@ onMounted(() => {
   </section>
 </template>
 
+
 <style scoped>
+.router-link-wrapper img {
+  border-radius: 1.25rem; /* Vergroot de border-radius voor een grotere afgeronde hoek */
+}
+
+.router-link-wrapper {
+  border-radius: 1.25rem; /* Vergroot de border-radius voor de container rondom de afbeelding en naam */
+  padding: 2.5rem;
+}
+
 </style>

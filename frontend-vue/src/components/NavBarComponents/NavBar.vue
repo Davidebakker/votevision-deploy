@@ -3,11 +3,7 @@
     v-if="windowWidth >= 768"
     class="sticky-sidebar flex flex-col w-64 px-4 py-8 bg-white dark:bg-gray-900 dark:border-gray-700 border-r"
   >
-    <div class="flex -space-x-2 overflow-hidden avatar">
-      <img class="inline-block h-10 w-10 rounded-full ring-5 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-    </div>
     <nav class="flex flex-col justify-start flex-1 mt-6 space-y-5">
-      <!-- Public links -->
       <router-link
         to="/"
         class="flex items-center justify-start px-4 py-2 text-gray-700 bg-gray-100 rounded-lg dark:bg-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -20,8 +16,19 @@
       >
         <span class="font-medium">About</span>
       </router-link>
+      <router-link
+        to="/parties"
+        class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+      >
+        <span class="font-medium">Parties</span>
+      </router-link>
+      <router-link
+        to="/forum"
+        class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+      >
+        <span class="font-medium">Forum</span>
+      </router-link>
 
-      <!-- Links for non-logged-in users -->
       <template v-if="!isLoggedIn">
         <router-link
           to="/registration"
@@ -35,68 +42,94 @@
         >
           <span class="font-medium">Log in</span>
         </router-link>
-      </template>
 
-      <!-- Links for logged-in users -->
+      </template>
       <template v-else>
-        <router-link
-          to="/parties"
-          class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-        >
-          <span class="font-medium">Parties</span>
-        </router-link>
-        <router-link
-          to="/forum"
-          class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-        >
-          <span class="font-medium">Forum</span>
-        </router-link>
         <router-link
           to="/logout"
           class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
         >
           <span class="font-medium">Logout</span>
         </router-link>
+        <router-link
+          to="/profile"
+          class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+        >
+          <span class="font-medium">profile</span>
+        </router-link>
 
-        <!-- Admin-only links -->
-        <template v-if="isAdmin">
+
+        <template v-if="isAdmin || isModerator">
           <router-link
-            to="/admin"
-            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-          >
-            <span class="font-medium">Admin</span>
-          </router-link>
-          <router-link
-            to="/admin/users"
+            to="/moderator/users"
             class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
           >
             <span class="font-medium">Manage users</span>
           </router-link>
         </template>
+        <template v-if="isModerator">
+          <router-link
+            to="/admin"
+            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
+            <span class="font-medium">Admin page</span>
+          </router-link>
+          <router-link
+            to="/admin/moderators"
+            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
+            <span class="font-medium">Manage moderators</span>
+          </router-link>
+        </template>
       </template>
     </nav>
   </aside>
-  <nav v-else>
+  <nav v-else class="flex justify-center items-center bg-white w-full h-screen">
     <BurgerNav title="Menu" />
   </nav>
 </template>
 
+
 <script>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
+// import { getCookie } from '@/stores/cookies.ts';
 
-const windowWidth = ref(window.innerWidth);
-const jwt = ref(localStorage.getItem('jwt'));
-const userRoles = ref(localStorage.getItem('userRoles'));
-
-const isLoggedIn = computed(() => !!jwt.value);
-const isAdmin = computed(() => {
-  const roles = userRoles.value?.split(',') || [];
-  return roles.includes('ROLE_ADMIN');
-});
-
-const handleResize = () => {
-  windowWidth.value = window.innerWidth;
+export default {
+  name: 'NavBar',
+  components: {
+    BurgerNav,
+  },
+  data() {
+    return {
+      windowWidth: window.innerWidth,
+    };
+  },
+  computed: {
+    isLoggedIn() {
+      return !!localStorage.getItem('jwtToken');
+    },
+    isAdmin() {
+      const userRoles = localStorage.getItem('userRoles');
+      return userRoles && userRoles.includes('ROLE_ADMIN');
+    },
+    isModerator() {
+      const userRoles = localStorage.getItem('userRoles');
+      return userRoles && userRoles.includes('ROLE_MODERATOR');
+    }
+  },
+  mounted() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  methods: {
+    handleResize() {
+      this.windowWidth = window.innerWidth;
+    },
+  },
 };
 
 onMounted(() => {
@@ -110,8 +143,8 @@ onUnmounted(() => {
 });
 </script>
 
-
 <style scoped>
+
 .sticky-sidebar {
   position: sticky;
   top: 0;
@@ -140,6 +173,7 @@ nav > a {
   align-items: center;
   padding: 10px;
   transition: all 0.3s ease;
+  color: #3b7feb;
 }
 
 nav > a:hover {

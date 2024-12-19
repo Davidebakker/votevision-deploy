@@ -19,7 +19,14 @@ export default {
       };
 
       try {
-        const response = await axios.post(`http://localhost:8080/api/auth/login`, userData);
+        const response = await axios.post(
+          `http://localhost:8080/api/auth/login`,
+          userData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
         console.log(response.data);
 
         if (response.data.token) {

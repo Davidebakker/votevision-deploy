@@ -54,22 +54,8 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @Autowired
-    CookieRepository cookieRepository;
-
-    @GetMapping("/print")
-    public void printCookies(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                System.out.println("Cookie Name: " + cookie.getName());
-                System.out.println("Cookie Value: " + cookie.getValue());
-            }
-        } else {
-            System.out.println("No cookies found");
-        }
-    }
+//    @Autowired
+//    CookieRepository cookieRepository;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
@@ -93,11 +79,11 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        cookieRepository.addJwtToCookie(response, jwt);
-
-        if (!roles.isEmpty()) {
-            cookieRepository.addRoleToCookie(response, roles.get(0)); // Assuming single role assignment for simplicity
-        }
+//        cookieRepository.addJwtToCookie(response, jwt);
+//
+//        if (!roles.isEmpty()) {
+//            cookieRepository.addRoleToCookie(response, roles.get(0));
+//        }
 
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
@@ -179,11 +165,11 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        cookieRepository.addJwtToCookie(response, jwt);
-
-        if (!rolesList.isEmpty()) {
-            cookieRepository.addRoleToCookie(response, rolesList.get(0));
-        }
+//        cookieRepository.addJwtToCookie(response, jwt);
+//
+//        if (!rolesList.isEmpty()) {
+//            cookieRepository.addRoleToCookie(response, rolesList.get(0));
+//        }
 
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
@@ -196,8 +182,8 @@ public class AuthController {
     public ResponseEntity<?> signOut(HttpServletResponse response) {
         SecurityContextHolder.clearContext();
 
-        cookieRepository.deleteJwtCookie(response);
-        cookieRepository.deleteRoleCookie(response);
+//        cookieRepository.deleteJwtCookie(response);
+//        cookieRepository.deleteRoleCookie(response);
 
         return ResponseEntity.ok(new MessageResponse("Signed out successfully!"));
     }

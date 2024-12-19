@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -32,5 +33,6 @@ public class Candidate {
     @MapsId("party_id")
     @JoinColumn(name = "party_id", nullable = false)
     @JsonBackReference
+    @ToString.Exclude
     private Party party;
 }

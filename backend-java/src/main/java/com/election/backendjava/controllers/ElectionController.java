@@ -1,5 +1,6 @@
 package com.election.backendjava.controllers;
 
+import com.election.backendjava.dto.PartyMunicipalityResultDTO;
 import com.election.backendjava.models.election.Candidate;
 import com.election.backendjava.models.election.Party;
 import com.election.backendjava.payload.response.MessageResponse;
@@ -7,6 +8,7 @@ import com.election.backendjava.repositories.election.CandidateRepository;
 import com.election.backendjava.repositories.election.PartyRepository;
 import com.election.backendjava.repositories.election.StationRepository;
 import com.election.backendjava.repositories.election.VotesRepository;
+import com.election.backendjava.security.services.ElectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,9 @@ public class ElectionController {
 
     @Autowired
     PartyRepository partyRepository;
+
+    @Autowired
+    private ElectionService electionService;
 
     @Autowired
     CandidateRepository candidateRepository;
@@ -40,15 +45,21 @@ public class ElectionController {
 
     @GetMapping("/party/{partyName}")
     public ResponseEntity<?> getParty(@PathVariable String partyName) {
+        System.out.println("Searching for party: " + partyName);
         Optional<Party> getParty = partyRepository.findByNameIgnoreCase(partyName);
 
         if (getParty.isPresent()) {
+            System.out.println("Party found: " + getParty.get());
             return ResponseEntity.ok(getParty.get());
         } else {
+            System.out.println("Party not found: " + partyName);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new MessageResponse("Party not found with name: " + partyName));
         }
     }
+
+
+
 
     @GetMapping("/candidate/{candidateName}")
     public ResponseEntity<?> getPartyCandidate(@PathVariable String candidateName) {
@@ -93,10 +104,15 @@ public class ElectionController {
         return ResponseEntity.ok(candidateRepository.findAll());
     }
 
-    @GetMapping("/parties/seats")
-    public List<Party> getPartiesWithSeats() {
-        return partyRepository.findAll();
+    @GetMapping("/results")
+    public ResponseEntity<List<PartyMunicipalityResultDTO>> getNationalResults() {
+        List<PartyMunicipalityResultDTO> results = electionService.getNationalResults();
+        return ResponseEntity.ok(results);
     }
+
+
+
+
 
 
 }
