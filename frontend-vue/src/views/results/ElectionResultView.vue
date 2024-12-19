@@ -14,11 +14,11 @@ export default {
       { field: "firstName", headerName: "First Name", editable: true },
       { field: "lastName", headerName: "Last Name" },
       { field: "locality", headerName: "Locality" },
-      {
-        field: "party",
-        headerName: "Party",
-        valueGetter: params => params.data.party ? params.data.party.name : 'No Party'
-      }
+      // {
+      //   field: "party",
+      //   headerName: "Party",
+      //   valueGetter: params => params.data.party ? params.data.party.name : 'No Party'
+      // }
     ]);
 
 
