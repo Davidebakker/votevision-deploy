@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import AboutView from '../views/AboutView.vue'
 import ElectionResultView from '../views/results/ElectionResultView.vue'
-import NationalElectionResultView from '../views/results/NationalElectionResultView.vue'
 import Registration from '@/components/RegistrationComponents/RegistrationItem.vue'
 import Login from '@/components/loginComponents/LoginItem.vue'
 import Logout from '@/components/loginComponents/LogoutItem.vue'
 import PartiesOverview from '@/components/PartyOverviewComponents/PartiesOverview.vue'
-import Party from '@/components/Elections/TestPartyItem.vue'
 import Candidate from '@/components/Elections/TestCandidateItem.vue'
 import PostForum from "@/components/ForumComponents/PostForum.vue";
 import ForumItem from "@/components/ForumComponents/ForumItem.vue";
@@ -16,6 +15,7 @@ import UnauthorizedItem from '@/components/unauthorizedComponents/UnauthorizedIt
 import PartyDetails from '@/components/PartyOverviewComponents/PartyDetails.vue'
 import AdminManagementItem from '@/components/managment/ModComponents/AdminManagementItem.vue'
 import ModeratorHomeItem from '@/components/managment/ModComponents/ModeratorHomeItem.vue'
+import ProfilePageComponent from '@/components/profileComponents/ProfilePageComponent.vue'
 
 function isLoggedIn() {
   return !!localStorage.getItem('jwtToken');
@@ -35,13 +35,13 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/', name: 'home', component: HomeView },
-    { path: '/about', name: 'about', component: () => import('../views/AboutView.vue') },
+    { path: '/about', name: 'about', component: AboutView },
     { path: '/result/election-result', name: 'election-result', component: ElectionResultView, meta: { userOnly: true } },
-    { path: '/result/National-election-result', name: 'national-election-result', component: NationalElectionResultView, meta: { userOnly: true } },
     // Authentication
     { path: '/registration', name: 'registration', component: Registration, meta: { guestOnly: true } },
     { path: '/login', name: 'login', component: Login, meta: { guestOnly: true } },
     { path: '/logout', name: 'logout', component: Logout, meta: { userOnly: true } },
+    { path: '/profile', name: 'profile', component: ProfilePageComponent, meta: { userOnly: true }},
     // Elections
     { path: '/party/:name', component: PartyDetails, name: 'PartyDetails', props: true, },
     { path: '/kandidaat/:candidateName', name: 'candidate', component: Candidate, props: true },

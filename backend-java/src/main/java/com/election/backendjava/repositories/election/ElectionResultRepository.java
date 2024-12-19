@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 
-@Repository
-public interface ElectionRepository extends CrudRepository<ElectionResult, Long> {
+@Repository("electionResultRepository")
+public interface ElectionResultRepository extends CrudRepository<ElectionResult, Long> {
 
     @Query("SELECT new com.election.backendjava.dto.PartyMunicipalityResultDTO(p.name, m.name, SUM(e.votesReceived)) " +
             "FROM ElectionResult e " +

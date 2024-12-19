@@ -12,8 +12,8 @@ export default {
     const router = useRouter();
     const onderwerpNummer = route.params.onderwerpNummer;
     const isSubmitting = ref(false);
-    // const replyTekst = ref('');
-    // const activeReplyPostIndex = ref(null)
+    const replyTekst = ref('');
+    const activeReplyPostIndex = ref(null)
 
     const handleSubmit = async () => {
       if (!jwtToken) {
@@ -125,9 +125,7 @@ export default {
         </form>
 
         <div class="posts mt-6">
-<!--          <h3 class="text-lg font-medium text-center text-gray-600 dark:text-gray-200">Berichten</h3>-->
           <div v-if="posts.length === 0" class="text-center text-gray-500 dark:text-gray-400">
-<!--            Er zijn nog geen berichten.-->
           </div>
           <div v-else>
             <div
@@ -138,10 +136,6 @@ export default {
               <h4 class="text-lg font-medium text-gray-600 dark:text-gray-200">{{ post.title }}</h4>
               <p class="mt-2 text-gray-600 dark:text-gray-200">{{ post.commentText }}</p>
               <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">Geplaatst op: {{ post.date }}</small>
-
-<!--              <button @click="openReplyField(index)" class="text-blue-500 hover:underline mt-2">-->
-<!--                Reageren-->
-<!--              </button>-->
 
               <div v-if="activeReplyPostIndex === index" class="mt-2">
                 <textarea

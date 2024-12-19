@@ -210,6 +210,7 @@
   </div>
 </template>
 
+
 <script>
 export default {
   name: 'NavBar',
@@ -248,6 +249,16 @@ export default {
     }
   }
 };
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  jwt.value = localStorage.getItem('jwt');
+  userRoles.value = localStorage.getItem('userRoles');
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
 </script>
 
 <style scoped>

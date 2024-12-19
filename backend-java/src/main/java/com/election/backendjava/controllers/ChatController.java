@@ -10,6 +10,7 @@ import com.election.backendjava.repositories.form.CommentRepository;
 import com.election.backendjava.repositories.form.ReplyRepository;
 import com.election.backendjava.repositories.form.TopicRepository;
 import com.election.backendjava.repositories.user.UserRepository;
+import com.election.backendjava.security.services.UpvoteService;
 import com.election.backendjava.security.services.UserDetailsImpl;
 import com.election.backendjava.dto.ReplyDTO;
 import com.election.backendjava.dto.CommentDTO;
@@ -34,6 +35,9 @@ public class ChatController {
 
     @Autowired
     CommentRepository commentRepository;
+
+    @Autowired
+    private UpvoteService upvoteService;
 
     @Autowired
     ReplyRepository replyRepository;
@@ -147,5 +151,17 @@ public class ChatController {
                 .map(this::mapReply)
                 .toList());
         return replyDTO;
+    }
+
+    @PutMapping("/comment/{commentId}/upvote")
+    public ResponseEntity<Integer> upvoteComment(@PathVariable Long commentId) {
+        Integer updatedUpvotes = upvoteService.upvoteComment(commentId);
+        return ResponseEntity.ok(updatedUpvotes);
+    }
+
+    @PutMapping("/reply/{replyId}/upvote")
+    public ResponseEntity<Integer> upvoteReply(@PathVariable Long replyId) {
+        Integer updatedUpvotes = upvoteService.upvoteReply(replyId);
+        return ResponseEntity.ok(updatedUpvotes);
     }
 }
