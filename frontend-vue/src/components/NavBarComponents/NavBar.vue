@@ -212,6 +212,8 @@
 
 
 <script>
+import { onMounted, onUnmounted } from 'vue'
+
 export default {
   name: 'NavBar',
   data() {
