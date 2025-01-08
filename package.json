@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "cypress": "^13.17.0",
     "esbuild": "^0.21.5",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14"
