@@ -1,4 +1,6 @@
 <script>
+import axios from "axios";
+
 export default {
   props: {
     upvotesCount: {
@@ -7,12 +9,20 @@ export default {
     },
     commentId: {
       type: Number,
-      required: true,
+      required: false,
     },
     replyId: {
       type: Number,
-      required: false, // Alleen nodig voor replies
+      required: false,
     },
+    showUpvote: {
+      type: Boolean,
+      default: true,
+    },
+    showReport: {
+      type: Boolean,
+      default: true,
+    }
   },
   data() {
     return {
@@ -21,10 +31,30 @@ export default {
     };
   },
   methods: {
-    handleUpvote() {
-      // Simuleer een API-call
-      this.upvotes += 1;
-      console.log(`Upvoted comment/reply with ID: ${this.commentId || this.replyId}`);
+    async upvoteItem() {
+      const id = this.replyId || this.commentId;
+      if (!id || id <= 0) {
+        console.error("Invalid ID:", id);
+        alert("Cannot upvote. Invalid ID.");
+        return;
+      }
+
+      const endpoint = this.replyId
+          ? `http://localhost:8080/api/chat/reply/${id}/upvote`
+          : `http://localhost:8080/api/chat/comment/${id}/upvote`;
+
+      try {
+        const response = await axios.put(endpoint);
+        this.upvotes = response.data;
+        this.$emit("update-upvotes", {
+          replyId: this.replyId,
+          commentId: this.commentId,
+          updatedUpvotes: this.upvotes,
+        });
+      } catch (error) {
+        console.error("Failed to upvote:", error.response || error.message);
+        alert("Failed to upvote. Please try again.");
+      }
     },
     handleReport() {
       if (this.reported) {
@@ -41,16 +71,31 @@ export default {
 
 <template>
   <div class="flex items-center space-x-4">
-    <button @click="handleUpvote" class="flex items-center space-x-1 text-green-600 hover:underline">
-      <span>▲</span>
-      <span>{{ upvotes }}</span>
+    <!-- Upvote enkel tonen indien showUpvote true is -->
+    <button
+        v-if="showUpvote"
+        @click="upvoteItem"
+        class="text-green-500 hover:text-green-600 w-8 h-8 flex justify-center items-center"
+    >
+      <!-- Kleinere SVG driehoek -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="12,6 18,18 6,18"/>
+      </svg>
     </button>
-    <button @click="handleReport" class="text-red-600 hover:underline">
+    <span v-if="showUpvote">{{ upvotes }}</span>
+
+    <!-- Report enkel tonen indien showReport true is -->
+    <button v-if="showReport" @click="handleReport" class="ml-auto text-red-600 hover:underline">
       Report
     </button>
   </div>
 </template>
 
+<CommentAction
+    :upvotesCount="comment.upvotes"
+    :commentId="comment.commentId"
+    @update-upvotes="handleUpvotes"
+/>
 
 
 <style scoped>

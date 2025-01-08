@@ -1,113 +1,225 @@
 <template>
-  <aside
-    v-if="windowWidth >= 768"
-    class="sticky-sidebar flex flex-col w-64 px-4 py-8 bg-white dark:bg-gray-900 dark:border-gray-700 border-r"
-  >
-    <div class="flex -space-x-2 overflow-hidden avatar">
-      <img class="inline-block h-10 w-10 rounded-full ring-5 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+  <div>
+    <!-- Desktop Sidebar (md and up) -->
+    <aside
+      v-if="windowWidth >= 768"
+      class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 dark:bg-gray-900 dark:border-gray-700 h-screen sticky top-0"
+    >
+      <nav class="mt-10 px-4 space-y-2">
+        <router-link
+          to="/"
+          class="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+        >
+          Home
+        </router-link>
+        <router-link
+          to="/about"
+          class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+        >
+          About
+        </router-link>
+        <router-link
+          to="/parties"
+          class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+        >
+          Parties
+        </router-link>
+
+        <template v-if="!isLoggedIn">
+          <router-link
+            to="/registration"
+            class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
+            Sign up
+          </router-link>
+          <router-link
+            to="/login"
+            class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
+            Log in
+          </router-link>
+        </template>
+
+        <template v-else>
+          <router-link
+            to="/forum"
+            class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
+            Forum
+          </router-link>
+          <router-link
+            to="/logout"
+            class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
+            Logout
+          </router-link>
+
+          <!-- Admin or Moderator -->
+          <template v-if="isAdmin || isModerator">
+            <router-link
+              to="/moderator/users"
+              class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+            >
+              Manage users
+            </router-link>
+          </template>
+
+          <!-- Moderator only -->
+          <template v-if="isModerator">
+            <router-link
+              to="/admin"
+              class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+            >
+              Admin page
+            </router-link>
+            <router-link
+              to="/admin/moderators"
+              class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+            >
+              Manage moderators
+            </router-link>
+          </template>
+        </template>
+      </nav>
+    </aside>
+
+    <!-- Mobile Top Bar (below md) -->
+    <div v-else class="md:hidden flex items-center justify-between bg-white border-b border-gray-200 py-3 px-4 dark:bg-gray-900 dark:border-gray-700">
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-gray-800 dark:text-gray-200">Menu</span>
+      </div>
+      <button @click="toggleMenu" class="text-gray-800 dark:text-gray-200 focus:outline-none">
+        <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+          <path
+            v-if="isMenuOpen"
+            d="M16.24 14.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 0 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12l2.83 2.83z"
+          />
+          <path
+            v-else
+            d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2z"
+          />
+        </svg>
+      </button>
     </div>
-    <nav class="flex flex-col justify-start flex-1 mt-6 space-y-5">
 
-      <router-link
-        to="/"
-        class="flex items-center justify-start px-4 py-2 text-gray-700 bg-gray-100 rounded-lg dark:bg-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
-      >
-        <span class="font-medium">Home</span>
-      </router-link>
-      <router-link
-        to="/about"
-        class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-      >
-        <span class="font-medium">About</span>
-      </router-link>
-      <router-link
-        to="/parties"
-        class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-      >
-        <span class="font-medium">Parties</span>
-      </router-link>
+    <!-- Mobile slide-out menu -->
+    <transition name="slide-fade">
+      <div v-if="isMenuOpen && windowWidth < 768" class="fixed inset-0 flex z-50">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black bg-opacity-50" @click="toggleMenu"></div>
 
+        <!-- Slide out menu -->
+        <div class="relative bg-white w-64 max-w-full p-6 overflow-auto dark:bg-gray-900 h-screen">
+          <div class="flex items-center justify-between mb-4">
+            <span class="font-bold text-gray-800 dark:text-gray-200">Menu</span>
+            <button @click="toggleMenu" class="text-gray-800 dark:text-gray-200 focus:outline-none">
+              <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+                <path
+                  d="M16.24 14.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 0 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12l2.83 2.83z"
+                />
+              </svg>
+            </button>
+          </div>
+          <nav class="space-y-2">
+            <router-link
+              to="/"
+              class="block px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+              @click="toggleMenu"
+            >
+              Home
+            </router-link>
+            <router-link
+              to="/about"
+              class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+              @click="toggleMenu"
+            >
+              About
+            </router-link>
+            <router-link
+              to="/parties"
+              class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+              @click="toggleMenu"
+            >
+              Parties
+            </router-link>
 
-      <template v-if="!isLoggedIn">
-        <router-link
-          to="/registration"
-          class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-        >
-          <span class="font-medium">Sign up</span>
-        </router-link>
-        <router-link
-          to="/login"
-          class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-        >
-          <span class="font-medium">Log in</span>
-        </router-link>
-      </template>
+            <template v-if="!isLoggedIn">
+              <router-link
+                to="/registration"
+                class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                @click="toggleMenu"
+              >
+                Sign up
+              </router-link>
+              <router-link
+                to="/login"
+                class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                @click="toggleMenu"
+              >
+                Log in
+              </router-link>
+            </template>
 
+            <template v-else>
+              <router-link
+                to="/forum"
+                class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                @click="toggleMenu"
+              >
+                Forum
+              </router-link>
+              <router-link
+                to="/logout"
+                class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                @click="toggleMenu"
+              >
+                Logout
+              </router-link>
 
-      <template v-else>
-        <router-link
-          to="/forum"
-          class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-        >
-          <span class="font-medium">Forum</span>
-        </router-link>
-        <router-link
-          to="/logout"
-          class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-        >
-          <span class="font-medium">Logout</span>
-        </router-link>
+              <template v-if="isAdmin || isModerator">
+                <router-link
+                  to="/moderator/users"
+                  class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                  @click="toggleMenu"
+                >
+                  Manage users
+                </router-link>
+              </template>
 
-
-        <template v-if="isAdmin || isModerator">
-<!--          <router-link-->
-<!--            to="/moderator"-->
-<!--            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"-->
-<!--          >-->
-<!--            <span class="font-medium">Moderator Page</span>-->
-<!--          </router-link>-->
-          <router-link
-            to="/moderator/users"
-            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-          >
-            <span class="font-medium">Manage users</span>
-          </router-link>
-        </template>
-        <!-- Moderator-only links -->
-        <template v-if="isModerator">
-          <router-link
-            to="/admin"
-            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-          >
-            <span class="font-medium">Admin page</span>
-          </router-link>
-          <router-link
-            to="/admin/moderators"
-            class="flex items-center justify-start px-4 py-2 text-gray-600 rounded-lg dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-          >
-            <span class="font-medium">Manage moderators</span>
-          </router-link>
-        </template>
-      </template>
-    </nav>
-  </aside>
-  <nav v-else>
-    <BurgerNav title="Menu" />
-  </nav>
+              <template v-if="isModerator">
+                <router-link
+                  to="/admin"
+                  class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                  @click="toggleMenu"
+                >
+                  Admin page
+                </router-link>
+                <router-link
+                  to="/admin/moderators"
+                  class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                  @click="toggleMenu"
+                >
+                  Manage moderators
+                </router-link>
+              </template>
+            </template>
+          </nav>
+        </div>
+      </div>
+    </transition>
+  </div>
 </template>
 
+
 <script>
-import BurgerNav from '@/components/NavBarComponents/BurgerNavBar.vue';
-// import { getCookie } from '@/stores/cookies.ts';
+import { onMounted, onUnmounted } from 'vue'
 
 export default {
   name: 'NavBar',
-  components: {
-    BurgerNav,
-  },
   data() {
     return {
       windowWidth: window.innerWidth,
+      isMenuOpen: false
     };
   },
   computed: {
@@ -134,49 +246,29 @@ export default {
     handleResize() {
       this.windowWidth = window.innerWidth;
     },
-  },
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
+    }
+  }
 };
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  jwt.value = localStorage.getItem('jwt');
+  userRoles.value = localStorage.getItem('userRoles');
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
 </script>
 
 <style scoped>
-.sticky-sidebar {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  max-height: 100vh;
-  width: 15%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: #1f2937;
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
-
-nav {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: flex-start;
-  width: 100%;
-  height: 100%;
-}
-
-nav > a {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  transition: all 0.3s ease;
-  color: #3b7feb;
-}
-
-nav > a:hover {
-  background-color: #4b5563;
-}
-
-.avatar {
-  background-color: #0c0c0c;
-  width: 100%;
-  border-radius: 20px;
+.slide-fade-enter-from, .slide-fade-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
 }
 </style>

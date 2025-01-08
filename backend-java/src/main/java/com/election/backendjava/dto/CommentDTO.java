@@ -14,6 +14,9 @@ public class CommentDTO {
     private String userName; // De naam van de gebruiker die de comment plaatste
     private List<ReplyDTO> replies; // De lijst met replies
 
+    // Voeg upvotes toe
+    private Integer upvotes;
+
     // Getters en setters
     public Integer getCommentId() {
         return commentId;
@@ -61,5 +64,13 @@ public class CommentDTO {
 
     public void setReplies(List<ReplyDTO> replies) {
         this.replies = replies;
+    }
+
+    public Integer getUpvotes() {
+        return upvotes;
+    }
+
+    public void setUpvotes(Integer upvotes) {
+        this.upvotes = upvotes;
     }
 }

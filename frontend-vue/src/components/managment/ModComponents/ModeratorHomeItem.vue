@@ -71,4 +71,16 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+p{
+  text-align: center;
+  color: Black;
+}
+h2{
+  text-align: center;
+  color: darkblue;
+  font-weight: bold;
+  background-color: darkgray;
+  padding: 10px;
+  border-radius: 10px;
+}
 </style>
