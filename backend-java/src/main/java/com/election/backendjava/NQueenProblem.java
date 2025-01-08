@@ -4,7 +4,7 @@ public class NQueenProblem {
 
     public static void main(String[] args) {
         // Test boards: 4, 8, 12
-        int[] boardSizes = {4,12, 18, 24};
+        int[] boardSizes = {4, 12, 18, 24};
 
         System.out.println("===== NAIVE APPROACH =====");
         for (int size : boardSizes) {
@@ -115,8 +115,8 @@ class PrunedNQueens {
         this.N = size;
         queens = new int[N];
         usedCols = new boolean[N];
-        diag1 = new boolean[2*N - 1]; // for r+c
-        diag2 = new boolean[2*N - 1]; // for r-c + (N-1)
+        diag1 = new boolean[2 * N - 1]; // for r+c
+        diag2 = new boolean[2 * N - 1]; // for r-c + (N-1)
         exploredStates = 0;
     }
 

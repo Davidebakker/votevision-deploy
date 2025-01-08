@@ -2,7 +2,9 @@
   "dependencies": {
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
-    "node.js": "^0.0.1-security"
+    "maven": "^5.0.0",
+    "node.js": "^0.0.1-security",
+    "springboot": "^0.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",

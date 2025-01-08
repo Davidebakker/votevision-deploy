@@ -13,10 +13,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CandidateId implements Serializable {
-    
+
     @Column(name = "candidate_id")
     private int candidateId;
-    
+
     @Column(name = "party_id")
     private int partyId;
 
