@@ -1,16 +1,23 @@
 <script>
 import { ref } from 'vue';
 import axios from 'axios'
-
-
 import { useRouter } from 'vue-router'
 import { toast } from "react-toastify";
+import CustomAlert from "@/components/CustomAlert.vue";
 
 export default {
+  components: {
+    CustomAlert,
+  },
   setup() {
     const router = useRouter();
-    const username = ref('');
-    const password = ref('');
+    const username = ref("");
+    const password = ref("");
+    const showAlert = ref(false);
+    const alertData = ref({
+      title: "Error",
+      message: "",
+    });
 
     const handleSubmit = async () => {
       const userData = {
@@ -24,31 +31,33 @@ export default {
           userData,
           {
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
-          });
+          }
+        );
         console.log(response.data);
 
         if (response.data.token) {
           const jwtToken = response.data.token;
-          localStorage.setItem('jwtToken', jwtToken);
-          axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+          localStorage.setItem("jwtToken", jwtToken);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${jwtToken}`;
         }
 
         if (response.data.roles) {
           const userRoles = response.data.roles;
-          localStorage.setItem('userRoles', JSON.stringify(userRoles));
+          localStorage.setItem("userRoles", JSON.stringify(userRoles));
         }
-        toast("You successfully logged in");
 
-        router.push({ name: 'home' });
+        toast("You successfully logged in");
+        router.push({ name: "home" });
         window.location.reload();
       } catch (error) {
         if (error.response && error.response.status === 403) {
-          alert("Your account is banned!");
+          alertData.value.message = "Your account is banned!";
         } else {
-          alert("Your email or password is wrong!");
+          alertData.value.message = "Your email or password is wrong!";
         }
+        showAlert.value = true;
         console.error(error);
       }
     };
@@ -57,9 +66,12 @@ export default {
       username,
       password,
       handleSubmit,
+      showAlert,
+      alertData,
     };
   },
 };
+
 </script>
 
 
@@ -110,8 +122,17 @@ export default {
         </a>
       </div>
     </div>
+
+    <!-- Custom Alert -->
+    <CustomAlert
+      v-if="showAlert"
+      :title="alertData.title"
+      :message="alertData.message"
+      @close="showAlert = false"
+    />
   </div>
 </template>
+
 
 <style scoped>
 .min-h-screen {
