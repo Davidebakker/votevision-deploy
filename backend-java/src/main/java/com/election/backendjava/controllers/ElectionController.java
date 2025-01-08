@@ -59,8 +59,6 @@ public class ElectionController {
     }
 
 
-
-
     @GetMapping("/candidate/{candidateName}")
     public ResponseEntity<?> getPartyCandidate(@PathVariable String candidateName) {
         Optional<Candidate> getCandidate = candidateRepository.findByLastNameIgnoreCase(candidateName);
@@ -99,6 +97,7 @@ public class ElectionController {
             return ResponseEntity.badRequest().body(new MessageResponse("candidate not found with name: " + candidateName));
         }
     }
+
     @GetMapping("/candidate")
     public ResponseEntity<List<Candidate>> getAllCandidates() {
         return ResponseEntity.ok(candidateRepository.findAll());
@@ -109,10 +108,6 @@ public class ElectionController {
         List<PartyMunicipalityResultDTO> results = electionService.getNationalResults();
         return ResponseEntity.ok(results);
     }
-
-
-
-
 
 
 }

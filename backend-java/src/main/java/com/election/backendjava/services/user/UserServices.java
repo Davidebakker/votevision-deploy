@@ -100,7 +100,6 @@ public class UserServices {
     }
 
 
-
     @Transactional
     public void updateUserById(Long userId, String firstname, String lastname, String region) {
         User user = userRepository.findById(userId)

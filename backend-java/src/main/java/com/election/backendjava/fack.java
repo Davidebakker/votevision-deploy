@@ -5,11 +5,12 @@ public class fack {
     public static void main(String[] args) {
         int n = 6;
         int nu = 7;
-        int result= fac(n);
-        int result1= fac(nu);
+        int result = fac(n);
+        int result1 = fac(nu);
         System.out.println(" de fack van " + n + " is " + result + " en de fack van " + nu + " is " + result1);
 
     }
+
     public static int fac(int num) {
         if (num == 0 || num == 1) {
             return 1;

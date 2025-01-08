@@ -17,7 +17,7 @@ public class VotesId implements Serializable {
 
     @Embedded
     private CandidateId candidateId;
-    
+
     @Column(name = "station_id")
     private String stationId;
 
