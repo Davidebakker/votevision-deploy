@@ -1,6 +1,23 @@
 <template>
   <div class="flex flex-col items-center bg-gray-900 min-h-screen text-white">
-    <!-- Table container -->
+
+    <CustomAlert
+      v-if="showAlert"
+      :title="alertData.title"
+      :message="alertData.message"
+      @close="showAlert = false"
+    />
+
+
+    <ConfirmDialog
+      v-if="showConfirmDialog"
+      :title="confirmData.title"
+      :message="confirmData.message"
+      @confirm="confirmData.onConfirm(); showConfirmDialog = false;"
+      @cancel="showConfirmDialog = false"
+    />
+
+
     <div class="w-full max-w-6xl p-6 mt-6 bg-gray-800 rounded-lg shadow-lg">
       <h2 class="text-2xl font-semibold mb-4">User Management</h2>
       <table class="w-full text-left rounded-lg overflow-hidden">
@@ -60,20 +77,40 @@
 import axios from "axios";
 import { ref, onMounted } from "vue";
 import { intervalToDuration } from "date-fns";
+import CustomAlert from "@/components/CustomAlert.vue";
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
 
 export default {
   name: "UserManagement",
+  components: {
+    CustomAlert,
+    ConfirmDialog,
+  },
   setup() {
     const jwtToken = localStorage.getItem("jwtToken");
     const users = ref([]);
+    const showAlert = ref(false);
+    const alertData = ref({
+      title: "",
+      message: "",
+    });
+    const showConfirmDialog = ref(false);
+    const confirmData = ref({
+      title: "",
+      message: "",
+      onConfirm: null,
+    });
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/user/findAll/role_user", {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        });
+        const response = await axios.get(
+          "http://localhost:8080/api/user/findAll/role_user",
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          }
+        );
         users.value = response.data.map((user) => ({
           ...user,
           banExpiration: user.banExpiration ? new Date(user.banExpiration) : null,
@@ -83,30 +120,58 @@ export default {
       }
     };
 
-    const deleteUser = async (id) => {
+    const deleteUser = (id) => {
+      confirmData.value = {
+        title: "Delete User",
+        message: "Are you sure you want to delete this user? This action cannot be undone.",
+        onConfirm: () => handleDeleteUser(id),
+      };
+      showConfirmDialog.value = true;
+    };
+
+    const handleDeleteUser = async (id) => {
       try {
         await axios.post(`http://localhost:8080/api/user/delete/${id}`, null, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
           },
         });
+        alertData.value = { title: "Success", message: "User successfully deleted." };
+        showAlert.value = true;
         await fetchUsers();
       } catch (error) {
+        alertData.value = { title: "Error", message: "Failed to delete user." };
+        showAlert.value = true;
         console.error("Error deleting user", error);
       }
+      showConfirmDialog.value = false; // Ensure dialog is closed after action
     };
 
-    const banUser = async (id) => {
+    const banUser = (id) => {
+      confirmData.value = {
+        title: "Ban User",
+        message: "Are you sure you want to ban this user? They will lose access temporarily.",
+        onConfirm: () => handleBanUser(id),
+      };
+      showConfirmDialog.value = true;
+    };
+
+    const handleBanUser = async (id) => {
       try {
         await axios.post(`http://localhost:8080/api/user/ban/${id}`, null, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
           },
         });
+        alertData.value = { title: "Success", message: "User successfully banned." };
+        showAlert.value = true;
         await fetchUsers();
       } catch (error) {
+        alertData.value = { title: "Error", message: "Failed to ban user." };
+        showAlert.value = true;
         console.error("Error banning user", error);
       }
+      showConfirmDialog.value = false; // Ensure dialog is closed after action
     };
 
     const addAsAdmin = async (id) => {
@@ -116,8 +181,12 @@ export default {
             Authorization: `Bearer ${jwtToken}`,
           },
         });
+        alertData.value = { title: "Success", message: "User successfully promoted to moderator." };
+        showAlert.value = true;
         await fetchUsers();
       } catch (error) {
+        alertData.value = { title: "Error", message: "Failed to promote user to moderator." };
+        showAlert.value = true;
         console.error("Error adding admin", error);
       }
     };
@@ -138,6 +207,10 @@ export default {
       banUser,
       addAsAdmin,
       formatBanDuration,
+      showAlert,
+      alertData,
+      showConfirmDialog,
+      confirmData,
     };
   },
   computed: {
@@ -148,6 +221,8 @@ export default {
   },
 };
 </script>
+
+
 
 <style scoped>
 /* General Table Styling */

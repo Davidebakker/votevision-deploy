@@ -1,33 +1,47 @@
 <script>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import ReplyList from './ReplyList.vue';
+import { ref, onMounted } from "vue";
+import axios from "axios";
+import ReplyList from "./ReplyList.vue";
 import CommentAction from "@/components/ForumComponents/CommentAction.vue";
-import {formatDistanceToNow} from "date-fns";
+import CustomAlert from "@/components/CustomAlert.vue";
+import { formatDistanceToNow } from "date-fns";
 import { nl } from "date-fns/locale";
 
 export default {
-  components: { ReplyList,
+  components: {
+    ReplyList,
     CommentAction,
+    CustomAlert,
   },
   setup() {
     const comments = ref([]);
     const replyTexts = ref({});
-    const activeReplyId = ref(null); // Tracks active reply field for comments/replies
-    const jwtToken = localStorage.getItem('jwtToken');
+    const activeReplyId = ref(null);
+    const jwtToken = localStorage.getItem("jwtToken");
+
+    const showAlert = ref(false);
+    const alertData = ref({
+      title: "",
+      message: "",
+    });
 
     const fetchComments = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/chat/comments', {
+        const response = await axios.get("http://localhost:8080/api/chat/comments", {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         });
 
-        comments.value = response.data.reverse(); // Laatste comment bovenaan
+        comments.value = response.data.reverse();
       } catch (error) {
-        console.error('Error fetching comments:', error);
+        console.error("Error fetching comments:", error);
+        alertData.value = {
+          title: "Error",
+          message: "Failed to load comments. Please try again later.",
+        };
+        showAlert.value = true;
       }
     };
 
@@ -37,7 +51,11 @@ export default {
 
     const handleReplySubmit = async (commentId) => {
       if (!replyTexts.value[commentId]) {
-        alert('Reply text cannot be empty');
+        alertData.value = {
+          title: "Validation Error",
+          message: "Reply text cannot be empty.",
+        };
+        showAlert.value = true;
         return;
       }
 
@@ -45,40 +63,48 @@ export default {
 
       try {
         const response = await axios.post(
-            `http://localhost:8080/api/chat/comment/${commentId}/reply/post`,
-            payload,
-            {
-              headers: {
-                Authorization: `Bearer ${jwtToken}`,
-                'Content-Type': 'application/json',
-              },
-            }
-        )
-        console.log("Comment ID in ForumItem:", comment.commentId);
-
-
+          `http://localhost:8080/api/chat/comment/${commentId}/reply/post`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         const newReply = response.data;
         const comment = comments.value.find((c) => c.commentId === commentId);
         if (comment) {
           comment.replies = comment.replies || [];
-          comment.replies.unshift(newReply); // Voeg nieuwe reply bovenaan toe
+          comment.replies.unshift(newReply);
         }
 
-        replyTexts.value[commentId] = '';
+        replyTexts.value[commentId] = "";
         activeReplyId.value = null;
-      } catch (error) {
-        console.error('Error submitting reply:', error.response?.data);
-      }
-    };
 
-    const formatTimeAgo = (date) => {
-      return formatDistanceToNow(new Date(date), { addSuffix: true, locale: nl });
+        alertData.value = {
+          title: "Success",
+          message: "Reply posted successfully.",
+        };
+        showAlert.value = true;
+      } catch (error) {
+        console.error("Error submitting reply:", error.response?.data);
+        alertData.value = {
+          title: "Error",
+          message: "Failed to post reply. Please try again.",
+        };
+        showAlert.value = true;
+      }
     };
 
     const handleNestedReplySubmit = async (replyId) => {
       if (!replyTexts.value[replyId]) {
-        alert('Reply text cannot be empty');
+        alertData.value = {
+          title: "Validation Error",
+          message: "Reply text cannot be empty.",
+        };
+        showAlert.value = true;
         return;
       }
 
@@ -86,14 +112,14 @@ export default {
 
       try {
         const response = await axios.post(
-            `http://localhost:8080/api/chat/reply/${replyId}/reply/post`,
-            payload,
-            {
-              headers: {
-                Authorization: `Bearer ${jwtToken}`,
-                'Content-Type': 'application/json',
-              },
-            }
+          `http://localhost:8080/api/chat/reply/${replyId}/reply/post`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
 
         const newNestedReply = response.data;
@@ -102,7 +128,7 @@ export default {
           for (const reply of replies) {
             if (reply.replyId === replyId) {
               reply.childReplies = reply.childReplies || [];
-              reply.childReplies.unshift(newNestedReply); // Voeg nieuwe nested reply bovenaan toe
+              reply.childReplies.unshift(newNestedReply);
               return true;
             }
             if (reply.childReplies) {
@@ -112,31 +138,41 @@ export default {
           return false;
         };
 
-        comments.value.forEach(comment => {
+        comments.value.forEach((comment) => {
           addNestedReply(comment.replies || [], replyId, newNestedReply);
         });
 
-        replyTexts.value[replyId] = '';
+        replyTexts.value[replyId] = "";
         activeReplyId.value = null;
+
+        alertData.value = {
+          title: "Success",
+          message: "Reply posted successfully.",
+        };
+        showAlert.value = true;
       } catch (error) {
-        console.error('Error submitting nested reply:', error.response?.data);
+        console.error("Error submitting nested reply:", error.response?.data);
+        alertData.value = {
+          title: "Error",
+          message: "Failed to post nested reply. Please try again.",
+        };
+        showAlert.value = true;
       }
     };
-    const handleUpvotes = (eventData) => {
-      // eventData bevat: { replyId, commentId, updatedUpvotes }
-      // Zoek de juiste comment of reply en update de waarde lokaal.
 
+    const formatTimeAgo = (date) => {
+      return formatDistanceToNow(new Date(date), { addSuffix: true, locale: nl });
+    };
+
+    const handleUpvotes = (eventData) => {
       if (eventData.commentId) {
-        // Update een comment
-        const comment = comments.value.find(c => c.commentId === eventData.commentId);
+        const comment = comments.value.find((c) => c.commentId === eventData.commentId);
         if (comment) {
           comment.upvotes = eventData.updatedUpvotes;
         }
       }
 
       if (eventData.replyId) {
-        // Update een reply
-        // Je zal hiervoor door de replies heen moeten gaan.
         const updateReplyUpvotes = (replies) => {
           for (const reply of replies) {
             if (reply.replyId === eventData.replyId) {
@@ -150,7 +186,7 @@ export default {
           return false;
         };
 
-        comments.value.forEach(comment => {
+        comments.value.forEach((comment) => {
           if (comment.replies) {
             updateReplyUpvotes(comment.replies);
           }
@@ -171,13 +207,22 @@ export default {
       handleNestedReplySubmit,
       handleUpvotes,
       formatTimeAgo,
+      showAlert,
+      alertData,
     };
   },
 };
 </script>
 
+
 <template>
   <div class="min-h-screen flex flex-col items-center justify-start bg-gray-100">
+    <CustomAlert
+      v-if="showAlert"
+      :title="alertData.title"
+      :message="alertData.message"
+      @close="showAlert = false"
+    />
     <div class="w-full max-w-3xl px-6 py-4 flex justify-end">
       <router-link
           to="/onderwerp/1"
