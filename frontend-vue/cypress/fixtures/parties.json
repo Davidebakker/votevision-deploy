@@ -1,0 +1,16 @@
+[
+  {
+    "partyId": 1,
+    "name": "Democratic Party",
+    "logo": "https://example.com/democratic-logo.png",
+    "seats": 45,
+    "description": "Leading democratic party."
+  },
+  {
+    "partyId": 2,
+    "name": "Republican Party",
+    "logo": "https://example.com/republican-logo.png",
+    "seats": 40,
+    "description": "Conservative political party."
+  }
+]
