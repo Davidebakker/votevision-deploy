@@ -1,4 +1,4 @@
-package com.election.backendjava.security.services;
+package com.election.backendjava.services.election;
 
 import com.election.backendjava.dto.PartyMunicipalityResultDTO;
 import com.election.backendjava.repositories.election.ElectionResultRepository;

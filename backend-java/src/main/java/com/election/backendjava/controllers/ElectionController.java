@@ -8,7 +8,7 @@ import com.election.backendjava.repositories.election.CandidateRepository;
 import com.election.backendjava.repositories.election.PartyRepository;
 import com.election.backendjava.repositories.election.StationRepository;
 import com.election.backendjava.repositories.election.VotesRepository;
-import com.election.backendjava.security.services.ElectionService;
+import com.election.backendjava.services.election.ElectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

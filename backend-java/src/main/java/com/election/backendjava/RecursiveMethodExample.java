@@ -1,6 +1,6 @@
 package com.election.backendjava;
 
-public class fack {
+public class RecursiveMethodExample {
     //recursive functie uitproberen
     public static void main(String[] args) {
         int n = 6;

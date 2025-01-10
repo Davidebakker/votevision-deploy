@@ -1,4 +1,4 @@
-package com.election.backendjava.security.services;
+package com.election.backendjava.services.forum;
 
 import com.election.backendjava.models.form.Comment;
 import com.election.backendjava.models.form.Reply;

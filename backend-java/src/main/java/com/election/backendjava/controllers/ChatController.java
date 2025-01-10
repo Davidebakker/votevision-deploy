@@ -10,7 +10,7 @@ import com.election.backendjava.repositories.form.CommentRepository;
 import com.election.backendjava.repositories.form.ReplyRepository;
 import com.election.backendjava.repositories.form.TopicRepository;
 import com.election.backendjava.repositories.user.UserRepository;
-import com.election.backendjava.security.services.UpvoteService;
+import com.election.backendjava.services.forum.UpvoteService;
 import com.election.backendjava.security.services.UserDetailsImpl;
 import com.election.backendjava.dto.ReplyDTO;
 import com.election.backendjava.dto.CommentDTO;
