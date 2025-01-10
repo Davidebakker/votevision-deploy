@@ -58,13 +58,16 @@
                 User is banned for: {{ formatBanDuration(user.banExpiration) }}
               </span>
           </td>
-          <td class="p-4" v-if="isMod">
+          <td class="p-4" v-if="isMod && !user.banned">
             <button
               @click="addAsAdmin(user.userId)"
               class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-700"
             >
               Add Moderator
             </button>
+          </td>
+          <td class="p-4" v-else-if="isMod">
+              Add Moderator not possible
           </td>
         </tr>
         </tbody>

@@ -188,13 +188,6 @@
 
               <template v-if="isModerator">
                 <router-link
-                  to="/admin"
-                  class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
-                  @click="toggleMenu"
-                >
-                  Admin page
-                </router-link>
-                <router-link
                   to="/admin/moderators"
                   class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
                   @click="toggleMenu"

@@ -228,7 +228,7 @@ export default {
           to="/onderwerp/1"
           class="px-4 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
       >
-        Place a commen
+        Place a comment
       </router-link>
     </div>
     <div class="w-full max-w-3xl px-6 py-4">

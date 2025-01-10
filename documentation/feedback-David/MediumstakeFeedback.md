@@ -21,7 +21,7 @@ lambda expressions ==> try to implement some
 
 complexity ==> perform code analysis, try using sonarqube
 
-## Software realiseren (9.2, 9.3) - io
+### Software realiseren (9.2, 9.3) - io
 this was good enough
 - no business logic in controller
 - replace MYSQL with hibernate
@@ -62,7 +62,7 @@ I already implemented it but I didn't know the term, so I couldn't explain it.
 **complexity** <br>
 downloaded sonarqube.
 
-## Software realiseren (9.2, 9.3) - io
+### Software realiseren (9.2, 9.3) - io
 kept working on it.
 - replaced a lot of MYSQL with hibernate.
 - put a lot of business logic in the services instead of the controllers.

@@ -9,12 +9,10 @@ import PartiesOverview from '@/components/PartyOverviewComponents/PartiesOvervie
 import Candidate from '@/components/Elections/TestCandidateItem.vue'
 import PostForum from "@/components/ForumComponents/PostForum.vue";
 import ForumItem from "@/components/ForumComponents/ForumItem.vue";
-import AdminHomeItem from '@/components/managment/AdminComponents/AdminHomeItem.vue'
-import UserManagementItem from '@/components/managment/AdminComponents/UserManagementItem.vue'
+import UserManagementItem from '@/components/managment/UserManagementItem.vue'
 import UnauthorizedItem from '@/components/unauthorizedComponents/UnauthorizedItem.vue'
 import PartyDetails from '@/components/PartyOverviewComponents/PartyDetails.vue'
-import AdminManagementItem from '@/components/managment/ModComponents/AdminManagementItem.vue'
-import ModeratorHomeItem from '@/components/managment/ModComponents/ModeratorHomeItem.vue'
+import AdminManagementItem from '@/components/managment/AdminManagementItem.vue'
 import ProfilePageComponent from '@/components/profileComponents/ProfilePageComponent.vue'
 import NationalElectionResultView from '@/views/results/NationalElectionResultView.vue'
 
@@ -51,10 +49,8 @@ const router = createRouter({
     { path: '/forum', name: 'ForumItem', component: ForumItem },
     { path: '/onderwerp/:onderwerpNummer', name: 'ForumPost', component: PostForum, meta: { userOnly: true } },
     // Admin
-    { path: '/moderator', name: 'Moderator', component: AdminHomeItem, meta: { adminOnly: true } },
     { path: '/moderator/users', name: 'userManagement', component: UserManagementItem, meta: { adminOnly: true } },
     // Moderator
-    { path: '/admin', name: 'Moderator', component: ModeratorHomeItem, meta: { modOnly: true } },
     { path: '/admin/moderators', name: 'moderatorManagement', component: AdminManagementItem, meta: { modOnly: true } },
     // Unauthorized
     { path: '/unauthorized', name: 'unauthorized', component: UnauthorizedItem },
