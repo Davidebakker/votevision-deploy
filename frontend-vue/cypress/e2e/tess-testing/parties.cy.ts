@@ -13,7 +13,7 @@ describe('Party Overview Page', () => {
   });
 
   it('shows the subtext describing the page', () => {
-    cy.contains('Bekijk hier de verschillende partijen en hun informatie').should('be.visible');
+    cy.contains('View the different parties and their information here').should('be.visible');
   });
 
   it('displays a list of parties', () => {
