@@ -67,12 +67,6 @@
           <!-- Moderator only -->
           <template v-if="isModerator">
             <router-link
-              to="/admin"
-              class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
-            >
-              Admin page
-            </router-link>
-            <router-link
               to="/admin/moderators"
               class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
             >

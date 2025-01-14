@@ -60,6 +60,15 @@ public class AuthService {
                     .body(new MessageResponse("User is banned"));
         }
 
+        boolean isActive = userRepository.findById(userDetails.getId())
+                .map(User::getActive)
+                .orElse(false);
+
+        if (!isActive) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new MessageResponse("Access denied: User is disabled."));
+        }
+
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
