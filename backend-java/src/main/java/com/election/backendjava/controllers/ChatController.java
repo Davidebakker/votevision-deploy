@@ -200,14 +200,19 @@ public class ChatController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));
 
         // Controleer of de ingelogde gebruiker de eigenaar is van de comment
-        if (!comment.getUser().getId().equals(userDetails.getId())) {
+        if (!comment.getUser().getUserId().equals(userDetails.getId())) { // .getUserId() aangepast
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only delete your own comments");
         }
 
-        commentRepository.delete(comment); // Verwijder de comment
+        // Verwijder de replies die bij de comment horen (indien nodig, als cascade niet expliciet is)
+        replyRepository.deleteAll(comment.getReplies());
+
+        // Verwijder de comment
+        commentRepository.delete(comment);
 
         return ResponseEntity.ok("Comment deleted successfully");
     }
+
     @DeleteMapping("/reply/{replyId}")
     public ResponseEntity<?> deleteReply(@PathVariable Long replyId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -218,13 +223,26 @@ public class ChatController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reply not found"));
 
         // Controleer of de ingelogde gebruiker de eigenaar is van de reply
-        if (!reply.getUser().getId().equals(userDetails.getId())) {
+        if (!reply.getUser().getUserId().equals(userDetails.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only delete your own replies");
         }
 
-        replyRepository.delete(reply); // Verwijder de reply
+        // Recursieve verwijdering van child replies (indien gewenst)
+        deleteChildReplies(reply);
+
+        // Verwijder de reply
+        replyRepository.delete(reply);
 
         return ResponseEntity.ok("Reply deleted successfully");
+    }
+
+    private void deleteChildReplies(Reply reply) {
+        if (reply.getChildReplies() != null && !reply.getChildReplies().isEmpty()) {
+            for (Reply childReply : reply.getChildReplies()) {
+                deleteChildReplies(childReply);
+                replyRepository.delete(childReply);
+            }
+        }
     }
 }
 

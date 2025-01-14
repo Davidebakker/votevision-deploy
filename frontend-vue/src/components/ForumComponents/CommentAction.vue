@@ -65,6 +65,31 @@ export default {
       console.log(`Reported comment/reply with ID: ${this.commentId || this.replyId}`);
       alert("This comment/reply has been reported.");
     },
+
+    async deleteItem() {
+      const id = this.replyId || this.commentId;
+      if (!id || id <= 0) {
+        console.error("Invalid ID:", id);
+        alert("Cannot delete. Invalid ID.");
+        return;
+      }
+
+      const endpoint = this.replyId
+          ? `http://localhost:8080/api/chat/reply/${id}`
+          : `http://localhost:8080/api/chat/comment/${id}`;
+
+      try {
+        await axios.delete(endpoint);
+        this.$emit("delete-item", {
+          replyId: this.replyId,
+          commentId: this.commentId,
+        });
+        alert("Item successfully deleted!");
+      } catch (error) {
+        console.error("Failed to delete:", error.response || error.message);
+        alert("Failed to delete. Please try again.");
+      }
+    }
   },
 };
 </script>
@@ -87,6 +112,14 @@ export default {
     <!-- Report enkel tonen indien showReport true is -->
     <button v-if="showReport" @click="handleReport" class="ml-auto text-red-600 hover:underline">
       Report
+    </button>
+
+    <button
+        v-if="showDelete"
+        @click="deleteItem"
+        class="text-red-600 hover:underline"
+    >
+      Delete
     </button>
   </div>
 </template>

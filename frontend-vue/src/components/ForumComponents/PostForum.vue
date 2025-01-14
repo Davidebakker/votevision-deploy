@@ -79,6 +79,27 @@ export default {
       router.push('/forum');
     };
 
+    const deleteComment = async (commentId) => {
+      if (!jwtToken) {
+        alert('You must be logged in to delete comments.');
+        return;
+      }
+
+      try {
+        await axios.delete(`http://localhost:8080/api/chat/comment/${commentId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
+
+        // Verwijder de comment uit de lijst 'posts'
+        posts.value = posts.value.filter(post => post.commentId !== commentId);
+        alert('Comment successfully deleted!');
+      } catch (error) {
+        console.error("Failed to delete the comment:", error.response || error.message);
+        alert(error.response?.data?.message || 'An unexpected error occurred while deleting.');
+      }
+    };
 
     return {
       newComment,
@@ -86,6 +107,7 @@ export default {
       handleSubmit,
       cancelPost,
       isSubmitting,
+      deleteComment,
     };
   }
 };
@@ -126,6 +148,7 @@ export default {
 
         <div class="posts mt-6">
           <div v-if="posts.length === 0" class="text-center text-gray-500 dark:text-gray-400">
+            Geen posts beschikbaar.
           </div>
           <div v-else>
             <div
@@ -137,33 +160,13 @@ export default {
               <p class="mt-2 text-gray-600 dark:text-gray-200">{{ post.commentText }}</p>
               <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">Geplaatst op: {{ post.date }}</small>
 
-              <div v-if="activeReplyPostIndex === index" class="mt-2">
-                <textarea
-                    v-model="replyText"
-                    placeholder="Schrijf een reactie..."
-                    class="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400"
-                ></textarea>
-                <div class="flex mt-2">
-                  <button @click="handleReplySubmit(index)" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-400">
-                    Reageren
-                  </button>
-                  <button @click="cancelReply" class="px-4 py-2 bg-red-500 text-white rounded ml-2 hover:bg-red-400">
-                    Annuleren
-                  </button>
-                </div>
-              </div>
-
-              <div v-if="post.replies && post.replies.length" class="mt-4">
-                <h5 class="font-medium text-gray-500 dark:text-gray-400">Reacties:</h5>
-                <div
-                    v-for="(reply, replyIndex) in post.replies"
-                    :key="replyIndex"
-                    class="p-2 border-t dark:border-gray-700"
-                >
-                  <p class="text-gray-600 dark:text-gray-200">{{ reply.text }}</p>
-                  <small class="block text-sm text-gray-500 dark:text-gray-400">Geplaatst op: {{ reply.date }}</small>
-                </div>
-              </div>
+              <!-- Delete knop toevoegen -->
+              <button
+                  @click="deleteComment(post.commentId)"
+                  class="text-red-600 hover:text-red-800"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>

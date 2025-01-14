@@ -23,18 +23,21 @@
     const jwtToken = localStorage.getItem('jwtToken'); // JWT-token ophalen
 
     // Controleer of de huidige gebruiker de eigenaar is van de comment
-    const isOwner = (comment) => comment.userId === currentUserId.value;
+    const isOwner = (comment) => {
+      console.log('Comment userId:', comment.userId, 'Current userId:', currentUserId.value);
+      console.log('Is owner:', comment.userId === currentUserId.value);
+      return comment.userId === currentUserId.value;
+    };
 
     const fetchCurrentUserId = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/chat/user/me', {
           headers: {
-            Authorization: `Bearer ${jwtToken}`
+            Authorization: `Bearer ${jwtToken}`,
           },
         });
         currentUserId.value = response.data.userId; // Haal de userId uit de response
         console.log('Ingelogde gebruiker:', currentUserId.value);
-        console.log('JWT-token:', jwtToken);
       } catch (error) {
         console.error('Fout bij ophalen userId:', error);
         alert('Kan de ingelogde gebruiker niet ophalen. Zorg ervoor dat u bent ingelogd.');
@@ -172,42 +175,43 @@
 };
 
   // Verwijder een comment of reply
-  const handleDelete = async (type, id) => {
-  try {
-  const url =
-  type === 'comment'
-  ? `http://localhost:8080/api/chat/comment/${id}`
-  : `http://localhost:8080/api/chat/reply/${id}`;
+    const handleDelete = async (type, id) => {
+      try {
+        const url =
+            type === 'comment'
+                ? `http://localhost:8080/api/chat/comment/${id}`
+                : `http://localhost:8080/api/chat/reply/${id}`;
 
-  await axios.delete(url, {
-  headers: {
-  Authorization: `Bearer ${jwtToken}`,
-},
-});
+        await axios.delete(url, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
 
-  if (type === 'comment') {
-  comments.value = comments.value.filter((comment) => comment.commentId !== id);
-} else if (type === 'reply') {
-  const removeReply = (replies) =>
-  replies.filter((reply) => {
-  if (reply.replyId === id) return false;
-  if (reply.childReplies) reply.childReplies = removeReply(reply.childReplies);
-  return true;
-});
+        // Update comments/reacties op frontend
+        if (type === 'comment') {
+          comments.value = comments.value.filter((comment) => comment.commentId !== id);
+        } else if (type === 'reply') {
+          const removeReply = (replies) =>
+              replies.filter((reply) => {
+                if (reply.replyId === id) return false;
+                if (reply.childReplies) reply.childReplies = removeReply(reply.childReplies);
+                return true;
+              });
 
-  comments.value.forEach((comment) => {
-  if (comment.replies) {
-  comment.replies = removeReply(comment.replies);
-}
-});
-}
+          comments.value.forEach((comment) => {
+            if (comment.replies) {
+              comment.replies = removeReply(comment.replies);
+            }
+          });
+        }
 
-  alert(`${type === 'comment' ? 'Comment' : 'Reply'} deleted successfully`);
-} catch (error) {
-  console.error('Error deleting:', error.response?.data);
-  alert('Failed to delete the item. Please try again.');
-}
-};
+        alert(`${type === 'comment' ? 'Comment' : 'Reply'} deleted successfully`);
+      } catch (error) {
+        console.error('Error deleting:', error.response?.data);
+        alert('Failed to delete the item. Please try again.');
+      }
+    };
 
   // Update upvotes
   const handleUpvotes = (eventData) => {
@@ -323,7 +327,7 @@
           <!-- 'Delete'-knop tonen indien de gebruiker eigenaar is van de comment -->
           <button
               v-if="currentUserId && isOwner(comment)"
-              @click="() => handleDelete('comment', comment.commentId)"
+              @click="handleDelete('comment', comment.commentId)"
               class="mt-2 px-4 py-1 text-red-500 border rounded-lg hover:bg-red-500 hover:text-white transition"
           >
             Delete
