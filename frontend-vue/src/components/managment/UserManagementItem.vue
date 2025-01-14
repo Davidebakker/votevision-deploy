@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center bg-gray-900 min-h-screen text-white">
+  <div class="flex flex-col items-center bg-white dark:bg-gray-900 min-h-screen text-white">
 
     <CustomAlert
       v-if="showAlert"
@@ -267,10 +267,8 @@ button:hover {
   opacity: 0.9;
 }
 
-/* Background for better alignment with Admin Management */
 .flex {
   align-items: center;
-  background-color: #1f2937;
   min-height: 100vh;
 }
 

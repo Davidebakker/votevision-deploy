@@ -46,7 +46,7 @@ export default {
 
 
 <template>
-  <div class="flex flex-col items-center bg-gray-900 min-h-screen text-white">
+  <div class="flex flex-col items-center bg-white dark:bg-gray-900 min-h-screen text-white">
     <!-- Table Container -->
     <div class="w-full max-w-6xl p-6 mt-6 bg-gray-800 rounded-lg shadow-lg">
       <h2 class="text-2xl font-semibold mb-4">Moderator Management</h2>
@@ -82,7 +82,6 @@ export default {
 </template>
 
 <style scoped>
-/* General table styling */
 table {
   width: 100%;
   border-collapse: collapse;
