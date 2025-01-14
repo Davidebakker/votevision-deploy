@@ -165,6 +165,19 @@ public class ChatController {
         return replyDTO;
     }
 
+    @GetMapping("/user/me")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetailsImpl)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        }
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User user = userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        return ResponseEntity.ok(user);
+    }
+
     @PutMapping("/comment/{commentId}/upvote")
     public ResponseEntity<Integer> upvoteComment(@PathVariable Long commentId) {
         Integer updatedUpvotes = upvoteService.upvoteComment(commentId);
