@@ -81,5 +81,7 @@ public class User {
         this.name = name;
         this.region = region;
     }
-
+    public Long getId() {
+        return userId;
+    }
 }

@@ -130,10 +130,9 @@ public class ChatController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        // Hier sorteren we expliciet op createdAt in DESCENDING volgorde
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
-        Page<Comment> comments = commentRepository.findAll(pageable); // Gebruik findAll met gesorteerd pageable
+        Page<Comment> comments = commentRepository.findAll(pageable);
 
         Page<CommentDTO> commentDTOs = comments.map(comment -> {
             CommentDTO commentDTO = new CommentDTO();
@@ -142,6 +141,7 @@ public class ChatController {
             commentDTO.setCommentTitle(comment.getCommentTitle());
             commentDTO.setCreatedAt(comment.getCreatedAt());
             commentDTO.setUserName(comment.getUser().getUsername());
+            commentDTO.setUserId(comment.getUser().getUserId()); // Voeg userId toe
             commentDTO.setReplies(comment.getReplies().stream()
                     .filter(reply -> reply.getParentReply() == null)
                     .map(this::mapReply)
@@ -158,6 +158,7 @@ public class ChatController {
         replyDTO.setReplyText(reply.getReplyText());
         replyDTO.setCreatedAt(reply.getCreatedAt());
         replyDTO.setUserName(reply.getUser().getUsername());
+        replyDTO.setUserId(reply.getUser().getUserId());
         replyDTO.setChildReplies(reply.getChildReplies().stream()
                 .map(this::mapReply)
                 .toList());
@@ -176,7 +177,42 @@ public class ChatController {
         return ResponseEntity.ok(updatedUpvotes);
     }
 
+    @DeleteMapping("/comment/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
+        // Controleer of de comment bestaat
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));
+
+        // Controleer of de ingelogde gebruiker de eigenaar is van de comment
+        if (!comment.getUser().getId().equals(userDetails.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only delete your own comments");
+        }
+
+        commentRepository.delete(comment); // Verwijder de comment
+
+        return ResponseEntity.ok("Comment deleted successfully");
+    }
+    @DeleteMapping("/reply/{replyId}")
+    public ResponseEntity<?> deleteReply(@PathVariable Long replyId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        // Controleer of de reply bestaat
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reply not found"));
+
+        // Controleer of de ingelogde gebruiker de eigenaar is van de reply
+        if (!reply.getUser().getId().equals(userDetails.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only delete your own replies");
+        }
+
+        replyRepository.delete(reply); // Verwijder de reply
+
+        return ResponseEntity.ok("Reply deleted successfully");
+    }
 }
 
 
