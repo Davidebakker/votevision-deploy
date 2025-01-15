@@ -1,17 +1,35 @@
 <script>
-import { ref } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { ref } from "vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
+import CustomAlert from "@/components/CustomAlert.vue";
 
 export default {
+  components: { ConfirmDialog, CustomAlert },
   setup() {
     const router = useRouter();
-    const name = ref('');
-    const username = ref('');
-    const email = ref('');
-    const password = ref('');
-    const region = ref('');
+    const name = ref("");
+    const username = ref("");
+    const email = ref("");
+    const password = ref("");
+    const region = ref("");
     const showModal = ref(false);
+
+    const isDarkMode = ref(false);
+
+    // Alert states
+    const showAlert = ref(false);
+    const alertData = ref({
+      title: "",
+      message: "",
+      type: "", // 'success' or 'error'
+    });
+
+    const showAlertMessage = (title, message, type) => {
+      alertData.value = { title, message, type };
+      showAlert.value = true;
+    };
 
     const handleSubmit = async () => {
       showModal.value = true;
@@ -27,29 +45,53 @@ export default {
       };
 
       try {
-        const response = await axios.post('http://localhost:8080/api/auth/signup', userData);
-        console.log(response.data);
+        const response = await axios.post(
+          "http://localhost:8080/api/auth/signup",
+          userData
+        );
 
         if (response.data.token) {
           const jwtToken = response.data.token;
-          localStorage.setItem('jwtToken', jwtToken);
-          axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+          localStorage.setItem("jwtToken", jwtToken);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${jwtToken}`;
         }
 
-        localStorage.setItem('userRoles', 'USER_ROLE');
-        alert(response.data.message || 'Registratie succesvol');
+        localStorage.setItem("userRoles", "USER_ROLE");
 
-        router.push({ name: 'home' });
+        showAlertMessage(
+          "Success",
+          response.data.message || "Registration successful!",
+          "success"
+        );
+
+        router.push({ name: "home" });
         window.location.reload();
       } catch (error) {
-        console.error(error);
         if (error.response?.data?.message) {
-          alert(error.response.data.message);
+          showAlertMessage("Error", error.response.data.message, "error");
         } else {
-          alert('Er is een onverwachte fout opgetreden.');
+          showAlertMessage("Error", "An unexpected error occurred.", "error");
         }
       }
     };
+
+    const termsMessage = ref(`
+      <h2 class="text-xl font-bold mb-4">User Behavior and Responsibilities</h2>
+      <p><strong>Respectful Communication:</strong> Users must interact respectfully and must not post offensive, discriminatory, violent, or hateful messages.</p>
+      <p><strong>No Misinformation:</strong> Users must not post incorrect or misleading information, especially about elections or candidates.</p>
+      <p><strong>No Spam or Promotions:</strong> Unauthorized advertisements, spam, or promotional content are prohibited.</p>
+      <p><strong>Account Responsibility:</strong> Users are responsible for activities occurring from their account.</p>
+      <h2 class="text-xl font-bold mb-4 mt-4">Moderation and Content Management</h2>
+      <p><strong>Right to Remove Content:</strong> Administrators may remove inappropriate posts or accounts without prior notice.</p>
+      <p><strong>Report Functionality:</strong> Users can report inappropriate behavior or content.</p>
+      <p><strong>No Liability for Discussions:</strong> The website is not responsible for user opinions or statements.</p>
+      <h2 class="text-xl font-bold mb-4 mt-4">Liability</h2>
+      <p><strong>No Accuracy Guarantee:</strong> The website does not guarantee that information (such as election results) is accurate and up-to-date.</p>
+      <p><strong>Limitation of Liability:</strong> The website is not responsible for damages resulting from using the site.</p>
+      <h2 class="text-xl font-bold mb-4 mt-4">Changes to Terms</h2>
+      <p>The terms may be changed, and users will be notified of updates.</p>
+    `);
+
 
     const closeModal = () => {
       showModal.value = false;
@@ -65,16 +107,20 @@ export default {
       showModal,
       closeModal,
       acceptTermsAndSubmit,
+      showAlert,
+      alertData,
+      isDarkMode,
+      termsMessage,
     };
   },
 };
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md">
+  <div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+    <div class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
       <div class="px-6 py-4">
-        <h3 class="mt-3 text-xl font-medium text-center text-gray-600">Register</h3>
+        <h3 class="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">Register</h3>
 
         <form @submit.prevent="handleSubmit">
           <input
@@ -82,35 +128,35 @@ export default {
             type="text"
             placeholder="Name"
             required
-            class="block w-full px-4 py-2 mt-4 border rounded-lg"
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <input
             v-model="username"
             type="text"
             placeholder="Username"
             required
-            class="block w-full px-4 py-2 mt-4 border rounded-lg"
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <input
             v-model="email"
             type="email"
             placeholder="Email"
             required
-            class="block w-full px-4 py-2 mt-4 border rounded-lg"
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <input
             v-model="password"
             type="password"
             placeholder="Password"
             required
-            class="block w-full px-4 py-2 mt-4 border rounded-lg"
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <input
             v-model="region"
             type="text"
             placeholder="Region"
             required
-            class="block w-full px-4 py-2 mt-4 border rounded-lg"
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <button
             type="submit"
@@ -122,66 +168,23 @@ export default {
       </div>
     </div>
 
-    <div
+    <!-- Modal -->
+    <ConfirmDialog
       v-if="showModal"
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-    >
-      <div class="bg-white rounded-lg p-6 w-11/12 max-w-3xl max-h-[90vh] overflow-y-auto relative">
-        <h1 class="text-xl font-bold mb-4">Algemene Voorwaarden</h1>
-        <h2 class="text-xl font-bold mb-4">Gebruikersgedrag en verantwoordelijkheden</h2>
-        <p><strong>Respectvolle communicatie:</strong> Gebruikers moeten respectvol met elkaar omgaan en mogen geen beledigende, discriminerende, gewelddadige of haatzaaiende berichten plaatsen.</p>
-        <p><strong>Geen misinformatie:</strong> Gebruikers mogen geen onjuiste of misleidende informatie plaatsen, vooral over verkiezingen of kandidaten.</p>
-        <p><strong>Geen spam of promotie:</strong> Het is verboden om ongeautoriseerde advertenties, spam of promotionele content te plaatsen.</p>
-        <p><strong>Accountverantwoordelijkheid:</strong> Gebruikers zijn verantwoordelijk voor de activiteiten die vanuit hun account plaatsvinden.</p>
-        <br>
-        <h2 class="text-xl font-bold mb-4">Moderatie en contentbeheer</h2>
-        <p><strong>Recht om content te verwijderen:</strong> Beheerders hebben het recht om ongepaste berichten of accounts te verwijderen zonder voorafgaande kennisgeving.</p>
-        <p><strong>Rapporteerfunctie:</strong> Gebruikers kunnen ongepast gedrag of content melden.</p>
-        <p><strong>Geen aansprakelijkheid voor discussies:</strong> De website is niet verantwoordelijk voor de meningen en uitspraken van gebruikers.</p>
-        <br>
-        <h2 class="text-xl font-bold mb-4">Aansprakelijkheid</h2>
-        <p><strong>Geen garantie op juistheid:</strong> De website garandeert niet dat alle informatie (bijv. verkiezingsuitslagen) correct en up-to-date is.</p>
-        <p><strong>Beperking van aansprakelijkheid:</strong> De website is niet verantwoordelijk voor schade die ontstaat door het gebruik van de site.</p>
-        <br>
-        <h2 class="text-xl font-bold mb-4">Wijzigingen in de voorwaarden</h2>
-        <p> De voorwaarden kunnen worden aangepast en gebruikers worden op de hoogte gesteld van wijzigingen.</p>
-        <button
-          @click="acceptTermsAndSubmit"
-          class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg">
-          Akkoord en Registreren
-        </button>
-        <button
-          @click="closeModal"
-          class="mt-4 ml-2 px-4 py-2 bg-red-500 text-white rounded-lg">
-          Annuleren
-        </button>
-      </div>
-    </div>
+      title="Terms and Conditions"
+      :message="termsMessage"
+      @confirm="acceptTermsAndSubmit"
+      @cancel="closeModal"
+    />
+
+
+    <!-- Alert -->
+    <CustomAlert
+      v-if="showAlert"
+      :title="alertData.title"
+      :message="alertData.message"
+      :type="alertData.type"
+      @close="showAlert = false"
+    />
   </div>
 </template>
-
-
-<style scoped>
-
-.fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.bg-black {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.bg-white {
-  background-color: white;
-}
-
-.overflow-y-auto {
-  overflow-y: auto; /* Maakt verticale scroll mogelijk */
-}
-</style>
-
-

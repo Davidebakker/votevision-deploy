@@ -8,7 +8,7 @@
       <nav class="mt-10 px-4 space-y-2">
         <router-link
           to="/"
-          class="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+          class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
         >
           Home
         </router-link>
@@ -66,12 +66,6 @@
 
           <!-- Moderator only -->
           <template v-if="isModerator">
-            <router-link
-              to="/admin"
-              class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
-            >
-              Admin page
-            </router-link>
             <router-link
               to="/admin/moderators"
               class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -187,13 +181,6 @@
               </template>
 
               <template v-if="isModerator">
-                <router-link
-                  to="/admin"
-                  class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
-                  @click="toggleMenu"
-                >
-                  Admin page
-                </router-link>
                 <router-link
                   to="/admin/moderators"
                   class="block px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"

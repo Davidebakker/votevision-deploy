@@ -35,3 +35,7 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add('getLocalStorage', (key) => {
+  return cy.window().then((win) => win.localStorage.getItem(key));
+});

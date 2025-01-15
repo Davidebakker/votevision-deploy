@@ -26,7 +26,7 @@ public class Station {
     @JoinColumn(name = "municipality_id", nullable = false)
     @JsonBackReference
     private Municipality municipality;
-    
+
 
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
     @JsonManagedReference

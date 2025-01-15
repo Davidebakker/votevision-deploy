@@ -2,10 +2,12 @@
   "name": "frontend-vue",
   "version": "0.0.0",
   "private": true,
-
   "scripts": {
+    "start": "npx http-server -p 8081 ./dist",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
+    "build-production": "vite build --mode=production",
+    "build-development": "vite build --mode=development",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
@@ -20,6 +22,7 @@
     "ag-grid-vue3": "^32.3.0",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
+    "http-server": "^14.1.1",
     "jwt-decode": "^4.0.0",
     "node": "^22.9.0",
     "pinia": "^2.1.7",

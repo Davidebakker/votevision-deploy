@@ -7,15 +7,19 @@ import lombok.Data;
 public class EditUserRequest {
 
     @NotBlank
-    private String firstName;
+    private Long userId;
 
     @NotBlank
-    private String lastName;
+    private String username;
+
+    @NotBlank
+    private String email;
+
+    @NotBlank
+    private String Name;
 
     @NotBlank
     private String region;
 
-    @NotBlank
-    private String bio;
 
 }
