@@ -10,7 +10,8 @@ stages:
 
 build-sonar:
   stage: build-sonar
-
+  tags:
+    - hva
   cache:
     policy: pull-push
     key: "sonar-cache-$CI_COMMIT_REF_SLUG"
