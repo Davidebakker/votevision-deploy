@@ -31,7 +31,6 @@ public class APIConfig implements WebMvcConfigurer {
                 .allowedOrigins(corsOrigin)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
                 .allowedHeaders("*");
-//                .allowCredentials(true);
     }
 
     @Autowired
