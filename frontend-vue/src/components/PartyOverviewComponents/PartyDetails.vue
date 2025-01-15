@@ -22,7 +22,7 @@ export default {
 
     onMounted(() => {
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
+        document.documentElement.classList.add('dark'); // Voeg de 'dark' class toe aan de html tag
       }
       fetchPartyDetails();
     });
@@ -47,7 +47,7 @@ export default {
         </div>
         <div class="md:w-2/3 md:pl-10">
           <p class="text-xl font-medium text-gray-700 dark:text-gray-300 mb-4">
-            <span class="font-bold text-gray-800 dark:text-white">Aantal zetels:</span> {{ party.seats }}
+            <span class="font-bold text-gray-800 dark:text-white">Number of seats:</span> {{ party.seats }}
           </p>
           <div class="mt-4 text-lg text-gray-600 dark:text-gray-200 leading-relaxed">
             <p>{{ party.description }}</p>
@@ -57,7 +57,7 @@ export default {
     </div>
 
     <div class="w-full max-w-6xl bg-white dark:bg-gray-800 shadow-lg rounded-2xl overflow-hidden mt-8 p-8">
-      <h2 class="text-2xl font-semibold mb-6 text-gray-600 dark:text-gray-200">Kandidaten:</h2>
+      <h2 class="text-2xl font-semibold mb-6 text-gray-600 dark:text-gray-200">Candidates:</h2>
       <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           v-for="candidate in party.candidates"
@@ -74,7 +74,6 @@ export default {
   </div>
 </template>
 
-
 <style scoped>
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -88,5 +87,35 @@ p {
 ul {
   list-style-type: none;
   padding: 0;
+}
+
+/* Styles for input fields and dropdown */
+input[type="text"],
+select {
+  padding: 8px 12px;
+  margin: 8px 0;
+  border-radius: 0.375rem;
+  background-color: #f7fafc;
+  border: 1px solid #d1d5db;
+  color: #2d3748;
+}
+
+input[type="text"]:focus,
+select:focus {
+  border-color: #4c51bf;
+  outline: none;
+}
+
+/* Dark mode styles for input fields and dropdown */
+body.dark input[type="text"],
+body.dark select {
+  background-color: #2d3748;
+  color: #edf2f7;
+  border: 1px solid #4a5568;
+}
+
+body.dark input[type="text"]:focus,
+body.dark select:focus {
+  border-color: #63b3ed;
 }
 </style>
