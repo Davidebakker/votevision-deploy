@@ -3,9 +3,9 @@
     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
     @click.self="cancel"
   >
-    <div class="bg-gray-800 text-white rounded-lg shadow-lg w-11/12 max-w-lg p-6">
+    <div class="bg-gray-800 text-white rounded-lg shadow-lg w-11/12 max-w-lg max-h-[90vh] overflow-y-auto p-6">
       <h3 class="text-xl font-semibold mb-4">{{ title }}</h3>
-      <p class="mb-6">{{ message }}</p>
+      <div class="mb-6" v-html="message"></div>
       <div class="flex justify-end space-x-4">
         <button
           class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded"
@@ -50,7 +50,6 @@ export default {
 </script>
 
 <style scoped>
-/* Add subtle animations for better user experience */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -62,5 +61,16 @@ export default {
 
 div {
   animation: fadeIn 0.3s ease-out;
+}
+
+@media (max-width: 768px) {
+  .bg-gray-800 {
+    width: 90%;
+    padding: 4px;
+  }
+
+  .text-xl {
+    font-size: 1.25rem;
+  }
 }
 </style>
