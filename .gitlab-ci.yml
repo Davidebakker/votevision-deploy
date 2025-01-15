@@ -20,7 +20,9 @@ build-sonar:
 
   script:
     - cd backend-java  # Navigate to the directory containing pom.xml
-    - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+    - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+      -Dsonar.host.url=$SONARQUBE_URL \
+      -Dsonar.login=$SONARQUBE_TOKEN
   allow_failure: true
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
