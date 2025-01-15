@@ -1,10 +1,12 @@
 <script>
+import { ref, defineComponent } from "vue";
+import axios from "axios";
 import CommentAction from "@/components/ForumComponents/CommentAction.vue";
 import { formatDistanceToNow } from "date-fns";
-import { nl } from "date-fns/locale"; // Nederlandse vertaling voor tijd
+import { nl } from "date-fns/locale";
 
-export default {
-  name: 'ReplyList',
+export default defineComponent({
+  name: "ReplyList",
   components: {
     CommentAction,
   },
@@ -12,12 +14,12 @@ export default {
     replies: {
       type: Array,
       required: true,
-      default: () => [], // Zorg voor een lege array als standaard
+      default: () => [],
     },
     replyTexts: {
       type: Object,
-      required: true,
-      default: () => ({}), // Zorg voor een leeg object als standaard
+      required: false,
+      default: () => ({}),
     },
     activeReplyId: {
       type: [String, Number, null],
@@ -27,25 +29,58 @@ export default {
       type: Number,
       required: true,
     },
-  },
-
-  emits: ["toggle-reply-field", "submit-nested-reply"],
-  methods: {
-    formatTimeAgo(date) {
-      return formatDistanceToNow(new Date(date), { addSuffix: true, locale: nl });
+    currentUserId: { // Ingelogde gebruiker doorgeven
+      type: Number,
+      required: true,
     },
-    updateReplyUpvotes(newUpvotes) {
-      // Zoek de specifieke reply en update zijn upvotes
-      const replyIndex = this.replies.findIndex(
+  },
+  emits: ["toggle-reply-field", "submit-nested-reply", "delete-reply", "update-reply-text", "update-replies"],
+  setup(props, { emit }) {
+    // Format time in "time ago" format
+    const formatTimeAgo = (date) => {
+      return formatDistanceToNow(new Date(date), { addSuffix: true, locale: nl });
+    };
+
+    // Update the upvotes for a specific reply
+    const updateReplyUpvotes = (newUpvotes) => {
+      const replyIndex = props.replies.findIndex(
           (reply) => reply.replyId === newUpvotes.replyId
       );
       if (replyIndex !== -1) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.replies[replyIndex].upvotes = newUpvotes.updatedUpvotes;
+        const updatedReplies = [...props.replies];
+        updatedReplies[replyIndex].upvotes = newUpvotes.updatedUpvotes;
+        emit("update-replies", updatedReplies);
       }
-    },
+    };
+
+    // Check if the current user is the owner of the reply
+    const isOwner = (reply) => {
+      console.log("Reply userId:", reply.userId, "Current userId:", props.currentUserId);
+      return reply.userId === props.currentUserId;
+    };
+
+    const onDeleteItem = (payload) => {
+      // payload bevat { replyId, commentId }
+      // Hier kun je de 'props.replies' array filteren
+      console.log("Delete event vanuit CommentAction ontvangen:", payload);
+
+      // 1. Als we in ReplyList rechtstreeks willen updaten:
+      if (payload.replyId) {
+        const updated = props.replies.filter(r => r.replyId !== payload.replyId);
+        emit("update-replies", updated);
+      }
+      // Of wat je maar wilt doen
+    };
+
+
+    return {
+      formatTimeAgo,
+      updateReplyUpvotes,
+      isOwner,
+      onDeleteItem,
+    };
   },
-};
+});
 </script>
 
 <template>
@@ -55,7 +90,7 @@ export default {
         :key="reply.replyId"
         class="mt-4 p-4 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 flex flex-col"
     >
-      <!-- Bovenste rij: reply text links, upvote rechts -->
+      <!-- Reply gegevens en acties -->
       <div class="flex items-center justify-between">
         <div>
           <strong>{{ reply.userName }}</strong>
@@ -64,41 +99,33 @@ export default {
             {{ formatTimeAgo(reply.createdAt) }}
           </small>
         </div>
-        <!-- Upvote knop rechtsboven -->
-        <CommentAction
-            :upvotesCount="reply.upvotes"
-            :replyId="reply.replyId"
-            :commentId="commentId"
-            @update-upvotes="updateReplyUpvotes"
-            :showUpvote="true"
-            :showReport="false"
-        />
+        <!-- Acties Upvote/Report/Delete -->
+        <div class="flex items-center space-x-4">
+          <CommentAction
+              :upvotesCount="reply.upvotes"
+              :replyId="reply.replyId"
+              :commentId="commentId"
+              @update-upvotes="updateReplyUpvotes"
+              :showUpvote="true"
+              :showDelete="isOwner(reply)"
+              @delete-item="onDeleteItem"
+              :showReport="true"
+          />
+          <button
+              @click="$emit('toggle-reply-field', reply.replyId)"
+              class="text-blue-500 hover:underline"
+          >
+            Reply
+          </button>
+        </div>
       </div>
 
-      <!-- Onderste rij: Reply en Report samen links -->
-      <div class="mt-2 flex items-center space-x-4">
-        <button
-            @click="$emit('toggle-reply-field', reply.replyId)"
-            class="text-blue-500 hover:underline"
-        >
-          Reply
-        </button>
-        <!-- Alleen Report tonen in deze CommentAction -->
-        <CommentAction
-            :upvotesCount="reply.upvotes"
-            :replyId="reply.replyId"
-            :commentId="commentId"
-            @update-upvotes="updateReplyUpvotes"
-            :showUpvote="false"
-            :showReport="true"
-        />
-      </div>
-
-      <!-- Reply input field -->
+      <!-- Reply invoerveld -->
       <div v-if="activeReplyId === reply.replyId" class="mt-2">
         <textarea
-            v-model="replyTexts[reply.replyId]"
-            placeholder="Schrijf een reactie..."
+            :value="replyTexts[reply.replyId]"
+            @input="$emit('update-reply-text', { replyId: reply.replyId, text: $event.target.value })"
+            placeholder="Write a reply..."
             class="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400"
         ></textarea>
         <button
@@ -109,21 +136,26 @@ export default {
         </button>
       </div>
 
-      <!-- Child replies -->
-      <div v-if="reply.childReplies && reply.childReplies.length" class="mt-4 pl-4 border-l dark:border-gray-700">
+      <!-- Child-replies -->
+      <div
+          v-if="reply.childReplies && reply.childReplies.length"
+          class="mt-4 pl-4 border-l dark:border-gray-700"
+      >
         <ReplyList
             :replies="reply.childReplies || []"
             :replyTexts="replyTexts"
             :activeReplyId="activeReplyId"
             :commentId="commentId"
-            @toggle-reply-field="$emit('toggle-reply-field', $event)"
-            @submit-nested-reply="$emit('submit-nested-reply', reply.replyId)"
+            :currentUserId="currentUserId"
+        @toggle-reply-field="$emit('toggle-reply-field', $event)"
+        @submit-nested-reply="$emit('submit-nested-reply', reply.replyId)"
+        @delete-reply="$emit('delete-reply', $event)"
         />
       </div>
     </div>
   </div>
   <div v-else>
-    <p>Geen reacties beschikbaar</p>
+    <p>No comments available</p>
   </div>
 </template>
 
@@ -131,6 +163,7 @@ export default {
 .mt-4 {
   margin-top: 1rem;
 }
+
 .pl-4 {
   padding-left: 1rem;
 }

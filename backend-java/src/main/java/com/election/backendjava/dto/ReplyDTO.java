@@ -13,9 +13,8 @@ public class ReplyDTO {
     private Integer replyId;
     private String replyText;
     private LocalDateTime createdAt;
-    private String userName;
+    private String userName; // De naam van de gebruiker die de reply plaatste
+    private Long userId; // Voeg ID van de gebruiker toe
     private List<ReplyDTO> childReplies = new ArrayList<>();
-
-    // Voeg hier ook upvotes toe
-    private Integer upvotes;
+    private Integer upvotes;// Voeg hier ook upvotes toe
 }

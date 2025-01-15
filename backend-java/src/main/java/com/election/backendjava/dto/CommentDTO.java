@@ -15,15 +15,15 @@ public class CommentDTO {
     private String commentTitle;
     private LocalDateTime createdAt;
     private String userName; // De naam van de gebruiker die de comment plaatste
+    private Long userID; // voeg ID van de gebruiker toe
     private List<ReplyDTO> replies; // De lijst met replies
-
-    // Voeg upvotes toe
-    private Integer upvotes;
+    private Integer upvotes;// Voeg upvotes toe
 
     // Getters en setters
     public Integer getCommentId() {
         return commentId;
     }
+
 
     public void setCommentId(Integer commentId) {
         this.commentId = commentId;
@@ -76,4 +76,7 @@ public class CommentDTO {
     public void setUpvotes(Integer upvotes) {
         this.upvotes = upvotes;
     }
-}
+
+    public void setUserId(Long userId) { this.userID = userId;}
+
+    public Long getUserId() { return userID; }}
