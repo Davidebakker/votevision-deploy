@@ -64,6 +64,9 @@ public class User {
     @Column(name = "ban_count")
     private Integer banCount = 0;
 
+    @Column(name = "active")
+    private Boolean active = Boolean.TRUE;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(  name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

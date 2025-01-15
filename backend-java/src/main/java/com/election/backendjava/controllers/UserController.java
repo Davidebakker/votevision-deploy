@@ -76,14 +76,15 @@ public class UserController {
         return ResponseEntity.ok(new MessageResponse("Admin deleted Successfully"));
     }
 
-    @PostMapping("/delete/{userId}")
+    @PostMapping("/disable/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-        userRepository.delete(user);
+        user.setActive(false);
+        userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User deleted successfully"));
+        return ResponseEntity.ok(new MessageResponse("User disabled successfully"));
     }
 
     @PostMapping("/ban/{userId}")
@@ -104,10 +105,23 @@ public class UserController {
         }
     }
 
-    @PutMapping("/edit")
-    public ResponseEntity<?> editUser(@RequestBody EditUserRequest editUserRequest) {
-        User user = userServices.getUserFromAuthentication();
+    @PutMapping("/unban/{userId}")
+    public ResponseEntity<?> unbanUser(@PathVariable Long userId) {
+        if (userServices.unbanUser(userId)) {
+            return ResponseEntity.ok(new MessageResponse("User unbanned successfully"));
 
-        return ResponseEntity.ok("");
+        } else {
+            return ResponseEntity.badRequest().body(new MessageResponse("An error occurred while unbanning the user"));
+        }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<?> editUser(@RequestBody EditUserRequest e) {
+        return userServices.updateUserById(
+                e.getUserId(),
+                e.getUsername(),
+                e.getEmail(),
+                e.getName(),
+                e.getRegion());
     }
 }
