@@ -17,22 +17,26 @@ export default {
     const onderwerpNummer = route.params.onderwerpNummer;
     const isSubmitting = ref(false);
 
+    // Alert system
+    const showAlert = ref(false);
+    const alertData = ref({
+      title: "",
+      message: "",
+      type: "info",
+    });
+    function showCustomAlert(title, message) {
+      alertData.value = { title, message, type: "info" };
+      showAlert.value = true;
+    }
+
     const handleSubmit = async () => {
       if (!jwtToken) {
-        alertData.value = {
-          title: "Authentication Required",
-          message: "You must be logged in to post.",
-        };
-        showAlert.value = true;
+        showCustomAlert("Authentication Required", "You must be logged in to post.");
         return;
       }
 
       if (!newComment.value.title || !newComment.value.commentText) {
-        alertData.value = {
-          title: "Validation Error",
-          message: "Please fill in all fields.",
-        };
-        showAlert.value = true;
+        showCustomAlert("Validation Error", "Please fill in all fields.");
         return;
       }
 
@@ -53,7 +57,6 @@ export default {
         );
 
         const savedComment = response.data;
-
         posts.value.unshift({
           commentId: savedComment.commentId,
           title: savedComment.commentTitle,
@@ -64,22 +67,18 @@ export default {
         newComment.value.title = "";
         newComment.value.commentText = "";
 
-        alertData.value = {
-          title: "Success",
-          message: "Comment successfully posted!",
-        };
-        showAlert.value = true;
+        showCustomAlert("Success", "Comment successfully posted!");
       } catch (error) {
         console.error(error);
-        alertData.value = {
-          title: "Error",
-          message: error.response?.data?.message || "An unexpected error occurred.",
-        };
-        showAlert.value = true;
+        showCustomAlert(
+          "Error",
+          error.response?.data?.message || "An unexpected error occurred."
+        );
       } finally {
         isSubmitting.value = false;
       }
 
+      // Optionally also navigate away
       router.push("/forum");
     };
 
@@ -97,6 +96,7 @@ export default {
       isSubmitting,
       showAlert,
       alertData,
+      showCustomAlert,
     };
   },
 };
@@ -109,6 +109,7 @@ export default {
       v-if="showAlert"
       :title="alertData.title"
       :message="alertData.message"
+      :type="alertData.type"
       @close="showAlert = false"
     />
 
@@ -120,21 +121,25 @@ export default {
 
         <form @submit.prevent="handleSubmit" class="mt-4">
           <input
-              v-model="newComment.title"
-              type="text"
-              placeholder="Title"
-              required
-              class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+            v-model="newComment.title"
+            type="text"
+            placeholder="Title"
+            required
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <textarea
-              v-model="newComment.commentText"
-              placeholder="Write your comment here..."
-              required
-              class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
-          ></textarea>
+            v-model="newComment.commentText"
+            placeholder="Write your comment here..."
+            required
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+          />
 
           <div class="flex mt-4">
-            <button type="submit" class="w-4/5 px-4 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-400">
+            <button
+              type="submit"
+              class="w-4/5 px-4 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-400"
+              :disabled="isSubmitting"
+            >
               Post
             </button>
             <button
@@ -149,6 +154,7 @@ export default {
 
         <div class="posts mt-6">
           <div v-if="posts.length === 0" class="text-center text-gray-500 dark:text-gray-400">
+            <!-- no posts -->
           </div>
           <div v-else>
             <div
@@ -156,10 +162,15 @@ export default {
               :key="index"
               class="post mt-4 p-4 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600"
             >
-              <h4 class="text-lg font-medium text-gray-600 dark:text-gray-200">{{ post.title }}</h4>
-              <p class="mt-2 text-gray-600 dark:text-gray-200">{{ post.commentText }}</p>
-              <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">Geplaatst op: {{ post.date }}</small>
-
+              <h4 class="text-lg font-medium text-gray-600 dark:text-gray-200">
+                {{ post.title }}
+              </h4>
+              <p class="mt-2 text-gray-600 dark:text-gray-200">
+                {{ post.commentText }}
+              </p>
+              <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">
+                Posted at: {{ post.date }}
+              </small>
             </div>
           </div>
         </div>
@@ -168,13 +179,10 @@ export default {
   </div>
 </template>
 
-
-
 <style scoped>
 .min-h-screen {
   min-height: 100vh;
 }
-
 .bg-gray-100 {
   background-color: #111827;
 }
