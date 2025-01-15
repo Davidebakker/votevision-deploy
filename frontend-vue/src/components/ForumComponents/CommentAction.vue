@@ -27,6 +27,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    showDelete: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -88,6 +92,39 @@ export default {
         "success"
       );
     },
+
+    async deleteItem() {
+      const id = this.replyId || this.commentId;
+      console.log("Reply ID:", this.replyId, "Comment ID:", this.commentId);
+
+      if (!id || id <= 0) {
+        console.error("Invalid ID:", id);
+        alert("Cannot delete. Invalid ID.");
+        return;
+      }
+
+      try {
+        await axios.delete(
+            `http://localhost:8080/api/chat/reply/${id}`, // <-- gebruik 'id' hier
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+              },
+            }
+        );
+
+        this.$emit("delete-item", {
+          replyId: this.replyId,
+          commentId: this.commentId,
+        });
+        alert("Item successfully deleted!");
+        window.location.reload();
+      } catch (error) {
+        console.error("Failed to delete bro:", error.response || error.message);
+        alert("Failed to delete. Please try again.");
+      }
+    }
+
   },
 };
 </script>
@@ -113,34 +150,26 @@ export default {
     </button>
     <span v-if="showUpvote">{{ upvotes }}</span>
 
-    <!-- Report button -->
-    <button
-      v-if="showReport"
-      @click="handleReport"
-      class="ml-auto text-red-600 hover:underline"
-    >
+    <!-- Report enkel tonen indien showReport true is -->
+    <button v-if="showReport" @click="handleReport" class="ml-auto text-yellow-600 hover:underline">
       Report
     </button>
+    <button
+        v-if="showDelete"
+        @click="deleteItem"
+        class="text-red-600 hover:underline"
+    >
+      Delete
+    </button>
 
-    <!-- Custom Alert -->
-    <CustomAlert
-      v-if="showAlert"
-      :title="alertData.title"
-      :message="alertData.message"
-      :type="alertData.type"
-      @close="showAlert = false"
-    />
   </div>
 </template>
-
-
 <CommentAction
+    :replyId="reply.replyId"
     :upvotesCount="comment.upvotes"
     :commentId="comment.commentId"
     @update-upvotes="handleUpvotes"
 />
-
-
 <style scoped>
 button {
   transition: color 0.2s ease;

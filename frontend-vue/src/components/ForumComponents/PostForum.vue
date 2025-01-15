@@ -17,12 +17,6 @@ export default {
     const onderwerpNummer = route.params.onderwerpNummer;
     const isSubmitting = ref(false);
 
-    const showAlert = ref(false);
-    const alertData = ref({
-      title: "",
-      message: "",
-    });
-
     const handleSubmit = async () => {
       if (!jwtToken) {
         alertData.value = {
@@ -121,30 +115,27 @@ export default {
     <div class="w-full max-w-md mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
       <div class="px-6 py-4">
         <h2 class="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
-          Maak een nieuwe post
+          Write a post
         </h2>
 
         <form @submit.prevent="handleSubmit" class="mt-4">
           <input
-            v-model="newComment.title"
-            type="text"
-            placeholder="Titel"
-            required
-            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+              v-model="newComment.title"
+              type="text"
+              placeholder="Title"
+              required
+              class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <textarea
-            v-model="newComment.commentText"
-            placeholder="Schrijf je post..."
-            required
-            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+              v-model="newComment.commentText"
+              placeholder="Write your comment here..."
+              required
+              class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           ></textarea>
 
           <div class="flex mt-4">
-            <button
-              type="submit"
-              class="w-4/5 px-4 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-400"
-            >
-              Posten
+            <button type="submit" class="w-4/5 px-4 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-400">
+              Post
             </button>
             <button
               type="button"
@@ -167,9 +158,8 @@ export default {
             >
               <h4 class="text-lg font-medium text-gray-600 dark:text-gray-200">{{ post.title }}</h4>
               <p class="mt-2 text-gray-600 dark:text-gray-200">{{ post.commentText }}</p>
-              <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">
-                Geplaatst op: {{ post.date }}
-              </small>
+              <small class="block mt-2 text-sm text-gray-500 dark:text-gray-400">Geplaatst op: {{ post.date }}</small>
+
             </div>
           </div>
         </div>
