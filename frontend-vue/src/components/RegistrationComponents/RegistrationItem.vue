@@ -16,6 +16,8 @@ export default {
     const region = ref("");
     const showModal = ref(false);
 
+    const isDarkMode = ref(false);
+
     // Alert states
     const showAlert = ref(false);
     const alertData = ref({
@@ -73,6 +75,24 @@ export default {
       }
     };
 
+    const termsMessage = ref(`
+      <h2 class="text-xl font-bold mb-4">User Behavior and Responsibilities</h2>
+      <p><strong>Respectful Communication:</strong> Users must interact respectfully and must not post offensive, discriminatory, violent, or hateful messages.</p>
+      <p><strong>No Misinformation:</strong> Users must not post incorrect or misleading information, especially about elections or candidates.</p>
+      <p><strong>No Spam or Promotions:</strong> Unauthorized advertisements, spam, or promotional content are prohibited.</p>
+      <p><strong>Account Responsibility:</strong> Users are responsible for activities occurring from their account.</p>
+      <h2 class="text-xl font-bold mb-4 mt-4">Moderation and Content Management</h2>
+      <p><strong>Right to Remove Content:</strong> Administrators may remove inappropriate posts or accounts without prior notice.</p>
+      <p><strong>Report Functionality:</strong> Users can report inappropriate behavior or content.</p>
+      <p><strong>No Liability for Discussions:</strong> The website is not responsible for user opinions or statements.</p>
+      <h2 class="text-xl font-bold mb-4 mt-4">Liability</h2>
+      <p><strong>No Accuracy Guarantee:</strong> The website does not guarantee that information (such as election results) is accurate and up-to-date.</p>
+      <p><strong>Limitation of Liability:</strong> The website is not responsible for damages resulting from using the site.</p>
+      <h2 class="text-xl font-bold mb-4 mt-4">Changes to Terms</h2>
+      <p>The terms may be changed, and users will be notified of updates.</p>
+    `);
+
+
     const closeModal = () => {
       showModal.value = false;
     };
@@ -89,16 +109,18 @@ export default {
       acceptTermsAndSubmit,
       showAlert,
       alertData,
+      isDarkMode,
+      termsMessage,
     };
   },
 };
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md">
+  <div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+    <div class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
       <div class="px-6 py-4">
-        <h3 class="mt-3 text-xl font-medium text-center text-gray-600">Register</h3>
+        <h3 class="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">Register</h3>
 
         <form @submit.prevent="handleSubmit">
           <input
@@ -106,35 +128,35 @@ export default {
             type="text"
             placeholder="Name"
             required
-            class="block w-full px-4 py-2 mt-4 border rounded-lg"
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <input
             v-model="username"
             type="text"
             placeholder="Username"
             required
-            class="block w-full px-4 py-2 mt-4 border rounded-lg"
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <input
             v-model="email"
             type="email"
             placeholder="Email"
             required
-            class="block w-full px-4 py-2 mt-4 border rounded-lg"
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <input
             v-model="password"
             type="password"
             placeholder="Password"
             required
-            class="block w-full px-4 py-2 mt-4 border rounded-lg"
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <input
             v-model="region"
             type="text"
             placeholder="Region"
             required
-            class="block w-full px-4 py-2 mt-4 border rounded-lg"
+            class="block w-full px-4 py-2 mt-2 text-white-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
           />
           <button
             type="submit"
@@ -149,11 +171,12 @@ export default {
     <!-- Modal -->
     <ConfirmDialog
       v-if="showModal"
-      title="Algemene Voorwaarden"
-      message="Gebruikers moeten respectvol communiceren en zijn verantwoordelijk voor hun accountactiviteiten."
+      title="Terms and Conditions"
+      :message="termsMessage"
       @confirm="acceptTermsAndSubmit"
       @cancel="closeModal"
     />
+
 
     <!-- Alert -->
     <CustomAlert
@@ -165,30 +188,3 @@ export default {
     />
   </div>
 </template>
-
-
-
-<style scoped>
-
-.fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.bg-black {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.bg-white {
-  background-color: white;
-}
-
-.overflow-y-auto {
-  overflow-y: auto; /* Maakt verticale scroll mogelijk */
-}
-</style>
-
-

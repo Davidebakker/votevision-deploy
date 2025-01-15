@@ -106,8 +106,8 @@ export default {
 
           <div class="flex items-center justify-between mt-4">
             <button
-              class="flex center px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
               type="submit"
+              class="w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-400"
             >
               Login
             </button>
@@ -117,7 +117,7 @@ export default {
 
       <div class="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700">
         <span class="text-sm text-gray-600 dark:text-gray-200">Don't have an account? </span>
-        <a href="#" class="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline">
+        <a href="/registration" class="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline">
           Register
         </a>
       </div>
@@ -128,8 +128,8 @@ export default {
       v-if="showAlert"
       :title="alertData.title"
       :message="alertData.message"
-      @close="showAlert = false"
-    />
+      :type="alertData.type"
+      @close="showAlert = false" />
   </div>
 </template>
 
