@@ -8,8 +8,7 @@
       </h1>
 
       <p class="max-w-2xl mx-auto my-6 text-center text-gray-500 dark:text-gray-300">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo incidunt ex placeat modi magni
-        quia error alias, adipisci rem similique, at omnis eligendi optio eos harum.
+        We are a dedicated team of professionals committed to innovation, collaboration, and excellence. Together, we work to bring visionary ideas to life, delivering impactful solutions that make a difference.
       </p>
 
       <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-2">
@@ -19,7 +18,7 @@
           <div class="flex flex-col sm:-mx-4 sm:flex-row">
             <img
               class="flex-shrink-0 object-cover w-24 h-24 rounded-full sm:mx-4 ring-4 ring-gray-300"
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+              src="@/assets/img/Matin.png"
               alt="Matin Kh"
             />
             <div class="mt-4 sm:mx-4 sm:mt-0">
@@ -29,13 +28,12 @@
                 Matin Kh
               </h1>
               <p class="mt-2 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
-                junior Developer
+                Senior Full Stack Developer
               </p>
             </div>
           </div>
           <p class="mt-4 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nesciunt officia aliquam
-            neque optio? Cumque facere numquam est.
+            Driven by a passion for creating innovative digital solutions, I specialize in crafting scalable, user friendly applications. With a strong foundation in both front end and back end technologies, I thrive on turning complex challenges into seamless user experiences.
           </p>
         </div>
 
@@ -45,8 +43,8 @@
           <div class="flex flex-col sm:-mx-4 sm:flex-row">
             <img
               class="flex-shrink-0 object-cover w-24 h-24 rounded-full sm:mx-4 ring-4 ring-gray-300"
-              src="https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
-              alt="Amelia Anderson"
+              src="@/assets/img/Tess.png"
+              alt="Tess"
             />
             <div class="mt-4 sm:mx-4 sm:mt-0">
               <h1
@@ -60,8 +58,7 @@
             </div>
           </div>
           <p class="mt-4 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nesciunt officia aliquam
-            neque optio? Cumque facere numquam est.
+            As a dedicated Scrum Master, I facilitate collaboration and ensure agile principles are upheld. My mission is to empower teams to deliver exceptional results by fostering clear communication and continuous improvement.
           </p>
         </div>
 
@@ -71,8 +68,8 @@
           <div class="flex flex-col sm:-mx-4 sm:flex-row">
             <img
               class="flex-shrink-0 object-cover w-24 h-24 rounded-full sm:mx-4 ring-4 ring-gray-300"
-              src="https://images.unsplash.com/photo-1488508872907-592763824245?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-              alt="Olivia Wathan"
+            src="@/assets/img/Ibti.png"
+              alt="Ibti"
             />
             <div class="mt-4 sm:mx-4 sm:mt-0">
               <h1
@@ -81,13 +78,13 @@
                 Ibtisam
               </h1>
               <p class="mt-2 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
-                Lead Designer
+                Senior developer
               </p>
             </div>
           </div>
           <p class="mt-4 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nesciunt officia aliquam
-            neque optio? Cumque facere numquam est.
+            With years of experience in software development, I focus on building robust and efficient systems.
+            I pride myself on combining technical expertise with a commitment to delivering high quality solutions that meet business needs.
           </p>
         </div>
 
@@ -97,8 +94,8 @@
           <div class="flex flex-col sm:-mx-4 sm:flex-row">
             <img
               class="flex-shrink-0 object-cover w-24 h-24 rounded-full sm:mx-4 ring-4 ring-gray-300"
-              src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-              alt="John Doe"
+              src="@/assets/img/David.png"
+              alt="David"
             />
             <div class="mt-4 sm:mx-4 sm:mt-0">
               <h1
@@ -112,8 +109,7 @@
             </div>
           </div>
           <p class="mt-4 text-gray-500 capitalize dark:text-gray-300 group-hover:text-gray-300">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nesciunt officia aliquam
-            neque optio? Cumque facere numquam est.
+            Combining creativity and technical expertise, I develop full stack solutions that drive success. My approach centers on bridging the gap between design and functionality to create impactful digital products.
           </p>
         </div>
       </div>

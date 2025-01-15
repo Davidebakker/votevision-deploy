@@ -31,4 +31,15 @@ public class Party {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<Candidate> candidates = new ArrayList<>();
+
+    public Party(long partyId, String name, String logo, int seats) {
+        this.partyId = (int) partyId;
+        this.name = name;
+        this.logo = logo;
+        this.seats = seats;
+        this.description = "";
+        this.candidates = new ArrayList<>();
+    }
+
 }
+

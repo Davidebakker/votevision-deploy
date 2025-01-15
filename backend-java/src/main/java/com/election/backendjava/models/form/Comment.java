@@ -17,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Comment {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer commentId;
@@ -44,6 +45,15 @@ public class Comment {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    public Comment(int i, String testComment, String testTitle, Object o, User user, LocalDateTime now) {
+        this.commentId = i;
+        this.commentText = testComment;
+        this.commentTitle = testTitle;
+        this.createdAt = now;
+        this.topic = new Topic();
+        this.user = user;
+    }
 
     @PrePersist
     protected void onCreate() {
