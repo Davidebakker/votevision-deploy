@@ -18,10 +18,8 @@ build-sonar:
       - "${SONAR_USER_HOME}/cache"
       - sonar-scanner/
   script:
-    - echo "SONAR_HOST_URL=$SONAR_HOST_URL"
-    - echo "SONAR_TOKEN=${SONAR_TOKEN:0:5}*****"  # Mask the token
     - cd backend-java
-    - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=sqp_14ed0962d9008a1c9bdc321db8c1a56443a3b4ad
+    - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN
 
   allow_failure: true
   rules:
