@@ -14,6 +14,7 @@ import com.election.backendjava.security.services.UpvoteService;
 import com.election.backendjava.security.services.UserDetailsImpl;
 import com.election.backendjava.dto.ReplyDTO;
 import com.election.backendjava.dto.CommentDTO;
+import com.election.backendjava.services.user.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -49,6 +50,62 @@ public class ChatController {
 
     @Autowired
     TopicRepository topicRepository;
+
+    @Autowired
+    UserServices userServices;
+
+    @GetMapping("/comments")
+    public ResponseEntity<Page<CommentDTO>> getAllComments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        Page<Comment> comments = commentRepository.findAll(pageable);
+
+        Page<CommentDTO> commentDTOs = comments.map(comment -> {
+            CommentDTO commentDTO = new CommentDTO();
+            commentDTO.setCommentId(comment.getCommentId());
+            commentDTO.setCommentText(comment.getCommentText());
+            commentDTO.setCommentTitle(comment.getCommentTitle());
+            commentDTO.setCreatedAt(comment.getCreatedAt());
+            commentDTO.setUserName(comment.getUser().getUsername());
+            commentDTO.setUserId(comment.getUser().getUserId()); // Voeg userId toe
+            commentDTO.setReplies(comment.getReplies().stream()
+                    .filter(reply -> reply.getParentReply() == null)
+                    .map(this::mapReply)
+                    .toList());
+            return commentDTO;
+        });
+
+        return ResponseEntity.ok(commentDTOs);
+    }
+
+    private ReplyDTO mapReply(Reply reply) {
+        ReplyDTO replyDTO = new ReplyDTO();
+        replyDTO.setReplyId(reply.getReplyId());
+        replyDTO.setReplyText(reply.getReplyText());
+        replyDTO.setCreatedAt(reply.getCreatedAt());
+        replyDTO.setUserName(reply.getUser().getUsername());
+        replyDTO.setUserId(reply.getUser().getUserId());
+        replyDTO.setChildReplies(reply.getChildReplies().stream()
+                .map(this::mapReply)
+                .toList());
+        return replyDTO;
+    }
+
+    @GetMapping("/user/me")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetailsImpl)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        }
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User user = userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        return ResponseEntity.ok(user);
+    }
 
     @PostMapping("/topic/{topicId}/comment/post")
     public ResponseEntity<?> addComment(@PathVariable Long topicId, @RequestBody CommentRequest commentRequest) {
@@ -125,59 +182,6 @@ public class ChatController {
         return ResponseEntity.ok(savedReply);
     }
 
-    @GetMapping("/comments")
-    public ResponseEntity<Page<CommentDTO>> getAllComments(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-
-        Page<Comment> comments = commentRepository.findAll(pageable);
-
-        Page<CommentDTO> commentDTOs = comments.map(comment -> {
-            CommentDTO commentDTO = new CommentDTO();
-            commentDTO.setCommentId(comment.getCommentId());
-            commentDTO.setCommentText(comment.getCommentText());
-            commentDTO.setCommentTitle(comment.getCommentTitle());
-            commentDTO.setCreatedAt(comment.getCreatedAt());
-            commentDTO.setUserName(comment.getUser().getUsername());
-            commentDTO.setUserId(comment.getUser().getUserId()); // Voeg userId toe
-            commentDTO.setReplies(comment.getReplies().stream()
-                    .filter(reply -> reply.getParentReply() == null)
-                    .map(this::mapReply)
-                    .toList());
-            return commentDTO;
-        });
-
-        return ResponseEntity.ok(commentDTOs);
-    }
-
-    private ReplyDTO mapReply(Reply reply) {
-        ReplyDTO replyDTO = new ReplyDTO();
-        replyDTO.setReplyId(reply.getReplyId());
-        replyDTO.setReplyText(reply.getReplyText());
-        replyDTO.setCreatedAt(reply.getCreatedAt());
-        replyDTO.setUserName(reply.getUser().getUsername());
-        replyDTO.setUserId(reply.getUser().getUserId());
-        replyDTO.setChildReplies(reply.getChildReplies().stream()
-                .map(this::mapReply)
-                .toList());
-        return replyDTO;
-    }
-
-    @GetMapping("/user/me")
-    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
-        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetailsImpl)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-        }
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        User user = userRepository.findById(userDetails.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
-        return ResponseEntity.ok(user);
-    }
-
     @PutMapping("/comment/{commentId}/upvote")
     public ResponseEntity<Integer> upvoteComment(@PathVariable Long commentId) {
         Integer updatedUpvotes = upvoteService.upvoteComment(commentId);
@@ -215,19 +219,27 @@ public class ChatController {
 
     @DeleteMapping("/reply/{replyId}")
     public ResponseEntity<?> deleteReply(@PathVariable Long replyId) {
+        // Haal authentication uit SecurityContext
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (!(authentication.getPrincipal() instanceof UserDetailsImpl)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user authentication");
+        }
 
-        // Controleer of de reply bestaat
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        // Vind user in DB
+        User user = userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        // Vind de reply in DB
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reply not found"));
 
-        // Controleer of de ingelogde gebruiker de eigenaar is van de reply
-        if (!reply.getUser().getUserId().equals(userDetails.getId())) {
+        // Check: ingelogde user == eigenaar van reply?
+        if (!reply.getUser().getUserId().equals(user.getUserId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only delete your own replies");
         }
 
-        // Recursieve verwijdering van child replies (indien gewenst)
+        // Eventueel childReplies verwijderen
         deleteChildReplies(reply);
 
         // Verwijder de reply
@@ -235,6 +247,7 @@ public class ChatController {
 
         return ResponseEntity.ok("Reply deleted successfully");
     }
+
 
     private void deleteChildReplies(Reply reply) {
         if (reply.getChildReplies() != null && !reply.getChildReplies().isEmpty()) {

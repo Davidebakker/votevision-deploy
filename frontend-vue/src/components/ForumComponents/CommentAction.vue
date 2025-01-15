@@ -22,7 +22,11 @@ export default {
     showReport: {
       type: Boolean,
       default: true,
-    }
+    },
+    showDelete: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -68,28 +72,36 @@ export default {
 
     async deleteItem() {
       const id = this.replyId || this.commentId;
+      console.log("Reply ID:", this.replyId, "Comment ID:", this.commentId);
+
       if (!id || id <= 0) {
         console.error("Invalid ID:", id);
         alert("Cannot delete. Invalid ID.");
         return;
       }
 
-      const endpoint = this.replyId
-          ? `http://localhost:8080/api/chat/reply/${id}`
-          : `http://localhost:8080/api/chat/comment/${id}`;
-
       try {
-        await axios.delete(endpoint);
+        await axios.delete(
+            `http://localhost:8080/api/chat/reply/${id}`, // <-- gebruik 'id' hier
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+              },
+            }
+        );
+
         this.$emit("delete-item", {
           replyId: this.replyId,
           commentId: this.commentId,
         });
         alert("Item successfully deleted!");
+        window.location.reload();
       } catch (error) {
-        console.error("Failed to delete:", error.response || error.message);
+        console.error("Failed to delete bro:", error.response || error.message);
         alert("Failed to delete. Please try again.");
       }
     }
+
   },
 };
 </script>
@@ -110,10 +122,9 @@ export default {
     <span v-if="showUpvote">{{ upvotes }}</span>
 
     <!-- Report enkel tonen indien showReport true is -->
-    <button v-if="showReport" @click="handleReport" class="ml-auto text-red-600 hover:underline">
+    <button v-if="showReport" @click="handleReport" class="ml-auto text-yellow-600 hover:underline">
       Report
     </button>
-
     <button
         v-if="showDelete"
         @click="deleteItem"
@@ -121,16 +132,15 @@ export default {
     >
       Delete
     </button>
+
   </div>
 </template>
-
 <CommentAction
+    :replyId="reply.replyId"
     :upvotesCount="comment.upvotes"
     :commentId="comment.commentId"
     @update-upvotes="handleUpvotes"
 />
-
-
 <style scoped>
 button {
   transition: color 0.2s ease;
