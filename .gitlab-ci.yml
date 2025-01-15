@@ -1,8 +1,8 @@
 image: maven:3-eclipse-temurin-21
 
 variables:
-  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Cache location for Sonar analysis
+  GIT_DEPTH: "0"  # Fetch all branches for accurate analysis
 
 stages:
   - build-sonar
@@ -17,12 +17,11 @@ build-sonar:
     paths:
       - "${SONAR_USER_HOME}/cache"
       - sonar-scanner/
-
   script:
-    - cd backend-java  # Navigate to the directory containing pom.xml
+    - cd backend-java  # Navigate to directory with pom.xml
     - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-      -Dsonar.host.url=$SONARQUBE_URL \
-      -Dsonar.login=$SONARQUBE_TOKEN
+      -Dsonar.host.url=$SONAR_HOST_URL \
+      -Dsonar.login=$SONAR_TOKEN
   allow_failure: true
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
