@@ -24,3 +24,4 @@ import Navbar from '@/components/NavBarComponents/NavBar.vue'
   background-color: #1a1a1a;
 }
 </style>
+
