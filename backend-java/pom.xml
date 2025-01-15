@@ -18,6 +18,8 @@
         <sonar.projectKey>semester-3-hbo-ict_onderwijs_student-projecten_2024-2025_out-r-se-cs_semester-1_weewiigoohee88_e0cf6379-6a5b-4909-a311-e9abed0d671b</sonar.projectKey>
         <sonar.projectName>s3e-R201 Team 5</sonar.projectName>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+        <sonar.host.url>${SONAR_HOST_URL}</sonar.host.url>
+        <sonar.login>${SONAR_TOKEN}</sonar.login>
     </properties>
 
     <dependencies>
@@ -137,6 +139,11 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>5.0.0.4389</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
