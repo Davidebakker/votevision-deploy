@@ -7,7 +7,6 @@ variables:
 stages:
   - build-sonar
 
-
 build-sonar:
   stage: build-sonar
   tags:
@@ -20,6 +19,7 @@ build-sonar:
       - sonar-scanner/
 
   script:
+    - cd backend-java  # Navigate to the directory containing pom.xml
     - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
   allow_failure: true
   rules:
