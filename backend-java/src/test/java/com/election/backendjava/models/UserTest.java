@@ -4,11 +4,13 @@ import com.election.backendjava.models.form.Comment;
 import com.election.backendjava.models.user.User;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 class UserTest {
 
     @Test

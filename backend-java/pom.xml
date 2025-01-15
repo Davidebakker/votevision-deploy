@@ -18,8 +18,8 @@
         <sonar.projectKey>semester-3-hbo-ict_onderwijs_student-projecten_2024-2025_out-r-se-cs_semester-1_weewiigoohee88_e0cf6379-6a5b-4909-a311-e9abed0d671b</sonar.projectKey>
         <sonar.projectName>s3e-R201 Team 5</sonar.projectName>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
-        <sonar.host.url>${SONAR_HOST_URL}</sonar.host.url>
-        <sonar.login>${SONAR_TOKEN}</sonar.login>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.login>sqp_14ed0962d9008a1c9bdc321db8c1a56443a3b4ad</sonar.login>
     </properties>
 
     <dependencies>
@@ -68,12 +68,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -156,9 +150,6 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
-                    <compilerArgs>
-                        <arg>--enable-preview</arg>
-                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
