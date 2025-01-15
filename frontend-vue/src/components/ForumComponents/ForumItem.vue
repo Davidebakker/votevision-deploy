@@ -362,7 +362,7 @@
                   class="mt-2 px-4 py-2 bg-blue-500 text-white font-medium rounded-lg"
                   @click="handleReplySubmit(comment.commentId)"
               >
-                Submit Reply
+                Reply
               </button>
             </div>
           </div>

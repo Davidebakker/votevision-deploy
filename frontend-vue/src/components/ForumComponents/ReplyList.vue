@@ -72,40 +72,10 @@ export default defineComponent({
       // Of wat je maar wilt doen
     };
 
-    // // Delete a reply
-    // const deleteReply = async (replyId) => {
-    //   console.log("Trying to delete reply with ID:", replyId); // Debugging
-    //   if (!replyId) {
-    //     console.error("Reply ID is undefined!"); // Debugging
-    //     return;
-    //   }
-    //   try {
-    //     const response = await axios.delete(`http://localhost:8080/api/chat/reply/delete/${replyId}`, {
-    //       headers: {
-    //         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-    //       },
-    //     });
-    //
-    //     if (response) {
-    //       const updatedReplies = props.replies.filter(
-    //           (reply) => reply.replyId !== replyId
-    //       );
-    //       emit("update-replies", updatedReplies);
-    //       alert("Reply succesvol verwijderd!");
-    //     }
-    //   } catch (error) {
-    //     console.error(
-    //         "Fout bij het verwijderen van de reply:",
-    //         error.response || error.message
-    //     );
-    //     alert("Het verwijderen van de reply is mislukt. Probeer het opnieuw.");
-    //   }
-    // };
 
     return {
       formatTimeAgo,
       updateReplyUpvotes,
-      // deleteReply,
       isOwner,
       onDeleteItem,
     };
@@ -155,7 +125,7 @@ export default defineComponent({
         <textarea
             :value="replyTexts[reply.replyId]"
             @input="$emit('update-reply-text', { replyId: reply.replyId, text: $event.target.value })"
-            placeholder="Schrijf een reactie..."
+            placeholder="Write a reply..."
             class="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400"
         ></textarea>
         <button
@@ -185,7 +155,7 @@ export default defineComponent({
     </div>
   </div>
   <div v-else>
-    <p>Geen reacties beschikbaar</p>
+    <p>No comments available</p>
   </div>
 </template>
 
