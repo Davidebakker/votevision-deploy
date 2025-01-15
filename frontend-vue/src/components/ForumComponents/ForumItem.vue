@@ -1,228 +1,286 @@
 <script>
-import { ref, onMounted } from "vue";
-import axios from "axios";
-import ReplyList from "./ReplyList.vue";
-import CommentAction from "@/components/ForumComponents/CommentAction.vue";
-import CustomAlert from "@/components/CustomAlert.vue";
-import { formatDistanceToNow } from "date-fns";
-import { nl } from "date-fns/locale";
+  import {ref, onMounted, onUnmounted} from 'vue';
+  import axios from 'axios';
+  import {formatDistanceToNow} from 'date-fns';
+  import {nl} from 'date-fns/locale';
+  import ReplyList from './ReplyList.vue';
+  import CommentAction from '@/components/ForumComponents/CommentAction.vue';
 
-export default {
-  components: {
-    ReplyList,
-    CommentAction,
-    CustomAlert,
-  },
+  export default {
+  components: {ReplyList, CommentAction},
+
   setup() {
-    const comments = ref([]);
-    const replyTexts = ref({});
-    const activeReplyId = ref(null);
-    const jwtToken = localStorage.getItem("jwtToken");
+    // *** Reactieve waarden ***
+    const comments = ref([]); // Opslag van alle comments
+    const replyTexts = ref({}); // Opslag van tekstvelden per reactie
+    const currentUserId = ref(null);
+    const currentPage = ref(0); // Huidige pagina voor paginatie
+    const pageSize = ref(10); // Aantal comments per pagina
+    const isLoading = ref(false); // Controle laadstatus
+    const isLastPage = ref(false); // Controle of er pagina's over zijn
+    const collapsed = ref({}); // Ingeklapte status per comment
+    const activeReplyId = ref(null); // Actieve reactie-ID
+    const jwtToken = localStorage.getItem('jwtToken'); // JWT-token ophalen
 
-    const showAlert = ref(false);
-    const alertData = ref({
-      title: "",
-      message: "",
-    });
 
-    const fetchComments = async () => {
+    function handleUpdateReplyText({ replyId, text }) {
+      // Hier bewaar je de tekst in replyTexts
+      replyTexts.value[replyId] = text;
+    }
+
+    // Controleer of de huidige gebruiker de eigenaar is van de comment
+    const isOwner = (comment) => {
+      return comment.userId === currentUserId.value;
+    };
+
+    const fetchCurrentUserId = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/chat/comments", {
+        const response = await axios.get('http://localhost:8080/api/chat/user/me', {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
-            "Content-Type": "application/json",
+          },
+        });
+        currentUserId.value = response.data.userId; // Haal de userId uit de response
+        console.log('Ingelogde gebruiker:', currentUserId.value);
+      } catch (error) {
+        console.error('Fout bij ophalen userId:', error);
+        alert('Kan de ingelogde gebruiker niet ophalen. Zorg ervoor dat u bent ingelogd.');
+      }
+    };
+
+    // Toggle collapsible replies voor een gegeven commentId
+  const toggleCollapse = (commentId) => {
+  collapsed.value[commentId] = !collapsed.value[commentId];
+};
+
+  // Formatteer tijd
+  const formatTimeAgo = (date) => {
+  return formatDistanceToNow(new Date(date), {addSuffix: true, locale: nl});
+};
+
+  // Fetch alle comments via paginering
+  const fetchComments = async () => {
+  if (isLoading.value || isLastPage.value) return;
+
+  isLoading.value = true;
+
+  try {
+  const response = await axios.get(`http://localhost:8080/api/chat/comments`, {
+  headers: {
+  Authorization: `Bearer ${jwtToken}`,
+  'Content-Type': 'application/json',
+},
+  params: {
+  page: currentPage.value,
+  size: pageSize.value,
+},
+});
+
+  comments.value = [...comments.value, ...response.data.content];
+  response.data.content.forEach(
+  (comment) => (collapsed.value[comment.commentId] = true) // Standaard ingeklapt
+  );
+  isLastPage.value = response.data.last;
+  currentPage.value += 1;
+} catch (error) {
+  console.error('Error fetching comments:', error);
+} finally {
+  isLoading.value = false;
+}
+};
+
+  // Toggle reply invoerveld
+  const toggleReplyField = (id) => {
+  activeReplyId.value = activeReplyId.value === id ? null : id;
+};
+
+  // Verwerk reply voor een specifieke comment
+  const handleReplySubmit = async (commentId) => {
+  if (!replyTexts.value[commentId]) {
+  alert('Reply text cannot be empty');
+  return;
+}
+
+  const payload = {replyText: replyTexts.value[commentId]};
+
+  try {
+  const response = await axios.post(
+  `http://localhost:8080/api/chat/comment/${commentId}/reply/post`,
+  payload,
+{
+  headers: {
+  Authorization: `Bearer ${jwtToken}`,
+  'Content-Type': 'application/json',
+},
+}
+  );
+
+  const newReply = response.data;
+  const comment = comments.value.find((c) => c.commentId === commentId);
+  if (comment) {
+  comment.replies = comment.replies || [];
+  comment.replies.unshift(newReply);
+  collapsed.value = {...collapsed.value, [commentId]: false}; // Open nieuwe reply standaard
+}
+
+  replyTexts.value[commentId] = '';
+  activeReplyId.value = null;
+} catch (error) {
+  console.error('Error submitting reply:', error.response?.data);
+}
+};
+
+  // Verwerk geneste reactie
+  const handleNestedReplySubmit = async (replyId) => {
+  if (!replyTexts.value[replyId]) {
+  alert('Reply text cannot be empty');
+  return;
+}
+
+  const payload = {replyText: replyTexts.value[replyId]};
+
+  try {
+  const response = await axios.post(
+  `http://localhost:8080/api/chat/reply/${replyId}/reply/post`,
+  payload,
+{
+  headers: {
+  Authorization: `Bearer ${jwtToken}`,
+  'Content-Type': 'application/json',
+},
+}
+  );
+
+  const newNestedReply = response.data;
+
+  const addNestedReply = (replies, replyId, newNestedReply) => {
+  for (const reply of replies) {
+  if (reply.replyId === replyId) {
+  reply.childReplies = reply.childReplies || [];
+  reply.childReplies.unshift(newNestedReply);
+  return true;
+}
+  if (reply.childReplies) {
+  if (addNestedReply(reply.childReplies, replyId, newNestedReply)) return true;
+}
+}
+  return false;
+};
+
+  comments.value.forEach((comment) => {
+  addNestedReply(comment.replies || [], replyId, newNestedReply);
+});
+
+  replyTexts.value[replyId] = '';
+  activeReplyId.value = null;
+} catch (error) {
+  console.error('Error submitting nested reply:', error.response?.data);
+}
+};
+
+  // Update upvotes
+  const handleUpvotes = (eventData) => {
+  if (eventData.commentId) {
+  const comment = comments.value.find((c) => c.commentId === eventData.commentId);
+  if (comment) comment.upvotes = eventData.updatedUpvotes;
+}
+
+  if (eventData.replyId) {
+  const updateReplyUpvotes = (replies) => {
+  for (const reply of replies) {
+  if (reply.replyId === eventData.replyId) {
+  reply.upvotes = eventData.updatedUpvotes;
+  return true;
+}
+  if (reply.childReplies && updateReplyUpvotes(reply.childReplies)) return true;
+}
+  return false;
+};
+
+  comments.value.forEach((comment) => {
+  if (comment.replies) updateReplyUpvotes(comment.replies);
+});
+}
+};
+
+    onMounted(async () => {
+      // 1. Haal eerst de userId op
+      await fetchCurrentUserId();
+      // => currentUserId.value is nu gevuld
+
+      // 2. Laad dan de comments
+      await fetchComments();
+      // => comments.value is nu gevuld en wordt gerenderd
+
+      // 3. Daarna eventuele scroll-/event-listeners of andere logica
+      const handleScroll = async () => {
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const scrollHeight = document.documentElement.offsetHeight;
+
+        if (scrollPosition >= scrollHeight - 100) {
+          await fetchComments();
+        }
+      };
+
+      window.addEventListener('scroll', handleScroll);
+
+      onUnmounted(() => {
+        window.removeEventListener('scroll', handleScroll);
+      });
+    });
+
+    const deleteComment = async (commentId) => {
+      if (!commentId) {
+        alert("Comment ID is undefined.");
+        return;
+      }
+
+      try {
+        // Bevestigingsdialoog voor het verwijderen
+        const confirmation = confirm("Weet je zeker dat je deze comment wilt verwijderen?");
+        if (!confirmation) return;
+
+        // DELETE-aanroep naar de backend
+        await axios.delete(`http://localhost:8080/api/chat/comment/${commentId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
           },
         });
 
-        comments.value = response.data.reverse();
+        // Filter de verwijderde comment uit de lijst
+        comments.value = comments.value.filter((comment) => comment.commentId !== commentId);
+
+        alert("Comment succesvol verwijderd!");
       } catch (error) {
-        console.error("Error fetching comments:", error);
-        alertData.value = {
-          title: "Error",
-          message: "Failed to load comments. Please try again later.",
-        };
-        showAlert.value = true;
+        console.error("Fout bij het verwijderen van de comment:", error.response || error.message);
+        alert("Het verwijderen van de comment is mislukt. Probeer het opnieuw.");
       }
     };
 
-    const toggleReplyField = (id) => {
-      activeReplyId.value = activeReplyId.value === id ? null : id;
-    };
 
-    const handleReplySubmit = async (commentId) => {
-      if (!replyTexts.value[commentId]) {
-        alertData.value = {
-          title: "Validation Error",
-          message: "Reply text cannot be empty.",
-        };
-        showAlert.value = true;
-        return;
-      }
-
-      const payload = { replyText: replyTexts.value[commentId] };
-
-      try {
-        const response = await axios.post(
-          `http://localhost:8080/api/chat/comment/${commentId}/reply/post`,
-          payload,
-          {
-            headers: {
-              Authorization: `Bearer ${jwtToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        const newReply = response.data;
-        const comment = comments.value.find((c) => c.commentId === commentId);
-        if (comment) {
-          comment.replies = comment.replies || [];
-          comment.replies.unshift(newReply);
-        }
-
-        replyTexts.value[commentId] = "";
-        activeReplyId.value = null;
-
-        alertData.value = {
-          title: "Success",
-          message: "Reply posted successfully.",
-        };
-        showAlert.value = true;
-      } catch (error) {
-        console.error("Error submitting reply:", error.response?.data);
-        alertData.value = {
-          title: "Error",
-          message: "Failed to post reply. Please try again.",
-        };
-        showAlert.value = true;
-      }
-    };
-
-    const handleNestedReplySubmit = async (replyId) => {
-      if (!replyTexts.value[replyId]) {
-        alertData.value = {
-          title: "Validation Error",
-          message: "Reply text cannot be empty.",
-        };
-        showAlert.value = true;
-        return;
-      }
-
-      const payload = { replyText: replyTexts.value[replyId] };
-
-      try {
-        const response = await axios.post(
-          `http://localhost:8080/api/chat/reply/${replyId}/reply/post`,
-          payload,
-          {
-            headers: {
-              Authorization: `Bearer ${jwtToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        const newNestedReply = response.data;
-
-        const addNestedReply = (replies, replyId, newNestedReply) => {
-          for (const reply of replies) {
-            if (reply.replyId === replyId) {
-              reply.childReplies = reply.childReplies || [];
-              reply.childReplies.unshift(newNestedReply);
-              return true;
-            }
-            if (reply.childReplies) {
-              if (addNestedReply(reply.childReplies, replyId, newNestedReply)) return true;
-            }
-          }
-          return false;
-        };
-
-        comments.value.forEach((comment) => {
-          addNestedReply(comment.replies || [], replyId, newNestedReply);
-        });
-
-        replyTexts.value[replyId] = "";
-        activeReplyId.value = null;
-
-        alertData.value = {
-          title: "Success",
-          message: "Reply posted successfully.",
-        };
-        showAlert.value = true;
-      } catch (error) {
-        console.error("Error submitting nested reply:", error.response?.data);
-        alertData.value = {
-          title: "Error",
-          message: "Failed to post nested reply. Please try again.",
-        };
-        showAlert.value = true;
-      }
-    };
-
-    const formatTimeAgo = (date) => {
-      return formatDistanceToNow(new Date(date), { addSuffix: true, locale: nl });
-    };
-
-    const handleUpvotes = (eventData) => {
-      if (eventData.commentId) {
-        const comment = comments.value.find((c) => c.commentId === eventData.commentId);
-        if (comment) {
-          comment.upvotes = eventData.updatedUpvotes;
-        }
-      }
-
-      if (eventData.replyId) {
-        const updateReplyUpvotes = (replies) => {
-          for (const reply of replies) {
-            if (reply.replyId === eventData.replyId) {
-              reply.upvotes = eventData.updatedUpvotes;
-              return true;
-            }
-            if (reply.childReplies && updateReplyUpvotes(reply.childReplies)) {
-              return true;
-            }
-          }
-          return false;
-        };
-
-        comments.value.forEach((comment) => {
-          if (comment.replies) {
-            updateReplyUpvotes(comment.replies);
-          }
-        });
-      }
-    };
-
-    onMounted(() => {
-      fetchComments();
-    });
-
-    return {
-      comments,
-      replyTexts,
-      activeReplyId,
-      toggleReplyField,
-      handleReplySubmit,
-      handleNestedReplySubmit,
-      handleUpvotes,
-      formatTimeAgo,
-      showAlert,
-      alertData,
-    };
-  },
+  return {
+  comments,
+  collapsed,
+  toggleCollapse,
+  replyTexts,
+  activeReplyId,
+    currentUserId,
+  toggleReplyField,
+  fetchComments,
+  handleReplySubmit,
+  handleNestedReplySubmit,
+  handleUpvotes,
+  formatTimeAgo,
+  isOwner,
+    deleteComment,
+    handleUpdateReplyText
 };
+  },
+  };
 </script>
-
-
 <template>
   <div class="min-h-screen flex flex-col items-center justify-start bg-gray-100">
-    <CustomAlert
-      v-if="showAlert"
-      :title="alertData.title"
-      :message="alertData.message"
-      @close="showAlert = false"
-    />
+    <!-- Plaats een nieuwe comment -->
     <div class="w-full max-w-3xl px-6 py-4 flex justify-end">
       <router-link
           to="/onderwerp/1"
@@ -231,18 +289,24 @@ export default {
         Place a comment
       </router-link>
     </div>
+
+    <!-- Comment-sectie -->
     <div class="w-full max-w-3xl px-6 py-4">
       <h2 class="text-lg font-medium text-gray-600 dark:text-gray-200">Comments</h2>
+
+      <!-- Laadindicatie als er geen comments zijn -->
       <div v-if="comments.length === 0" class="text-center text-gray-500 dark:text-gray-400">
         Comments are loading...
       </div>
+
+      <!-- Toon de comments (v-for loop) -->
       <div v-else>
         <div
             v-for="comment in comments"
             :key="comment.commentId"
             class="mt-4 p-4 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 flex flex-col"
         >
-          <!-- Bovenste rij: comment links, upvote rechts -->
+          <!-- Comment details -->
           <div class="flex justify-between items-center">
             <div>
               <p>{{ comment.userName }}</p>
@@ -253,7 +317,7 @@ export default {
               </small>
             </div>
 
-            <!-- Upvote alleen hier tonen -->
+            <!-- Upvote functionaliteit -->
             <CommentAction
                 :upvotesCount="comment.upvotes"
                 :commentId="comment.commentId"
@@ -263,44 +327,60 @@ export default {
             />
           </div>
 
-          <!-- Onderste rij: Reply en Report samen -->
-          <div class="mt-2 flex items-center space-x-4">
-            <button @click="toggleReplyField(comment.commentId)" class="text-blue-500 hover:underline">
-              Reply
-            </button>
+          <!-- In- en uitklappen knop -->
+          <button
+              @click="toggleCollapse(comment.commentId)"
+              class="mt-2 text-blue-500 hover:underline"
+          >
+            {{ collapsed[comment.commentId] ? 'Show replies' : 'Show less' }}
+          </button>
 
-            <!-- Alleen Report knop tonen -->
-            <CommentAction
-                :upvotesCount="comment.upvotes"
-                :commentId="comment.commentId"
-                @update-upvotes="handleUpvotes"
-                :showUpvote="false"
-                :showReport="true"
-            />
-          </div>
-
-          <!-- Als er gereageerd wordt -->
-          <div v-if="activeReplyId === comment.commentId" class="mt-4">
-            <textarea
-                v-model="replyTexts[comment.commentId]"
-                placeholder="Schrijf een reactie..."
-                class="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400"
-            ></textarea>
+          <!-- Optie om te reageren -->
+          <div class="mt-4">
+            <!-- Reply-knop -->
             <button
-                @click="handleReplySubmit(comment.commentId)"
-                class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">
+                class="text-blue-500 hover:underline mr-4"
+                @click="toggleReplyField(comment.commentId)"
+            >
               Reply
             </button>
+            <button
+                v-if="isOwner(comment)"
+                class="text-red-500 hover:underline mr-4"
+                @click="deleteComment(comment.commentId)"
+            >
+              Delete
+            </button>
+            <!-- Tekstveld wordt alleen getoond als de actieve reply ID overeenkomt -->
+            <div v-if="activeReplyId === comment.commentId" class="mt-2">
+              <textarea
+                  v-model="replyTexts[comment.commentId]"
+                  placeholder="Write a reply..."
+                  class="w-full p-2 border rounded-lg resize-none"
+              ></textarea>
+              <button
+                  class="mt-2 px-4 py-2 bg-blue-500 text-white font-medium rounded-lg"
+                  @click="handleReplySubmit(comment.commentId)"
+              >
+                Reply
+              </button>
+            </div>
           </div>
 
-          <ReplyList
-              :replies="comment.replies || []"
-              :replyTexts="replyTexts"
-              :activeReplyId="activeReplyId"
-              :commentId="comment.commentId"
-              @toggle-reply-field="toggleReplyField"
-              @submit-nested-reply="handleNestedReplySubmit"
-          />
+          <!-- ReplyList tonen/gebruiken als collapsed false is -->
+          <div v-if="!collapsed[comment.commentId]" class="mt-4">
+            <ReplyList
+                :replies="comment.replies || []"
+                :replyTexts="replyTexts"
+                :activeReplyId="activeReplyId"
+                :commentId="comment.commentId"
+                :currentUserId="currentUserId"
+                @toggle-reply-field="toggleReplyField"
+                @submit-nested-reply="handleNestedReplySubmit"
+                @update-reply-text="handleUpdateReplyText"
+            >
+            </ReplyList>
+          </div>
         </div>
       </div>
     </div>
@@ -313,6 +393,22 @@ export default {
 
 .bg-gray-100 {
   background-color: #111827;
+}
+
+textarea {
+  background-color: #1f2937; /* Donkere achtergrondkleur */
+  color: #f9fafb;           /* Lichte tekstkleur */
+  border-color: #374151;    /* Donkerdere randkleur */
+}
+
+textarea::placeholder {
+  color: #9ca3af;           /* Placeholder-tekst in een lichtere kleur */
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #3b82f6;    /* Blauw accent wanneer gefocust */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Blauwe focusring */
 }
 
 button,
