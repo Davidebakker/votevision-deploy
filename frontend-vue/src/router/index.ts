@@ -6,7 +6,6 @@ import Registration from '@/components/RegistrationComponents/RegistrationItem.v
 import Login from '@/components/loginComponents/LoginItem.vue'
 import Logout from '@/components/loginComponents/LogoutItem.vue'
 import PartiesOverview from '@/components/PartyOverviewComponents/PartiesOverview.vue'
-import Candidate from '@/components/Elections/TestCandidateItem.vue'
 import PostForum from "@/components/ForumComponents/PostForum.vue";
 import ForumItem from "@/components/ForumComponents/ForumItem.vue";
 import UserManagementItem from '@/components/managment/UserManagementItem.vue'
@@ -44,7 +43,6 @@ const router = createRouter({
     { path: '/profile', name: 'profile', component: ProfilePageComponent, meta: { userOnly: true }},
     // Elections
     { path: '/party/:name', component: PartyDetails, name: 'PartyDetails', props: true, },
-    { path: '/candidate/:candidateName', name: 'candidate', component: Candidate, props: true },
     { path: '/parties', name: 'parties', component: PartiesOverview },
     { path: '/forum', name: 'ForumItem', component: ForumItem },
     { path: '/onderwerp/:onderwerpNummer', name: 'ForumPost', component: PostForum, meta: { userOnly: true } },

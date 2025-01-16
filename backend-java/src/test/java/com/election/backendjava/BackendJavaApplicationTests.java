@@ -8,6 +8,7 @@ class BackendJavaApplicationTests {
 
     @Test
     void contextLoads() {
+        //method is empty because it only needs to load the page
     }
 
 }

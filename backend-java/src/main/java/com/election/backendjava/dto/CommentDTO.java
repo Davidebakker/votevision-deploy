@@ -2,8 +2,6 @@ package com.election.backendjava.dto;
 
 import java.time.LocalDateTime;
 
-import com.election.backendjava.dto.ReplyDTO;
-
 import java.util.List;
 
 import lombok.Getter;
