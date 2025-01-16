@@ -66,12 +66,12 @@ export default defineComponent({
 
     // Called when a <CommentAction> “delete-item” event fires
     const onDeleteItem = (payload) => {
-      // payload = { replyId, commentId }
       if (payload.replyId) {
         const updated = props.replies.filter((r) => r.replyId !== payload.replyId);
         emit("update-replies", updated);
       }
     };
+
 
     return {
       formatTimeAgo,

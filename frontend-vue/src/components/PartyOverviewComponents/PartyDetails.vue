@@ -62,9 +62,9 @@ export default {
         <div
           v-for="candidate in party.candidates"
           :key="candidate.firstName + candidate.lastName"
-          class="border p-4 rounded-lg shadow-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+          class="border p-4 rounded-lg shadow-sm transition"
         >
-          <p class="font-bold text-gray-600 dark:text-gray-300">
+        <p class="font-bold text-gray-600 dark:text-gray-300">
             {{ candidate.firstName }} {{ candidate.initials }} {{ candidate.lastNamePrefix }} {{ candidate.lastName }}
           </p>
           <p class="text-gray-600 dark:text-gray-400">{{ candidate.locality }}</p>
