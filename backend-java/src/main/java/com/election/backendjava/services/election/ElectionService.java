@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class ElectionService {
+    private final ElectionResultRepository electionRepository;
 
-    @Autowired
-    private ElectionResultRepository electionRepository;
+    public ElectionService(ElectionResultRepository electionRepository) {
+        this.electionRepository = electionRepository;
+    }
 
     public List<PartyMunicipalityResultDTO> getNationalResults() {
         // Fetch national results from the repository

@@ -22,20 +22,17 @@ import java.util.Optional;
 @RequestMapping("/api/elections")
 public class ElectionController {
 
-    @Autowired
-    PartyRepository partyRepository;
+    private final PartyRepository partyRepository;
+    private final CandidateRepository candidateRepository;
+    private final VotesRepository votesRepository;
+    private final ElectionService electionService;
 
-    @Autowired
-    private ElectionService electionService;
-
-    @Autowired
-    CandidateRepository candidateRepository;
-
-    @Autowired
-    StationRepository stationRepository;
-
-    @Autowired
-    VotesRepository votesRepository;
+    public ElectionController(PartyRepository partyRepository, CandidateRepository candidateRepository, VotesRepository votesRepository, ElectionService electionService) {
+        this.partyRepository = partyRepository;
+        this.candidateRepository = candidateRepository;
+        this.votesRepository = votesRepository;
+        this.electionService = electionService;
+    }
 
     // Endpoint om alle partijen op te halen
     @GetMapping("/parties")

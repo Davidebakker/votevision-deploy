@@ -36,23 +36,19 @@ import java.util.List;
 @RequestMapping("/api/chat")
 public class ChatController {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final UpvoteService upvoteService;
+    private final ReplyRepository replyRepository;
+    private final TopicRepository topicRepository;
 
-    @Autowired
-    CommentRepository commentRepository;
-
-    @Autowired
-    private UpvoteService upvoteService;
-
-    @Autowired
-    ReplyRepository replyRepository;
-
-    @Autowired
-    TopicRepository topicRepository;
-
-    @Autowired
-    UserServices userServices;
+    public ChatController(UserRepository userRepository, CommentRepository commentRepository, UpvoteService upvoteService, ReplyRepository replyRepository, TopicRepository topicRepository, UserServices userServices) {
+        this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
+        this.upvoteService = upvoteService;
+        this.replyRepository = replyRepository;
+        this.topicRepository = topicRepository;
+    }
 
     @GetMapping("/comments")
     public ResponseEntity<Page<CommentDTO>> getAllComments(

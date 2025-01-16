@@ -12,11 +12,13 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class UpvoteService {
 
-    @Autowired
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
+    private final ReplyRepository replyRepository;
 
-    @Autowired
-    private ReplyRepository replyRepository;
+    public UpvoteService(CommentRepository commentRepository, ReplyRepository replyRepository) {
+        this.commentRepository = commentRepository;
+        this.replyRepository = replyRepository;
+    }
 
     public Integer upvoteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)

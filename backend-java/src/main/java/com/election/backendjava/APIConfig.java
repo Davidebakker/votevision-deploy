@@ -2,6 +2,7 @@ package com.election.backendjava;
 
 import com.election.backendjava.security.jwt.AuthEntryPointJwt;
 import com.election.backendjava.security.jwt.AuthTokenFilter;
+import com.election.backendjava.security.jwt.JwtUtils;
 import com.election.backendjava.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,16 @@ public class APIConfig implements WebMvcConfigurer {
     @Value("${cors.origin}")
     private String corsOrigin;
 
+    private final UserDetailsServiceImpl userDetailsService;
+    private final AuthEntryPointJwt unauthorizedHandler;
+    private final JwtUtils jwtUtils;
+
+    public APIConfig(UserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
+        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+        this.jwtUtils = new JwtUtils();
+    }
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -33,15 +44,9 @@ public class APIConfig implements WebMvcConfigurer {
                 .allowedHeaders("*");
     }
 
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
-
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
+        return new AuthTokenFilter(jwtUtils, userDetailsService);
     }
 
     @Bean
