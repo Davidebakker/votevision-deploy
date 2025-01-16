@@ -8,17 +8,13 @@ import com.election.backendjava.payload.response.MessageResponse;
 import com.election.backendjava.repositories.election.RoleRepository;
 import com.election.backendjava.repositories.user.UserRepository;
 import com.election.backendjava.services.user.UserServices;
-import com.election.backendjava.security.services.UserDetailsImpl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -33,7 +29,6 @@ public class UserController {
     private final UserRepository userRepository;
     private final UserServices userServices;
 
-    @Autowired
     public UserController(UserRepository userRepository, UserServices userServices, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.userServices = userServices;

@@ -15,7 +15,6 @@ import com.election.backendjava.security.services.UserDetailsImpl;
 import com.election.backendjava.dto.ReplyDTO;
 import com.election.backendjava.dto.CommentDTO;
 import com.election.backendjava.services.user.UserServices;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -36,23 +34,19 @@ import java.util.List;
 @RequestMapping("/api/chat")
 public class ChatController {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final UpvoteService upvoteService;
+    private final ReplyRepository replyRepository;
+    private final TopicRepository topicRepository;
 
-    @Autowired
-    CommentRepository commentRepository;
-
-    @Autowired
-    private UpvoteService upvoteService;
-
-    @Autowired
-    ReplyRepository replyRepository;
-
-    @Autowired
-    TopicRepository topicRepository;
-
-    @Autowired
-    UserServices userServices;
+    public ChatController(UserRepository userRepository, CommentRepository commentRepository, UpvoteService upvoteService, ReplyRepository replyRepository, TopicRepository topicRepository, UserServices userServices) {
+        this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
+        this.upvoteService = upvoteService;
+        this.replyRepository = replyRepository;
+        this.topicRepository = topicRepository;
+    }
 
     @GetMapping("/comments")
     public ResponseEntity<Page<CommentDTO>> getAllComments(
