@@ -4,7 +4,6 @@
     "date-fns": "^4.1.0",
     "http-server": "^14.1.1",
     "maven": "^5.0.0",
-    "node.js": "^0.0.1-security",
     "springboot": "^0.1.0"
   },
   "devDependencies": {
@@ -13,5 +12,9 @@
     "esbuild": "^0.21.5",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14"
+  },
+  "engines": {
+    "node": "18.x",
+    "npm": "8.x"
   }
 }
