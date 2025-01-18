@@ -29,11 +29,6 @@ import com.election.backendjava.payload.request.LoginRequest;
 import com.election.backendjava.payload.request.RegisterRequest;
 import com.election.backendjava.payload.response.JwtResponse;
 import com.election.backendjava.payload.response.MessageResponse;
-import com.election.backendjava.repositories.election.RoleRepository;
-import com.election.backendjava.repositories.user.UserRepository;
-import com.election.backendjava.repositories.CookieRepository;
-import com.election.backendjava.security.jwt.JwtUtils;
-import com.election.backendjava.security.services.UserDetailsImpl;
 
 @SuppressWarnings("DuplicatedCode")
 @CrossOrigin(origins = "*", maxAge = 3600)
