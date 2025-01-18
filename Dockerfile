@@ -16,10 +16,9 @@ WORKDIR /backend-java
 COPY backend-java/ .
 
 # Fix permissions for Maven wrapper
-RUN chmod +x mvnw
-
+RUN chmod +x mvnw \
 # Build the backend JAR
-RUN ./mvnw clean package -DskipTests
+&& ./mvnw clean package -DskipTests
 
 # Final Stage
 FROM nginx:stable-alpine AS final

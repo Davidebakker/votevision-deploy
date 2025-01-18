@@ -4,7 +4,6 @@ import com.election.backendjava.security.jwt.AuthEntryPointJwt;
 import com.election.backendjava.security.jwt.AuthTokenFilter;
 import com.election.backendjava.security.jwt.JwtUtils;
 import com.election.backendjava.security.services.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

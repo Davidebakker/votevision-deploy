@@ -27,8 +27,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/chat")
@@ -40,7 +38,7 @@ public class ChatController {
     private final ReplyRepository replyRepository;
     private final TopicRepository topicRepository;
 
-    public ChatController(UserRepository userRepository, CommentRepository commentRepository, UpvoteService upvoteService, ReplyRepository replyRepository, TopicRepository topicRepository, UserServices userServices) {
+    public ChatController(UserRepository userRepository, CommentRepository commentRepository, UpvoteService upvoteService, ReplyRepository replyRepository, TopicRepository topicRepository) {
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.upvoteService = upvoteService;
